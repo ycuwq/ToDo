@@ -46,4 +46,5 @@ dependencies {
     //数据库
     compile 'org.greenrobot:greendao:3.2.2'
     compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:design:25.3.1'
 }
