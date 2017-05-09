@@ -12,7 +12,7 @@ import com.ycuwq.todo.data.bean.DaoSession;
 
 public class App extends Application{
 
-	private DaoSession mDaoSession;
+	private static DaoSession mDaoSession;
 
 	@Override
 	public void onCreate() {
@@ -23,7 +23,7 @@ public class App extends Application{
 	}
 
 	@NonNull
-	public DaoSession getmDaoSession() {
+	public static DaoSession getmDaoSession() {
 		return mDaoSession;
 	}
 }
