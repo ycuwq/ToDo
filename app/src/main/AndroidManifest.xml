@@ -31,6 +31,11 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">
         </activity>
+        <activity
+            android:name=".task.ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
