@@ -23,7 +23,7 @@ public class App extends Application{
 	}
 
 	@NonNull
-	public static DaoSession getmDaoSession() {
+	public static DaoSession getDaoSession() {
 		return mDaoSession;
 	}
 }

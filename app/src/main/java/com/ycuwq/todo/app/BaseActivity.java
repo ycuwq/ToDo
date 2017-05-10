@@ -14,12 +14,26 @@ public class BaseActivity extends AppCompatActivity {
 
 	private CompositeDisposable mDisposable;
 
+	private App mApp;
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		removeSubscription();
 	}
 
+	public App getApp() {
+		if (mApp == null) {
+			mApp = (App) getApplication();
+		}
+
+		return mApp;
+	}
+
+	/**
+	 * RxJava2用来添加订阅事件流
+	 * @param disposable
+	 */
 	public void addSubscription(Disposable disposable) {
 		if (mDisposable == null) {
 			mDisposable = new CompositeDisposable();
