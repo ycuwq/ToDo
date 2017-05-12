@@ -27,5 +27,6 @@ public class TaskFragment extends BaseFragment{
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		mBinding = FragTaskBinding.inflate(inflater, container, false);
 		return mBinding.getRoot();
+
 	}
 }

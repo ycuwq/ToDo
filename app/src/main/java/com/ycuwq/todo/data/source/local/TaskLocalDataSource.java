@@ -1,6 +1,9 @@
 package com.ycuwq.todo.data.source.local;
 
+import android.content.Context;
+
 import com.ycuwq.todo.common.util.RxJava2Helper;
+import com.ycuwq.todo.data.bean.DaoMaster;
 import com.ycuwq.todo.data.bean.DaoSession;
 import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.data.bean.TaskDao;
@@ -8,32 +11,30 @@ import com.ycuwq.todo.data.source.TaskDataSource;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 
 /**
  * 本地数据库
+ * 利用Dagger2 实现单例模式
  * Created by 杨晨 on 2017/5/9.
  */
+@Singleton
 public class TaskLocalDataSource implements TaskDataSource{
-
-	private static TaskLocalDataSource INSTANCE = null;
 
 	private TaskDao mTaskDao;
 
-	public TaskLocalDataSource(DaoSession daoSession) {
+	@Inject
+	public TaskLocalDataSource(Context context) {
+		//加载数据库
+		DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(context, "tasks-db");
+		DaoMaster daoMaster = new DaoMaster(devOpenHelper.getWritableDb());
+		DaoSession daoSession = daoMaster.newSession();
+
 		mTaskDao = daoSession.getTaskDao();
-	}
-
-	public static TaskLocalDataSource getInstance(DaoSession daoSession) {
-		if (INSTANCE == null) {
-			INSTANCE = new TaskLocalDataSource(daoSession);
-		}
-		return INSTANCE;
-	}
-
-	public static void destroyInstance() {
-		INSTANCE = null;
 	}
 
 	@Override

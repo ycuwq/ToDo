@@ -1,29 +1,28 @@
 package com.ycuwq.todo.app;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
 
-import com.ycuwq.todo.data.bean.DaoMaster;
-import com.ycuwq.todo.data.bean.DaoSession;
+import com.ycuwq.todo.data.source.DaggerTaskRepositoryComponent;
+import com.ycuwq.todo.data.source.TaskRepositoryComponent;
 
 /**
+ * 自定义Application
  * Created by 杨晨 on 2017/5/7.
  */
 
 public class App extends Application{
 
-	private static DaoSession mDaoSession;
+	private TaskRepositoryComponent mRepositoryComponent;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, "tasks-db");
-		DaoMaster daoMaster = new DaoMaster(devOpenHelper.getWritableDb());
-		mDaoSession = daoMaster.newSession();
+		mRepositoryComponent = DaggerTaskRepositoryComponent.builder()
+				.applicationModule(new ApplicationModule(this))
+				.build();
 	}
 
-	@NonNull
-	public static DaoSession getDaoSession() {
-		return mDaoSession;
+	public TaskRepositoryComponent getRepositoryComponent() {
+		return mRepositoryComponent;
 	}
 }
