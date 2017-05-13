@@ -20,4 +20,8 @@ public class TaskViewModel extends BaseObservable{
 	public TaskViewModel(TaskRepository taskRepository) {
 		mTaskRepository = taskRepository;
 	}
+
+	public String getSnakeBarText() {
+		return snakeBarText.get();
+	}
 }

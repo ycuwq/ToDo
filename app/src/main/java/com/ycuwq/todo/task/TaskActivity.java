@@ -25,13 +25,9 @@ public class TaskActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_task);
 		initToolbar();
-
-		TaskFragment taskFragment = findTaskFragment();
-
 		DaggerTaskViewModelComponent.builder().taskRepositoryComponent(getApp().getRepositoryComponent())
 				.build().inject(this);
-
-
+		TaskFragment taskFragment = findTaskFragment();
 	}
 
 	private void initToolbar() {
@@ -43,7 +39,7 @@ public class TaskActivity extends BaseActivity {
 		TaskFragment taskFragment = (TaskFragment) getSupportFragmentManager().
 				findFragmentById(R.id.frame_task_content);
 		if (taskFragment == null) {
-			taskFragment = TaskFragment.newInstance();
+			taskFragment = TaskFragment.newInstance(mTaskViewModel);
 			ActivityUtils.addFragmentToActivity(
 					getSupportFragmentManager(), taskFragment, R.id.frame_task_content);
 		}
