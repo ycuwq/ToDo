@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WeekView">
+        <attr name="textSize" format="boolean"/>
+        <attr name="textColor" format="boolean" />
+        <attr name="backgroundColor" format="integer"/>
+
+    </declare-styleable>
+    <declare-styleable name="ExtraCalendarView">
+        <!--是否显示农历-->
+        <attr name="show_lunar" format="boolean"/>
+        <!--是否显示节假日-->
+        <attr name="show_holiday" format="boolean" />
+
+    </declare-styleable>
+</resources>
