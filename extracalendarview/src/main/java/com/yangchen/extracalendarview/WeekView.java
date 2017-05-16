@@ -2,24 +2,40 @@ package com.yangchen.extracalendarview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.yangchen.extracalendarview.util.DensityUtil;
+
 
 /**
+ * 自定义显示CalendarView上方的日期提示
  * Created by 杨晨 on 2017/5/15.
  */
+@SuppressWarnings("unused")
 public class WeekView extends View {
 
 	private Context mContext;
-	private Paint mPaint;
+
+	private String[] mWeekArray = {"日", "一", "二", "三", "四", "五", "六"};
+	private TextPaint mTextPaint;
 	private @ColorInt int mTextColor = Color.WHITE;
 	private @ColorInt int mBackgroundColor = Color.BLUE;
 	private int mTextSize = 12;
+
+	public WeekView(Context context) {
+		this(context, null);
+	}
+
+	public WeekView(Context context, @Nullable AttributeSet attrs) {
+		this(context, attrs, 0);
+	}
+
 	public WeekView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		mContext = context;
@@ -37,16 +53,19 @@ public class WeekView extends View {
 				mTextSize = a.getInteger(i, mTextSize);
 			} else if (attr == R.styleable.WeekView_textColor) {
 				mTextColor = a.getColor(i, mTextColor);
+			} else if (attr == R.styleable.WeekView_weekArray) {
+
 			}
 		}
 		a.recycle();
+		//设置背景 TODO fix 背景设置无效
+		super.setBackgroundColor(mBackgroundColor);
 	}
 	private void initPaint() {
-		mPaint = new Paint();
-		mPaint.setTextSize(mTextSize);
-		mPaint.setColor(mTextColor);
-		//抗锯齿
-		mPaint.setAntiAlias(true);
+		mTextPaint = new TextPaint();
+		mTextPaint.setTextSize(DensityUtil.sp2px(getContext(), mTextSize));
+		mTextPaint.setColor(mTextColor);
+		mTextPaint.setAntiAlias(true);
 	}
 
 	@Override
@@ -56,15 +75,63 @@ public class WeekView extends View {
 		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
 		int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 		int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-		//TODO 适配wrap_content
-//		int width;
-//		int height;
-//		if (widthMode == MeasureSpec.AT_MOST) {
-//			width = MeasureSpec.makeMeasureSpec((1 << 30) -1, MeasureSpec.AT_MOST);
-//		}
-//		if (heightMode == MeasureSpec.AT_MOST) {
-//			height = MeasureSpec.makeMeasureSpec((1 << 30) -1, MeasureSpec.AT_MOST);
-//		}
-		setMeasuredDimension(widthSize, heightSize);
+		int width = widthSize;
+		int height = heightSize;
+		if (widthMode == MeasureSpec.AT_MOST) {
+			width = MeasureSpec.makeMeasureSpec((1 << 30) -1, MeasureSpec.AT_MOST);
+		}
+		if (heightMode == MeasureSpec.AT_MOST) {
+			height = DensityUtil.dp2px(getContext(), 40);
+		}
+		setMeasuredDimension(width, height);
+	}
+
+	@Override
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
+		int itemWidth = getWidth() / 7;
+		int itemHeight = getHeight();
+
+		for (int i = 0; i < mWeekArray.length; i++) {
+			String text = mWeekArray[i];
+			//计算开始宽度， 用（itemWidth宽度 - 字体宽度） / 2 再加上每个item初始坐标
+			int startX =  itemWidth * i + (int)((itemWidth - mTextPaint.measureText(text)) / 2);
+			// TODO why
+			int startY = (int) (itemHeight / 2 - (mTextPaint.density + mTextPaint.ascent()) / 2);
+			canvas.drawText(text, startX, startY, mTextPaint);
+		}
+
+	}
+
+	public String[] getWeekArray() {
+		return mWeekArray;
+	}
+
+	public void setWeekArray(String[] mWeekArray) {
+		this.mWeekArray = mWeekArray;
+	}
+
+	public int getTextColor() {
+		return mTextColor;
+	}
+
+	public void setTextColor(int mTextColor) {
+		this.mTextColor = mTextColor;
+	}
+
+	public int getBackgroundColor() {
+		return mBackgroundColor;
+	}
+
+	public void setBackgroundColor(int mBackgroundColor) {
+		this.mBackgroundColor = mBackgroundColor;
+	}
+
+	public int getTextSize() {
+		return mTextSize;
+	}
+
+	public void setTextSize(int mTextSize) {
+		this.mTextSize = mTextSize;
 	}
 }

@@ -4,7 +4,7 @@
         <attr name="textSize" format="boolean"/>
         <attr name="textColor" format="boolean" />
         <attr name="backgroundColor" format="integer"/>
-
+        <attr name="weekArray" format="string"/>
     </declare-styleable>
     <declare-styleable name="ExtraCalendarView">
         <!--是否显示农历-->
