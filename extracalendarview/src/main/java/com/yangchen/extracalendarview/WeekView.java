@@ -19,14 +19,14 @@ import com.yangchen.extracalendarview.util.DensityUtil;
  */
 @SuppressWarnings("unused")
 public class WeekView extends View {
-
+	private final String TAG = getClass().getSimpleName();
 	private Context mContext;
 
 	private String[] mWeekArray = {"日", "一", "二", "三", "四", "五", "六"};
 	private TextPaint mTextPaint;
 	private @ColorInt int mTextColor = Color.WHITE;
-	private @ColorInt int mBackgroundColor = Color.BLUE;
-	private int mTextSize = 12;
+	private @ColorInt int mBackgroundColor = Color.GRAY;
+	private int mTextSize = 15;
 
 	public WeekView(Context context) {
 		this(context, null);
@@ -39,27 +39,27 @@ public class WeekView extends View {
 	public WeekView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		mContext = context;
-		initAttrs(attrs);
+		initAttrs(attrs, defStyleAttr);
 		initPaint();
+		super.setBackgroundColor(mBackgroundColor);
 	}
 
-	private void initAttrs(AttributeSet attrs) {
-		TypedArray a = mContext.obtainStyledAttributes(attrs, R.styleable.WeekView);
+	private void initAttrs(AttributeSet attrs, int defStyleAttr) {
+		TypedArray a = mContext.getTheme().obtainStyledAttributes(attrs, R.styleable.WeekView, defStyleAttr, 0);
 		for (int i = 0; i < a.getIndexCount(); i++) {
 			int attr = a.getIndex(i);
 			if (attr == R.styleable.WeekView_backgroundColor) {
-				mBackgroundColor = a.getColor(i, mBackgroundColor);
+				mBackgroundColor = a.getColor(attr, mBackgroundColor);
 			} else if (attr == R.styleable.WeekView_textSize) {
-				mTextSize = a.getInteger(i, mTextSize);
+				mTextSize = a.getInteger(attr, mTextSize);
 			} else if (attr == R.styleable.WeekView_textColor) {
-				mTextColor = a.getColor(i, mTextColor);
+				mTextColor = a.getColor(attr, mTextColor);
 			} else if (attr == R.styleable.WeekView_weekArray) {
-
+				//TODO 自定义显示的周的信息
 			}
 		}
 		a.recycle();
-		//设置背景 TODO fix 背景设置无效
-		super.setBackgroundColor(mBackgroundColor);
+
 	}
 	private void initPaint() {
 		mTextPaint = new TextPaint();
@@ -96,8 +96,7 @@ public class WeekView extends View {
 			String text = mWeekArray[i];
 			//计算开始宽度， 用（itemWidth宽度 - 字体宽度） / 2 再加上每个item初始坐标
 			int startX =  itemWidth * i + (int)((itemWidth - mTextPaint.measureText(text)) / 2);
-			// TODO why
-			int startY = (int) (itemHeight / 2 - (mTextPaint.density + mTextPaint.ascent()) / 2);
+			int startY = (int) (itemHeight / 2 - (mTextPaint.descent() + mTextPaint.ascent()) / 2);
 			canvas.drawText(text, startX, startY, mTextPaint);
 		}
 
@@ -115,23 +114,29 @@ public class WeekView extends View {
 		return mTextColor;
 	}
 
-	public void setTextColor(int mTextColor) {
-		this.mTextColor = mTextColor;
+	public void setTextColor(int textColor) {
+		this.mTextColor = textColor;
+		mTextPaint.setColor(textColor);
+		invalidate();
 	}
 
 	public int getBackgroundColor() {
 		return mBackgroundColor;
 	}
 
-	public void setBackgroundColor(int mBackgroundColor) {
-		this.mBackgroundColor = mBackgroundColor;
+	public void setBackgroundColor(int backgroundColor) {
+		this.mBackgroundColor = backgroundColor;
+		super.setBackgroundColor(backgroundColor);
+		invalidate();
 	}
 
 	public int getTextSize() {
 		return mTextSize;
 	}
 
-	public void setTextSize(int mTextSize) {
+	public void setTextSize(int textSize) {
 		this.mTextSize = mTextSize;
+		mTextPaint.setTextSize(DensityUtil.sp2px(getContext(), textSize));
+		invalidate();
 	}
 }
