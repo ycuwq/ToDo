@@ -1,4 +1,4 @@
-package com.yangchen.extracalendarview.data;
+package com.yangchen.extracalendarview;
 
 /**
  * Created by 杨晨 on 2017/5/18.
@@ -14,10 +14,18 @@ public class Date {
 	private String lunarDay;        //农历日
 	private String lunarHoliday;     //农历节日
 
+	public Date() {
+	}
+
+	public Date(int year, int month, int day) {
+		this.year = year;
+		this.month = month;
+		this.day = day;
+	}
+
 	public int getYear() {
 		return year;
 	}
-
 	public void setYear(int year) {
 		this.year = year;
 	}

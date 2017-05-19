@@ -1,4 +1,4 @@
-package com.yangchen.extracalendarview;
+package com.yangchen.extracalendarview.util;
 
 import java.util.Calendar;
 
@@ -6,7 +6,7 @@ import java.util.Calendar;
  * Calendar的工具类
  * Created by 杨晨 on 2017/5/14.
  */
-public class CalendarUtil {
+public class DateUtil {
 	/**
 	 * 获取时期的星期几
 	 */
@@ -34,4 +34,5 @@ public class CalendarUtil {
 		calendar.set(y, m - 1, 1);
 		return calendar.get(Calendar.MONTH) + 1;
 	}
+
 }
