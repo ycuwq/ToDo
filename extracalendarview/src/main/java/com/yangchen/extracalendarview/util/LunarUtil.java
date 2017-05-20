@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class LunarUtil {
@@ -55,7 +56,7 @@ public class LunarUtil {
      * @param year
      * @param month
      * @param day
-     * @return
+     * @return  String[0] :月份， String[1]: 日
      */
     public static String[] solarToLunar(int year, int month, int day) {
         int i;
@@ -79,7 +80,7 @@ public class LunarUtil {
             solarDate = solarDate + day;
         }
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
         Date myDate = null;
         Date startDate = null;
         try {
@@ -104,11 +105,7 @@ public class LunarUtil {
         int leapMonth = getLeapMonth(lunarYear);//计算该年闰哪个月
         //设定当年是否有闰月
         boolean isLeapYear;
-        if (leapMonth > 0) {
-            isLeapYear = true;
-        } else {
-            isLeapYear = false;
-        }
+	    isLeapYear = leapMonth > 0;
 
         for (i = 1; i <= 12; i++) {
             if (i == leapMonth + 1 && isLeapYear) {
@@ -269,10 +266,6 @@ public class LunarUtil {
 
     /**
      * 计算农历节日
-     *
-     * @param year
-     * @param month
-     * @param day
      * @return
      */
     private static String getLunarHoliday(int year, int month, int day) {
@@ -308,7 +301,7 @@ public class LunarUtil {
         return holiday;
     }
 
-    public static int daysInLunarMonth(int year, int month) {
+    private static int daysInLunarMonth(int year, int month) {
         if ((LUNAR_INFO[year - MIN_YEAR] & (0x100000 >> month)) == 0)
             return 29;
         else
@@ -318,6 +311,7 @@ public class LunarUtil {
     private static GregorianCalendar utcCal = null;
 
     /**
+     * 计算错误
      * 根据阳历日期计算24节气
      */
     public static String getTermString(int solarYear, int solarMonth, int solarDay) {
