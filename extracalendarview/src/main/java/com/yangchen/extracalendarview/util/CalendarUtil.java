@@ -8,9 +8,10 @@ import com.yangchen.extracalendarview.Date;
  */
 public class CalendarUtil {
 
-	public static Date getDate(int year, int month, int day) {
+	public static Date getDate(int year, int month, int day, int type) {
 		Date date = new Date(year, month, day);
 		date.setHoliday(SolarUtil.getSolarHoliday(year, month, day));
+		date.setType(type);
 		String[] lunar = LunarUtil.solarToLunar(year, month, day);
 		date.setLunarMonth(lunar[0]);
 		date.setLunarDay(lunar[1]);

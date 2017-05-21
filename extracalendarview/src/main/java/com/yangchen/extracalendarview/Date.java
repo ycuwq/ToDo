@@ -4,6 +4,11 @@ package com.yangchen.extracalendarview;
  * Created by 杨晨 on 2017/5/18.
  */
 public class Date {
+	//用来标识type类型。
+	static int TYPE_LAST_MONTH = -1;
+	static int TYPE_THIS_MONTH = 0;
+	static int TYPE_NEXT_MONTH = 1;
+
 	private int year;
 	private int month;
 	private int day;
@@ -13,7 +18,7 @@ public class Date {
 	private String lunarMonth;      //农历月
 	private String lunarDay;        //农历日
 	private String lunarHoliday;     //农历节日
-
+	private int type;               //类型，0 - 当月，-1 - 上月， 1 - 下月；
 	public Date() {
 	}
 
@@ -52,6 +57,14 @@ public class Date {
 
 	public void setWeek(int week) {
 		this.week = week;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public String getHoliday() {
