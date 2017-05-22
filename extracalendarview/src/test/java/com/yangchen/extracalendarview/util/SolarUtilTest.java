@@ -25,6 +25,8 @@ public class SolarUtilTest {
 
 	@Test
 	public void getFirstWeekOfMonth() throws Exception {
+		int week = SolarUtil.getFirstWeekOfMonth(2017, 5);
+		assertEquals(1, week);
 	}
 
 	@Test

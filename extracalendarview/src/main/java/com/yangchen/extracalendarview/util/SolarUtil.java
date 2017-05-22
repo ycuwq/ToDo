@@ -95,7 +95,7 @@ public class SolarUtil {
      * @return
      */
     private static int motherFatherDay(int year, int month, int delta) {
-        int f = getFirstWeekOfMonth(year, month - 1);
+        int f = getFirstWeekOfMonth(year, month);
         f = f == 0 ? 7 : f;
         return 7 - f + 1 + 7 * delta;
     }
@@ -156,11 +156,12 @@ public class SolarUtil {
      *
      * @param year
      * @param month
-     * @return
+     * @return  返回的星期日是0，星期一是1
      */
     public static int getFirstWeekOfMonth(int year, int month) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, 1);
+        //月份是从第0个月开始算的,所以减一
+        calendar.set(year, month - 1, 1);
         return calendar.get(Calendar.DAY_OF_WEEK) - 1;
     }
 

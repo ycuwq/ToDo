@@ -5,9 +5,9 @@ package com.yangchen.extracalendarview;
  */
 public class Date {
 	//用来标识type类型。
-	static int TYPE_LAST_MONTH = -1;
-	static int TYPE_THIS_MONTH = 0;
-	static int TYPE_NEXT_MONTH = 1;
+	public static int TYPE_LAST_MONTH = -1;
+	public static int TYPE_THIS_MONTH = 0;
+	public static int TYPE_NEXT_MONTH = 1;
 
 	private int year;
 	private int month;
