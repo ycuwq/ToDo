@@ -6,7 +6,10 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.List;
 
 /**
  * 自定义扩展的CalendarView
@@ -24,6 +27,8 @@ public class ExtraCalendarView extends ViewGroup {
 	private @ColorInt int mTextColorTop;
 	private @ColorInt int mTextColorBottom;
 
+	private int mCurrentMonthDay, mLastMonthDay, mNextMonthDay; //当前月份天数，上月天数，下月天数。
+
 	public ExtraCalendarView(@NonNull Context context) {
 		super(context);
 	}
@@ -33,6 +38,30 @@ public class ExtraCalendarView extends ViewGroup {
 
 	public ExtraCalendarView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
+	}
+
+	public void setDates(List<Date> dates, int currentMonthDays) {
+		if (dates.size() > 0) {
+			removeAllViews();
+		}
+		mCurrentMonthDay = currentMonthDays;
+		mLastMonthDay = 0;
+		mNextMonthDay = 0;
+		for (Date date : dates) {
+			switch (date.getType()) {
+				case Date.TYPE_LAST_MONTH:
+					mLastMonthDay++;
+					break;
+				case Date.TYPE_NEXT_MONTH:
+					mNextMonthDay++;
+					break;
+				default:
+					break;
+			}
+			addView(new View(getContext()));
+
+
+		}
 	}
 
 	@Override
