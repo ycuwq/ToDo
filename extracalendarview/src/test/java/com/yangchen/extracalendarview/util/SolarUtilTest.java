@@ -15,12 +15,11 @@ public class SolarUtilTest {
 	}
 
 	@Test
-	public void chingMingDay() throws Exception {
-
-	}
-
-	@Test
 	public void getMonthDays() throws Exception {
+		int days = SolarUtil.getMonthDays(2017, 2);
+		assertEquals(28, days);
+		days = SolarUtil.getMonthDays(2020, 2);
+		assertEquals(29, days);
 	}
 
 	@Test
@@ -31,6 +30,10 @@ public class SolarUtilTest {
 
 	@Test
 	public void getCurrentDate() throws Exception {
+		int[] date = SolarUtil.getCurrentDate();
+		assertEquals(2017, date[0]);
+		assertEquals(5, date[1]);
+
 	}
 
 }

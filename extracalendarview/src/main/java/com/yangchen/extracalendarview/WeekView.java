@@ -41,6 +41,7 @@ public class WeekView extends View {
 		mContext = context;
 		initAttrs(attrs, defStyleAttr);
 		initPaint();
+
 		super.setBackgroundColor(mBackgroundColor);
 	}
 
@@ -56,6 +57,7 @@ public class WeekView extends View {
 				mTextColor = a.getColor(attr, mTextColor);
 			} else if (attr == R.styleable.WeekView_weekArray) {
 				//TODO 自定义显示的周的信息
+
 			}
 		}
 		a.recycle();
