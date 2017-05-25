@@ -66,7 +66,28 @@ public class ExtraCalendarView extends ViewGroup {
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+		if (getChildCount() == 0) {
+			return;
+		}
 
+		View childView = getChildAt(0);
+		int itemWidth = childView.getMeasuredWidth();
+		int itemHeight = childView.getMeasuredHeight();
+
+		//当显示五行时扩大行间距
+		int dy = 0;
+		if (getChildCount() == 35) {
+			dy = itemWidth / 5;
+		}
+
+		for (int i = 0; i < getChildCount(); i++) {
+			View view = getChildAt(i);
+			int left = i % COLUMN * itemWidth;// + (2 * (i % COLUMN) + 1) * 7
+			int top = i / COLUMN * (itemHeight + dy);
+			int right = left + itemWidth;
+			int bottom = top + itemHeight;
+			view.layout(left, top, right, bottom);
+		}
 	}
 
 	@Override
