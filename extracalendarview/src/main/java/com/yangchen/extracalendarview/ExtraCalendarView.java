@@ -93,6 +93,28 @@ public class ExtraCalendarView extends ViewGroup {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
+
+		int itemWidth = widthSpecSize / COLUMN;// - 14
+
+		int width = widthSpecSize;
+		int height = itemWidth * MAX_ROW;
+
+		setMeasuredDimension(width, height);
+
+		int itemHeight;
+
+//        if (getChildCount() == 35) {
+//            itemHeight = getMeasuredHeight() / 5;
+//        } else {
+		itemHeight = itemWidth;
+//        }
+
+		for (int i = 0; i < getChildCount(); i++) {
+			View childView = getChildAt(i);
+			childView.measure(MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY),
+					MeasureSpec.makeMeasureSpec(itemHeight, MeasureSpec.EXACTLY));
+		}
 	}
 
 	@Override
