@@ -6,7 +6,7 @@
         <attr name="backgroundColor" format="color"/>
         <attr name="weekArray" format="string"/>
     </declare-styleable>
-    <declare-styleable name="ExtraCalendarView">
+    <declare-styleable name="MonthView">
         <!--是否显示农历-->
         <attr name="showLunar" format="boolean"/>
         <!--是否显示节假日-->
