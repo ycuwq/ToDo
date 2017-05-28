@@ -15,4 +15,17 @@ public class ExtraCalendarView extends ViewPager {
 	public ExtraCalendarView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
+
+
+	private void initAttr(AttributeSet attrs) {
+
+	}
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	}
+
+
+
 }
