@@ -16,6 +16,12 @@ public class MonthViewAdapter extends PagerAdapter{
 	}
 
 	@Override
+	public void destroyItem(ViewGroup container, int position, Object object) {
+		container.removeView((MonthView) object);
+
+	}
+
+	@Override
 	public int getCount() {
 		return 0;
 	}
