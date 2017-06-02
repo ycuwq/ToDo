@@ -20,6 +20,8 @@ public class MonthView extends ViewGroup {
 	private static final int MAX_ROW = 6;       //最大显示的行数
 	private static final int COLUMN = 7;        //显示的列数
 
+	private Context mContext;
+
 	private boolean mShowLunar;
 	private boolean mShowHoliday;
 	private int mTextSizeTop;
@@ -30,14 +32,19 @@ public class MonthView extends ViewGroup {
 	private int mCurrentMonthDay, mLastMonthDay, mNextMonthDay; //当前月份天数，上月天数，下月天数。
 
 	public MonthView(@NonNull Context context) {
-		super(context);
+		this(context, null);
 	}
 	public MonthView(@NonNull Context context, @Nullable AttributeSet attrs) {
-		super(context, attrs);
+		this(context, attrs, 0);
 	}
 
 	public MonthView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
+		mContext = context;
+		initAttr(attrs);
+	}
+
+	private void initAttr(AttributeSet attrs) {
 	}
 
 	public void setDates(List<Date> dates, int currentMonthDays) {
@@ -59,9 +66,8 @@ public class MonthView extends ViewGroup {
 					break;
 			}
 			addView(new View(getContext()));
-
-
 		}
+		requestLayout();
 	}
 
 	@Override
