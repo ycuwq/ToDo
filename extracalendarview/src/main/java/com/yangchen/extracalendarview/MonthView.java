@@ -41,11 +41,19 @@ public class MonthView extends ViewGroup {
 	public MonthView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		mContext = context;
-		initAttr(attrs);
 	}
 
-	private void initAttr(AttributeSet attrs) {
+	public void initAttr(boolean isShowLunar, boolean isShowHoliday, int textSizeTop, int textSizeBottom,
+	                      int textColorTop, int textColorBottom) {
+		mShowLunar = isShowLunar;
+		mShowHoliday = isShowHoliday;
+		mTextSizeTop = textSizeTop;
+		mTextSizeBottom = textSizeBottom;
+		mTextColorTop = textColorTop;
+		mTextColorBottom = textColorBottom;
 	}
+
+
 
 	public void setDates(List<Date> dates, int currentMonthDays) {
 		if (dates.size() > 0) {

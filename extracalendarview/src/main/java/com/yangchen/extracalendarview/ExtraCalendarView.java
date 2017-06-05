@@ -16,9 +16,8 @@ public class ExtraCalendarView extends ViewPager {
 	private boolean showLastNext = true;//是否显示上个月、下个月
 	private boolean showLunar = true;//是否显示农历
 	private boolean showHoliday = true;//是否显示节假日(不显示农历则节假日无法显示，节假日会覆盖农历显示)
-	private boolean showTerm = true;//是否显示节气
+	private boolean showTerm = false;//是否显示节气
 	private boolean disableBefore = false;//是否禁用默认选中日期前的所有日期
-	private boolean switchChoose = true;//单选时切换月份，是否选中上次的日期
 	private int colorSolar = Color.BLACK;//阳历的日期颜色
 	private int colorLunar = Color.parseColor("#999999");//阴历的日期颜色
 	private int colorHoliday = Color.parseColor("#EC9729");//节假日的颜色
