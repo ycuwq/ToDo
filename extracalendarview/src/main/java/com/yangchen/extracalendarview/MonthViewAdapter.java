@@ -6,6 +6,9 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yangchen.extracalendarview.util.CalendarUtil;
+import com.yangchen.extracalendarview.util.SolarUtil;
+
 import java.util.LinkedList;
 
 /**
@@ -14,8 +17,8 @@ import java.util.LinkedList;
  */
 public class MonthViewAdapter extends PagerAdapter{
 
-	private LinkedList<MonthView> mCache = new LinkedList<>();
-	private SparseArray<MonthView> mViews = new SparseArray<>();
+	private LinkedList<MonthItemView> mCache = new LinkedList<>();
+	private SparseArray<MonthItemView> mViews = new SparseArray<>();
 
 	private int count;
 	private boolean isShowHoliday;
@@ -24,34 +27,39 @@ public class MonthViewAdapter extends PagerAdapter{
 	private int mTextSizeBottom;
 	private @ColorInt int mTextColorTop;
 	private @ColorInt int mTextColorBottom;
+	private int mStartYear, mStartMonth;
 
-	public MonthViewAdapter(boolean isShowHoliday, boolean isShowLunar, int textSizeTop,
+	public MonthViewAdapter(int startYear, int startMonth, boolean isShowHoliday, boolean isShowLunar, int textSizeTop,
 	                        int textSizeBottom, int textColorTop, int textColorBottom) {
+		mStartYear = startYear;
+		mStartMonth = startMonth;
 		this.isShowHoliday = isShowHoliday;
 		this.isShowLunar = isShowLunar;
 		this.mTextSizeTop = textSizeTop;
 		this.mTextSizeBottom = textSizeBottom;
 		this.mTextColorTop = textColorTop;
 		this.mTextColorBottom = textColorBottom;
-
 	}
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
-		MonthView monthView;
+		MonthItemView monthItemView;
 		if (!mCache.isEmpty()) {
-			monthView = mCache.removeFirst();
+			monthItemView = mCache.removeFirst();
 		} else {
-			monthView = new MonthView(container.getContext());
+			monthItemView = new MonthItemView(container.getContext());
 
 		}
-		monthView.initAttr(isShowLunar, isShowHoliday, mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom);
-		return monthView;
+		monthItemView.initAttr(isShowLunar, isShowHoliday, mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom);
+		monthItemView.setDates(CalendarUtil.getDates(mStartYear, mStartMonth), SolarUtil.getMonthDays(mStartYear, mStartMonth));
+		mViews.put(position, monthItemView);
+		container.addView(monthItemView);
+		return monthItemView;
 	}
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-		container.removeView((MonthView) object);
+		container.removeView((MonthItemView) object);
 
 	}
 

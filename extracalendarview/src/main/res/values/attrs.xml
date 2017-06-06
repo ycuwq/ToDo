@@ -17,4 +17,5 @@
         <attr name="textSizeBottom" format="integer"/>
         <attr name="textColorTopBottom" format="color" />
     </declare-styleable>
+
 </resources>
