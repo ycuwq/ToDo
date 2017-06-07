@@ -22,6 +22,7 @@ public class MonthView extends ViewPager {
 	private int mTextSizeBottom = 8;//阴历日期文字尺寸
 	private MonthViewAdapter mMonthViewAdapter;
 	private Context mContext;
+
 	public MonthView(Context context) {
 		this(context, null);
 	}
