@@ -6,8 +6,10 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -19,8 +21,6 @@ public class MonthItemView extends ViewGroup {
 
 	private static final int MAX_ROW = 6;       //最大显示的行数
 	private static final int COLUMN = 7;        //显示的列数
-
-	private Context mContext;
 
 	private boolean mShowLunar;
 	private boolean mShowHoliday;
@@ -40,7 +40,6 @@ public class MonthItemView extends ViewGroup {
 
 	public MonthItemView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		mContext = context;
 	}
 
 	public void initAttr(boolean isShowLunar, boolean isShowHoliday, int textSizeTop, int textSizeBottom,
@@ -62,17 +61,28 @@ public class MonthItemView extends ViewGroup {
 		mCurrentMonthDay = currentMonthDays;
 		mLastMonthDay = 0;
 		mNextMonthDay = 0;
-		for (Date date : dates) {
+		for (int i = 0; i > dates.size(); i ++) {
+			Date date = dates.get(i);
 			switch (date.getType()) {
 				case Date.TYPE_LAST_MONTH:
 					mLastMonthDay++;
-					break;
+					addView(new View(getContext()), i);
+					continue;
 				case Date.TYPE_NEXT_MONTH:
-					mNextMonthDay++;
-					break;
+					addView(new View(getContext()), i);
+					continue;
 				default:
 					break;
 			}
+			View view = LayoutInflater.from(getContext()).inflate(R.layout.item_month_layout, null);
+			TextView solarDay = (TextView) view.findViewById(R.id.tv_item_month_top);
+			TextView lunarDay = (TextView) view.findViewById(R.id.tv_item_month_bottom);
+			solarDay.setTextColor(mTextColorTop);
+			lunarDay.setTextColor(mTextColorBottom);
+			solarDay.setTextSize(mTextSizeTop);
+			lunarDay.setTextSize(mTextSizeBottom);
+
+
 			addView(new View(getContext()));
 		}
 		requestLayout();

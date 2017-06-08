@@ -45,6 +45,14 @@ public class MonthView extends ViewPager {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		int calendarHeight;
+		if (getAdapter() != null) {
+			MonthView view = (MonthView) getChildAt(0);
+			if (view != null) {
+				calendarHeight = view.getMeasuredHeight();
+				setMeasuredDimension(widthMeasureSpec, MeasureSpec.makeMeasureSpec(calendarHeight, MeasureSpec.EXACTLY));
+			}
+		}
 	}
 
 
