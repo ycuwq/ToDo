@@ -20,6 +20,8 @@ public class MonthView extends ViewPager {
 	private int mTextColorBottom = Color.parseColor("#999999");//阴历的日期颜色
 	private int mTextSizeTop = 14;//阳历日期文字尺寸
 	private int mTextSizeBottom = 8;//阴历日期文字尺寸
+	private int mStartYear = 2017;      //日历开始显示的年份
+	private int mStartMonth = 5;        //日历开始显示的月份
 	private MonthViewAdapter mMonthViewAdapter;
 	private Context mContext;
 
@@ -30,6 +32,9 @@ public class MonthView extends ViewPager {
 	public MonthView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mContext = context;
+		mMonthViewAdapter = new MonthViewAdapter(mStartYear, mStartMonth, mShowHoliday, mShowLunar,
+				mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom);
+		setAdapter(mMonthViewAdapter);
 	}
 
 	public void initAttr(boolean isShowLunar, boolean isShowHoliday, int textSizeTop, int textSizeBottom,
@@ -47,7 +52,7 @@ public class MonthView extends ViewPager {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		int calendarHeight;
 		if (getAdapter() != null) {
-			MonthView view = (MonthView) getChildAt(0);
+			MonthItemView view = (MonthItemView) getChildAt(0);
 			if (view != null) {
 				calendarHeight = view.getMeasuredHeight();
 				setMeasuredDimension(widthMeasureSpec, MeasureSpec.makeMeasureSpec(calendarHeight, MeasureSpec.EXACTLY));

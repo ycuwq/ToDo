@@ -79,4 +79,21 @@ public class CalendarUtil {
 		}
 		return rows;
 	}
+
+	/**
+	 * 根据ViewPager position 得到对应年月
+	 * @param position  开始年月的延后月份
+	 * @return
+	 */
+	public static int[] positionToDate(int position, int startY, int startM) {
+		int year = position / 12 + startY;
+		int month = position % 12 + startM;
+
+		if (month > 12) {
+			month = month % 12;
+			year = year + 1;
+		}
+
+		return new int[]{year, month};
+	}
 }

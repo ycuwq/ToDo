@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yangchen.extracalendarview.util.CalendarUtil;
 import com.ycuwq.todo.app.BaseFragment;
 import com.ycuwq.todo.common.util.SnakeBarUtil;
 import com.ycuwq.todo.databinding.FragTaskBinding;
@@ -35,7 +34,7 @@ public class TaskFragment extends BaseFragment{
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		mBinding = FragTaskBinding.inflate(inflater, container, false);
 		setupSnakeBar();
-		mBinding.monthView.setDates(CalendarUtil.getDates(2017, 6), 30);
+//		mBinding.monthView.setDates(CalendarUtil.getDates(2017, 6), 30);
 		return mBinding.getRoot();
 
 	}

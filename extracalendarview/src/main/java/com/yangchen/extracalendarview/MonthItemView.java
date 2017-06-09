@@ -52,8 +52,6 @@ public class MonthItemView extends ViewGroup {
 		mTextColorBottom = textColorBottom;
 	}
 
-
-
 	public void setDates(List<Date> dates, int currentMonthDays) {
 		if (dates.size() > 0) {
 			removeAllViews();
@@ -81,7 +79,7 @@ public class MonthItemView extends ViewGroup {
 			lunarDay.setTextColor(mTextColorBottom);
 			solarDay.setTextSize(mTextSizeTop);
 			lunarDay.setTextSize(mTextSizeBottom);
-
+			solarDay.setText("12");
 
 			addView(new View(getContext()));
 		}

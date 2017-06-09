@@ -15,11 +15,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <com.yangchen.extracalendarview.MonthItemView
-        android:id="@+id/month_view"
+    <com.yangchen.extracalendarview.MonthView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content">
+
+    </com.yangchen.extracalendarview.MonthView>
 
 </LinearLayout>
 </layout>

@@ -50,8 +50,10 @@ public class MonthViewAdapter extends PagerAdapter{
 			monthItemView = new MonthItemView(container.getContext());
 
 		}
+
+		int date[] = CalendarUtil.positionToDate(position, mStartYear, mStartMonth);
 		monthItemView.initAttr(isShowLunar, isShowHoliday, mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom);
-		monthItemView.setDates(CalendarUtil.getDates(mStartYear, mStartMonth), SolarUtil.getMonthDays(mStartYear, mStartMonth));
+		monthItemView.setDates(CalendarUtil.getDates(date[0], date[1]), SolarUtil.getMonthDays(date[0], date[1]));
 		mViews.put(position, monthItemView);
 		container.addView(monthItemView);
 		return monthItemView;
@@ -65,7 +67,7 @@ public class MonthViewAdapter extends PagerAdapter{
 
 	@Override
 	public int getCount() {
-		return 0;
+		return 12;
 	}
 
 	@Override
