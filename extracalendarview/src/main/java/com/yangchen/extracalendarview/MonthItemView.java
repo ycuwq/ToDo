@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +60,7 @@ public class MonthItemView extends ViewGroup {
 		mCurrentMonthDay = currentMonthDays;
 		mLastMonthDay = 0;
 		mNextMonthDay = 0;
-		for (int i = 0; i > dates.size(); i ++) {
+		for (int i = 0; i < dates.size(); i ++) {
 			Date date = dates.get(i);
 			switch (date.getType()) {
 				case Date.TYPE_LAST_MONTH:
@@ -73,15 +74,27 @@ public class MonthItemView extends ViewGroup {
 					break;
 			}
 			View view = LayoutInflater.from(getContext()).inflate(R.layout.item_month_layout, null);
-			TextView solarDay = (TextView) view.findViewById(R.id.tv_item_month_top);
-			TextView lunarDay = (TextView) view.findViewById(R.id.tv_item_month_bottom);
-			solarDay.setTextColor(mTextColorTop);
-			lunarDay.setTextColor(mTextColorBottom);
-			solarDay.setTextSize(mTextSizeTop);
-			lunarDay.setTextSize(mTextSizeBottom);
-			solarDay.setText("12");
-
-			addView(new View(getContext()));
+			TextView topTv = (TextView) view.findViewById(R.id.tv_item_month_top);
+			TextView bottomTv = (TextView) view.findViewById(R.id.tv_item_month_bottom);
+			topTv.setTextColor(mTextColorTop);
+			bottomTv.setTextColor(mTextColorBottom);
+			topTv.setTextSize(mTextSizeTop);
+			bottomTv.setTextSize(mTextSizeBottom);
+			topTv.setText(String.valueOf(date.getDay()));
+			//设置农历数据
+			if (mShowLunar) {
+				bottomTv.setText(date.getLunarDay());
+			}
+			//设置节日数据
+			if (mShowHoliday) {
+				if (!TextUtils.isEmpty(date.getLunarHoliday())) {
+					bottomTv.setText(date.getLunarHoliday());
+				}
+				if (!TextUtils.isEmpty(date.getHoliday())) {
+					bottomTv.setText(date.getHoliday());
+				}
+			}
+			addView(view);
 		}
 		requestLayout();
 	}

@@ -10,8 +10,8 @@ import static org.junit.Assert.assertEquals;
 public class SolarUtilTest {
 	@Test
 	public void getSolarHoliday() throws Exception {
-		String holiday = SolarUtil.getSolarHoliday(2017, 1, 1);
-		assertEquals(holiday, "元旦");
+		String holiday = SolarUtil.getSolarHoliday(2017, 5, 1);
+		assertEquals(holiday, "劳动节");
 	}
 
 	@Test
