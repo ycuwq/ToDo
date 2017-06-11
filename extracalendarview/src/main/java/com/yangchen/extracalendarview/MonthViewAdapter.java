@@ -28,9 +28,10 @@ public class MonthViewAdapter extends PagerAdapter{
 	private @ColorInt int mTextColorTop;
 	private @ColorInt int mTextColorBottom;
 	private int mStartYear, mStartMonth;
+	private @ColorInt int mBackgroundColor;
 
 	public MonthViewAdapter(int startYear, int startMonth, boolean isShowHoliday, boolean isShowLunar, int textSizeTop,
-	                        int textSizeBottom, int textColorTop, int textColorBottom) {
+	                        int textSizeBottom, int textColorTop, int textColorBottom, int backgroudColor) {
 		mStartYear = startYear;
 		mStartMonth = startMonth;
 		this.isShowHoliday = isShowHoliday;
@@ -39,6 +40,7 @@ public class MonthViewAdapter extends PagerAdapter{
 		this.mTextSizeBottom = textSizeBottom;
 		this.mTextColorTop = textColorTop;
 		this.mTextColorBottom = textColorBottom;
+		mBackgroundColor = backgroudColor;
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class MonthViewAdapter extends PagerAdapter{
 		}
 
 		int date[] = CalendarUtil.positionToDate(position, mStartYear, mStartMonth);
-		monthItemView.initAttr(isShowLunar, isShowHoliday, mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom);
+		monthItemView.initAttr(isShowLunar, isShowHoliday, mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom, mBackgroundColor);
 		monthItemView.setDates(CalendarUtil.getDates(date[0], date[1]), SolarUtil.getMonthDays(date[0], date[1]));
 		mViews.put(position, monthItemView);
 		container.addView(monthItemView);

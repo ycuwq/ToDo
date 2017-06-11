@@ -29,6 +29,7 @@ public class MonthItemView extends ViewGroup {
 	private int mTextSizeBottom;
 	private @ColorInt int mTextColorTop;
 	private @ColorInt int mTextColorBottom;
+	private @ColorInt int mBackgroundColor;
 
 	private int mCurrentMonthDay, mLastMonthDay, mNextMonthDay; //当前月份天数，上月天数，下月天数。
 
@@ -44,13 +45,15 @@ public class MonthItemView extends ViewGroup {
 	}
 
 	public void initAttr(boolean isShowLunar, boolean isShowHoliday, int textSizeTop, int textSizeBottom,
-	                      int textColorTop, int textColorBottom) {
+	                      int textColorTop, int textColorBottom, int backgroundColor) {
 		mShowLunar = isShowLunar;
 		mShowHoliday = isShowHoliday;
 		mTextSizeTop = textSizeTop;
 		mTextSizeBottom = textSizeBottom;
 		mTextColorTop = textColorTop;
 		mTextColorBottom = textColorBottom;
+		mBackgroundColor = backgroundColor;
+		super.setBackgroundColor(mBackgroundColor);
 	}
 
 	public void setDates(List<Date> dates, int currentMonthDays) {
@@ -140,9 +143,9 @@ public class MonthItemView extends ViewGroup {
 		int itemHeight;
 
 //        if (getChildCount() == 35) {
-//            itemHeight = getMeasuredHeight() / 5;
+//	        itemHeight = getMeasuredHeight() / 5;
 //        } else {
-		itemHeight = itemWidth;
+			itemHeight = itemWidth;
 //        }
 
 		for (int i = 0; i < getChildCount(); i++) {

@@ -1,7 +1,6 @@
 package com.yangchen.extracalendarview;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
@@ -39,29 +38,15 @@ public class WeekView extends View {
 	public WeekView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		mContext = context;
-		initAttrs(attrs, defStyleAttr);
-		initPaint();
 
-		super.setBackgroundColor(mBackgroundColor);
 	}
 
-	private void initAttrs(AttributeSet attrs, int defStyleAttr) {
-		TypedArray a = mContext.getTheme().obtainStyledAttributes(attrs, R.styleable.WeekView, defStyleAttr, 0);
-		for (int i = 0; i < a.getIndexCount(); i++) {
-			int attr = a.getIndex(i);
-			if (attr == R.styleable.WeekView_backgroundColor) {
-				mBackgroundColor = a.getColor(attr, mBackgroundColor);
-			} else if (attr == R.styleable.WeekView_textSize) {
-				mTextSize = a.getInteger(attr, mTextSize);
-			} else if (attr == R.styleable.WeekView_textColor) {
-				mTextColor = a.getColor(attr, mTextColor);
-			} else if (attr == R.styleable.WeekView_weekArray) {
-				//TODO 自定义显示的周的信息
-
-			}
-		}
-		a.recycle();
-
+	public void setAttrs(int textSize, int textColor, int backgroundColor) {
+		mTextSize = textSize;
+		mTextColor = textColor;
+		mBackgroundColor = backgroundColor;
+		super.setBackgroundColor(mBackgroundColor);
+		initPaint();
 	}
 	private void initPaint() {
 		mTextPaint = new TextPaint();
