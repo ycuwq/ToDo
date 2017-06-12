@@ -14,7 +14,7 @@
         <attr name="backgroundColorWeekInfo" format="color"/>
         <attr name="backgroundColorMonth" format="color"/>
         <attr name="textSizeWeekInfo" format="integer"/>
-        <attr name="textColorWeekInfo" format="integer"/>
+
     </declare-styleable>
 
 </resources>

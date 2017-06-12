@@ -20,7 +20,7 @@ public class MonthViewAdapter extends PagerAdapter{
 	private LinkedList<MonthItemView> mCache = new LinkedList<>();
 	private SparseArray<MonthItemView> mViews = new SparseArray<>();
 
-	private int count;
+	private int mCount;     //一共显示多少个月
 	private boolean isShowHoliday;
 	private boolean isShowLunar;
 	private int mTextSizeTop;
@@ -30,8 +30,9 @@ public class MonthViewAdapter extends PagerAdapter{
 	private int mStartYear, mStartMonth;
 	private @ColorInt int mBackgroundColor;
 
-	public MonthViewAdapter(int startYear, int startMonth, boolean isShowHoliday, boolean isShowLunar, int textSizeTop,
-	                        int textSizeBottom, int textColorTop, int textColorBottom, int backgroudColor) {
+	MonthViewAdapter(int count, int startYear, int startMonth, boolean isShowHoliday, boolean isShowLunar, int textSizeTop,
+	                 int textSizeBottom, int textColorTop, int textColorBottom, int backgroundColor) {
+		mCount = count;
 		mStartYear = startYear;
 		mStartMonth = startMonth;
 		this.isShowHoliday = isShowHoliday;
@@ -40,7 +41,7 @@ public class MonthViewAdapter extends PagerAdapter{
 		this.mTextSizeBottom = textSizeBottom;
 		this.mTextColorTop = textColorTop;
 		this.mTextColorBottom = textColorBottom;
-		mBackgroundColor = backgroudColor;
+		mBackgroundColor = backgroundColor;
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class MonthViewAdapter extends PagerAdapter{
 
 	@Override
 	public int getCount() {
-		return 12;
+		return mCount;
 	}
 
 	@Override

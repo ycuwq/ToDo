@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
+ * 自定义的扩展日历
  * Created by yangchen on 2017/6/7.
  */
 public class ExtraCalendarView extends ViewGroup{
@@ -19,8 +20,8 @@ public class ExtraCalendarView extends ViewGroup{
 	private @ColorInt int mBackgroundWeekInfo = Color.WHITE;    //日历的周信息背景颜色
 	private @ColorInt int mTextColorTop = Color.BLACK;          //日历的日期颜色
 	private @ColorInt int mTextColorBottom = Color.parseColor("#999999");   //节日，阴历的日期颜色
-	private @ColorInt int mTextColorWeekInfo = Color.WHITE;     //日历的周信息字体颜色
-	private @ColorInt int mTextColorTitle = Color.parseColor("#999999");    //标题字体颜色
+	private @ColorInt int mTextColorWeekInfo = Color.BLACK;     //日历的周信息字体颜色
+	private @ColorInt int mTextColorTitle;    //标题字体颜色
 	private int mTextSizeTop = 14;                              //日历的日期字体
 	private int mTextSizeBottom = 8;                            //节日，阴历的字体
 	private int mTextSizeWeekInfo = 14;                         //周信息字体大小
@@ -28,7 +29,7 @@ public class ExtraCalendarView extends ViewGroup{
 	private int mStartYear = 2017;      //日历开始显示的年份
 	private int mStartMonth = 5;        //日历开始显示的月份
 	private MonthViewAdapter mMonthViewAdapter;
-
+	private int mMonthCount = 12;
 	public ExtraCalendarView(Context context) {
 		this(context, null);
 	}
@@ -39,7 +40,7 @@ public class ExtraCalendarView extends ViewGroup{
 
 	public ExtraCalendarView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-			//If we're on good Android versions, turn off clipping for cool effects
+
 		setClipToPadding(false);
 		setClipChildren(false);
 		initAttrs(attrs);
@@ -54,45 +55,44 @@ public class ExtraCalendarView extends ViewGroup{
 			int attr = a.getIndex(i);
 
 			if (attr == R.styleable.ExtraCalendarView_showHoliday) {
-				mShowHoliday = a.getBoolean(attr, mShowHoliday);
+				mShowHoliday = a.getBoolean(attr, true);
 			} else if (attr == R.styleable.ExtraCalendarView_showLunar) {
-				mShowLunar = a.getBoolean(attr, mShowLunar);
+				mShowLunar = a.getBoolean(attr, true);
 			} else if (attr == R.styleable.ExtraCalendarView_textColorTitle) {
-
+				mTextColorTitle = a.getColor(attr, Color.BLACK);
 			} else if (attr == R.styleable.ExtraCalendarView_textColorTop) {
-
+				mTextColorTop = a.getColor(attr, Color.BLACK);
 			} else if (attr == R.styleable.ExtraCalendarView_textColorTopBottom) {
-
-			} else if (attr == R.styleable.ExtraCalendarView_textColorTitle) {
-
-			} else if (attr == R.styleable.ExtraCalendarView_textColorWeekInfo) {
-
+				mTextColorBottom = a.getColor(attr, Color.parseColor("#999999"));
+			} else if(attr == R.styleable.ExtraCalendarView_textColorWeekInfo) {
+				mTextColorWeekInfo = a.getColor(attr, Color.BLACK);
 			} else if (attr == R.styleable.ExtraCalendarView_textSizeBottom) {
-
+				mTextSizeBottom = a.getInt(attr, 8);
 			} else if (attr == R.styleable.ExtraCalendarView_textSizeTop) {
-
+				mTextSizeTop = a.getInt(attr, 14);
 			} else if (attr == R.styleable.ExtraCalendarView_textSizeTitle) {
-
+				mTextSizeTitle = a.getInt(attr, 14);
 			} else if (attr == R.styleable.ExtraCalendarView_textSizeWeekInfo) {
-
+				mTextSizeWeekInfo = a.getInt(attr, 14);
 			} else if (attr == R.styleable.ExtraCalendarView_backgroundColorMonth) {
-
+				mBackgroundMonth = a.getInt(attr, Color.WHITE);
 			} else if (attr == R.styleable.ExtraCalendarView_backgroundColorWeekInfo) {
-
+				mBackgroundWeekInfo = a.getInt(attr, Color.WHITE);
 			}
 		}
 	}
 
 	private void setupChild() {
 		WeekView weekView = new WeekView(getContext());
-		weekView.setAttrs(mTextSizeTop, mTextColorTop, mBackgroundWeekInfo);
+		weekView.setAttrs(mTextSizeWeekInfo, mTextColorWeekInfo, mBackgroundWeekInfo);
 		addView(weekView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		MonthView monthView = new MonthView(getContext());
-		mMonthViewAdapter = new MonthViewAdapter(mStartYear, mStartMonth, mShowHoliday, mShowLunar,
+		mMonthViewAdapter = new MonthViewAdapter(mMonthCount, mStartYear, mStartMonth, mShowHoliday, mShowLunar,
 				mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom, mBackgroundMonth);
 		monthView.setAdapter(mMonthViewAdapter);
 		addView(monthView);
 	}
+
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		int specWidthSize = MeasureSpec.getSize(widthMeasureSpec);
