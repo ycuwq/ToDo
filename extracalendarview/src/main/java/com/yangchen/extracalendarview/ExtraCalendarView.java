@@ -13,16 +13,20 @@ import android.view.ViewGroup;
  */
 public class ExtraCalendarView extends ViewGroup{
 
-	private boolean mShowLunar = true;//是否显示农历
-	private boolean mShowHoliday = true;//是否显示节假日(不显示农历则节假日无法显示，节假日会覆盖农历显示)
-	private boolean disableBefore = false;//是否禁用默认选中日期前的所有日期
-	private @ColorInt int mTextColorTop = Color.BLACK;//阳历的日期颜色
-	private @ColorInt int mTextColorBottom = Color.parseColor("#999999");//阴历的日期颜色
-	private int mTextSizeTop = 14;//阳历日期文字尺寸
-	private int mTextSizeBottom = 8;//阴历日期文字尺寸
+	private boolean mShowLunar = true;                          //是否显示农历
+	private boolean mShowHoliday = true;                        //是否显示节假日(不显示农历则节假日无法显示，节假日会覆盖农历显示)
+	private @ColorInt int mBackgroundMonth = Color.WHITE;       //日历的背景颜色
+	private @ColorInt int mBackgroundWeekInfo = Color.WHITE;    //日历的周信息背景颜色
+	private @ColorInt int mTextColorTop = Color.BLACK;          //日历的日期颜色
+	private @ColorInt int mTextColorBottom = Color.parseColor("#999999");   //节日，阴历的日期颜色
+	private @ColorInt int mTextColorWeekInfo = Color.WHITE;     //日历的周信息字体颜色
+	private @ColorInt int mTextColorTitle = Color.parseColor("#999999");    //标题字体颜色
+	private int mTextSizeTop = 14;                              //日历的日期字体
+	private int mTextSizeBottom = 8;                            //节日，阴历的字体
+	private int mTextSizeWeekInfo = 14;                         //周信息字体大小
+	private int mTextSizeTitle = 14;                            //标题字体大小
 	private int mStartYear = 2017;      //日历开始显示的年份
 	private int mStartMonth = 5;        //日历开始显示的月份
-	private @ColorInt int mBackgroundColor = Color.WHITE;
 	private MonthViewAdapter mMonthViewAdapter;
 
 	public ExtraCalendarView(Context context) {
@@ -45,15 +49,47 @@ public class ExtraCalendarView extends ViewGroup{
 	private void initAttrs(AttributeSet attrs) {
 		TypedArray a = getContext().getTheme()
 				.obtainStyledAttributes(attrs, R.styleable.ExtraCalendarView, 0,0);
+		int count = a.getIndexCount();
+		for (int i = 0; i < count; i++) {
+			int attr = a.getIndex(i);
+
+			if (attr == R.styleable.ExtraCalendarView_showHoliday) {
+				mShowHoliday = a.getBoolean(attr, mShowHoliday);
+			} else if (attr == R.styleable.ExtraCalendarView_showLunar) {
+				mShowLunar = a.getBoolean(attr, mShowLunar);
+			} else if (attr == R.styleable.ExtraCalendarView_textColorTitle) {
+
+			} else if (attr == R.styleable.ExtraCalendarView_textColorTop) {
+
+			} else if (attr == R.styleable.ExtraCalendarView_textColorTopBottom) {
+
+			} else if (attr == R.styleable.ExtraCalendarView_textColorTitle) {
+
+			} else if (attr == R.styleable.ExtraCalendarView_textColorWeekInfo) {
+
+			} else if (attr == R.styleable.ExtraCalendarView_textSizeBottom) {
+
+			} else if (attr == R.styleable.ExtraCalendarView_textSizeTop) {
+
+			} else if (attr == R.styleable.ExtraCalendarView_textSizeTitle) {
+
+			} else if (attr == R.styleable.ExtraCalendarView_textSizeWeekInfo) {
+
+			} else if (attr == R.styleable.ExtraCalendarView_backgroundColorMonth) {
+
+			} else if (attr == R.styleable.ExtraCalendarView_backgroundColorWeekInfo) {
+
+			}
+		}
 	}
 
 	private void setupChild() {
 		WeekView weekView = new WeekView(getContext());
-		weekView.setAttrs(mTextSizeTop, mTextColorTop, mBackgroundColor);
+		weekView.setAttrs(mTextSizeTop, mTextColorTop, mBackgroundWeekInfo);
 		addView(weekView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		MonthView monthView = new MonthView(getContext());
 		mMonthViewAdapter = new MonthViewAdapter(mStartYear, mStartMonth, mShowHoliday, mShowLunar,
-				mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom, mBackgroundColor);
+				mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom, mBackgroundMonth);
 		monthView.setAdapter(mMonthViewAdapter);
 		addView(monthView);
 	}
