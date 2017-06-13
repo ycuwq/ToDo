@@ -30,6 +30,7 @@ public class ExtraCalendarView extends ViewGroup{
 	private int mStartMonth = 5;        //日历开始显示的月份
 	private MonthViewAdapter mMonthViewAdapter;
 	private int mMonthCount = 12;
+
 	public ExtraCalendarView(Context context) {
 		this(context, null);
 	}
@@ -143,5 +144,11 @@ public class ExtraCalendarView extends ViewGroup{
 			child.layout(childLeft, childTop, childLeft + width, childTop + height);
 			childTop += height;
 		}
+	}
+
+	public void setStartDate(int startYear, int startMonth, int monthCount) {
+		mStartYear = startYear;
+		mStartMonth = startMonth;
+		mMonthCount = monthCount;
 	}
 }
