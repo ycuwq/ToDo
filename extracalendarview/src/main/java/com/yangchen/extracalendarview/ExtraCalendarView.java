@@ -3,10 +3,15 @@ package com.yangchen.extracalendarview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * 自定义的扩展日历
@@ -30,6 +35,12 @@ public class ExtraCalendarView extends ViewGroup{
 	private int mStartMonth = 5;        //日历开始显示的月份
 	private MonthViewAdapter mMonthViewAdapter;
 	private int mMonthCount = 12;
+	private DirectionButton mButtonPast;    //切换到上个月的按钮
+	private DirectionButton mButtonFuture;  //切换到下个月的按钮
+	private TextView mTitleTv;                //用来显示当前月份的
+	private LinearLayout mTitleLayout;      //标题的父布局
+	private Drawable mLeftArrowMask;
+	private Drawable mRightArrowMask;
 
 	public ExtraCalendarView(Context context) {
 		this(context, null);
@@ -44,6 +55,10 @@ public class ExtraCalendarView extends ViewGroup{
 
 		setClipToPadding(false);
 		setClipChildren(false);
+
+		mButtonPast = new DirectionButton(context);
+		mButtonFuture = new DirectionButton(context);
+		mTitleTv = new TextView(context);
 		initAttrs(attrs);
 		setupChild();
 	}
@@ -79,11 +94,39 @@ public class ExtraCalendarView extends ViewGroup{
 				mBackgroundMonth = a.getInt(attr, Color.WHITE);
 			} else if (attr == R.styleable.ExtraCalendarView_backgroundColorWeekInfo) {
 				mBackgroundWeekInfo = a.getInt(attr, Color.WHITE);
+			} else if (attr == R.styleable.ExtraCalendarView_leftArrowMask) {
+				Drawable mask = a.getDrawable(attr);
+				if (mask == null) {
+					mask = getResources().getDrawable(R.drawable.mcv_action_previous);
+				}
+				setLeftArrowMask(mask);
+			} else if (attr == R.styleable.ExtraCalendarView_rightArrowMask) {
+				Drawable mask = a.getDrawable(attr);
+				if (mask == null) {
+					mask = getResources().getDrawable(R.drawable.mcv_action_next);
+				}
+				setRightArrowMask(mask);
 			}
 		}
 	}
 
 	private void setupChild() {
+		mTitleLayout = new LinearLayout(getContext());
+		mTitleLayout.setOrientation(LinearLayout.HORIZONTAL);
+		mTitleLayout.setClipChildren(false);
+		mTitleLayout.setClipToPadding(false);
+
+		addView(mTitleLayout, new MarginLayoutParams(LayoutParams.MATCH_PARENT, 1));
+
+		mButtonPast.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+		mTitleLayout.addView(mButtonPast, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
+
+		mTitleTv.setGravity(Gravity.CENTER);
+		mTitleLayout.addView(mTitleTv, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 5));
+
+		mButtonFuture.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+		mTitleLayout.addView(mButtonFuture, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
+
 		WeekView weekView = new WeekView(getContext());
 		weekView.setAttrs(mTextSizeWeekInfo, mTextColorWeekInfo, mBackgroundWeekInfo);
 		addView(weekView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -124,6 +167,16 @@ public class ExtraCalendarView extends ViewGroup{
 			child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
 		}
 		setMeasuredDimension(desiredWidth, childHeightSum);
+	}
+
+	public void setLeftArrowMask(Drawable icon) {
+		mLeftArrowMask = icon;
+		mButtonPast.setImageDrawable(icon);
+	}
+
+	public void setRightArrowMask(Drawable icon) {
+		mRightArrowMask = icon;
+		mButtonFuture.setImageDrawable(icon);
 	}
 
 	@Override
