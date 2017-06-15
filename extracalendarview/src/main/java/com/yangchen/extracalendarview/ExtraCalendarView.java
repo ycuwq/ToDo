@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.yangchen.extracalendarview.util.DensityUtil;
 
 /**
  * 自定义的扩展日历
@@ -39,9 +42,41 @@ public class ExtraCalendarView extends ViewGroup{
 	private DirectionButton mButtonFuture;  //切换到下个月的按钮
 	private TextView mTitleTv;                //用来显示当前月份的
 	private LinearLayout mTitleLayout;      //标题的父布局
-	private Drawable mLeftArrowMask;
-	private Drawable mRightArrowMask;
+	private Drawable mLeftArrowMask = getResources().getDrawable(R.drawable.mcv_action_previous);
+	private Drawable mRightArrowMask = getResources().getDrawable(R.drawable.mcv_action_next);
+	private @ColorInt int mArrowColor = Color.BLACK;
 
+	private MonthView mMonthView;
+
+	private OnClickListener onClickListener = v -> {
+		if (v == mButtonPast) {
+			if (mMonthView == null)
+				return;
+			mMonthView.setCurrentItem(mMonthView.getCurrentItem() - 1, true);
+		} else if (v == mButtonFuture) {
+			if (mMonthView == null)
+				return;
+			mMonthView.setCurrentItem(mMonthView.getCurrentItem() + 1, true);
+		}
+	};
+
+	private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+		@Override
+		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+		}
+
+		@Override
+		public void onPageSelected(int position) {
+			//TODO 第一次加载页面时，不会触发此事件
+			updateTitleUI();
+		}
+
+		@Override
+		public void onPageScrollStateChanged(int state) {
+
+		}
+	};
 	public ExtraCalendarView(Context context) {
 		this(context, null);
 	}
@@ -56,9 +91,6 @@ public class ExtraCalendarView extends ViewGroup{
 		setClipToPadding(false);
 		setClipChildren(false);
 
-		mButtonPast = new DirectionButton(context);
-		mButtonFuture = new DirectionButton(context);
-		mTitleTv = new TextView(context);
 		initAttrs(attrs);
 		setupChild();
 	}
@@ -96,45 +128,52 @@ public class ExtraCalendarView extends ViewGroup{
 				mBackgroundWeekInfo = a.getInt(attr, Color.WHITE);
 			} else if (attr == R.styleable.ExtraCalendarView_leftArrowMask) {
 				Drawable mask = a.getDrawable(attr);
-				if (mask == null) {
-					mask = getResources().getDrawable(R.drawable.mcv_action_previous);
-				}
 				setLeftArrowMask(mask);
 			} else if (attr == R.styleable.ExtraCalendarView_rightArrowMask) {
 				Drawable mask = a.getDrawable(attr);
-				if (mask == null) {
-					mask = getResources().getDrawable(R.drawable.mcv_action_next);
-				}
 				setRightArrowMask(mask);
 			}
 		}
 	}
 
 	private void setupChild() {
+		//初始化头布局和箭头文字
+		mButtonPast = new DirectionButton(getContext());
+		mButtonFuture = new DirectionButton(getContext());
+		mButtonPast.setOnClickListener(onClickListener);
+		mButtonFuture.setOnClickListener(onClickListener);
+		mButtonPast.setImageDrawable(mLeftArrowMask);
+		mButtonFuture.setImageDrawable(mRightArrowMask);
+		setArrowColor(mArrowColor);
+		mTitleTv = new TextView(getContext());
 		mTitleLayout = new LinearLayout(getContext());
 		mTitleLayout.setOrientation(LinearLayout.HORIZONTAL);
 		mTitleLayout.setClipChildren(false);
 		mTitleLayout.setClipToPadding(false);
 
-		addView(mTitleLayout, new MarginLayoutParams(LayoutParams.MATCH_PARENT, 1));
-
 		mButtonPast.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-		mTitleLayout.addView(mButtonPast, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
+		mTitleLayout.addView(mButtonPast, new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1));
 
 		mTitleTv.setGravity(Gravity.CENTER);
-		mTitleLayout.addView(mTitleTv, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 5));
+		mTitleLayout.addView(mTitleTv, new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 5));
 
 		mButtonFuture.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-		mTitleLayout.addView(mButtonFuture, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
+		mTitleLayout.addView(mButtonFuture, new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1));
+		mTitleLayout.setPadding(16,24,16,24);
+		addView(mTitleLayout, new LayoutParams(DensityUtil.dp2px(getContext(), 48)));
 
+		//周显示信息
 		WeekView weekView = new WeekView(getContext());
 		weekView.setAttrs(mTextSizeWeekInfo, mTextColorWeekInfo, mBackgroundWeekInfo);
 		addView(weekView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		MonthView monthView = new MonthView(getContext());
+
+		mMonthView = new MonthView(getContext());
 		mMonthViewAdapter = new MonthViewAdapter(mMonthCount, mStartYear, mStartMonth, mShowHoliday, mShowLunar,
 				mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom, mBackgroundMonth);
-		monthView.setAdapter(mMonthViewAdapter);
-		addView(monthView);
+		mMonthView.setAdapter(mMonthViewAdapter);
+		mMonthView.addOnPageChangeListener(onPageChangeListener);
+		addView(mMonthView);
+
 	}
 
 	@Override
@@ -152,7 +191,7 @@ public class ExtraCalendarView extends ViewGroup{
 		for (int i = 0; i < childCount; i ++) {
 			final View child = getChildAt(i);
 			measureChild(child, widthMeasureSpec, heightMeasureSpec);
-			LayoutParams p = child.getLayoutParams();
+			ViewGroup.LayoutParams p = child.getLayoutParams();
 
 			int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
 					desiredWidth,
@@ -167,6 +206,23 @@ public class ExtraCalendarView extends ViewGroup{
 			child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
 		}
 		setMeasuredDimension(desiredWidth, childHeightSum);
+	}
+
+	private void updateTitleUI() {
+		//TODO 设置信息变更
+		mTitleTv.setText("");
+		mButtonPast.setEnabled(canGoBack());
+		mButtonFuture.setEnabled(canGoForward());
+	}
+
+	public void setArrowColor(@ColorInt int color) {
+		if (color == 0) {
+			return;
+		}
+		mArrowColor = color;
+		mButtonPast.setColor(color);
+		mButtonFuture.setColor(color);
+		invalidate();
 	}
 
 	public void setLeftArrowMask(Drawable icon) {
@@ -203,5 +259,26 @@ public class ExtraCalendarView extends ViewGroup{
 		mStartYear = startYear;
 		mStartMonth = startMonth;
 		mMonthCount = monthCount;
+	}
+
+	public boolean canGoBack() {
+		return mMonthView.getCurrentItem() > 0;
+	}
+
+	public boolean canGoForward() {
+		return mMonthView.getCurrentItem() < (mMonthViewAdapter.getCount() - 1);
+	}
+
+	protected static class LayoutParams extends MarginLayoutParams {
+
+		/**
+		 * Create a layout that matches parent width, and is X number of tiles high
+		 *
+		 * @param tileHeight view height in number of tiles
+		 */
+		public LayoutParams(int tileHeight) {
+			super(MATCH_PARENT, tileHeight);
+		}
+
 	}
 }
