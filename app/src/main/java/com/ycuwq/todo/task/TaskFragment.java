@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yangchen.extracalendarview.ExtraCalendarView;
 import com.ycuwq.todo.app.BaseFragment;
 import com.ycuwq.todo.common.util.SnakeBarUtil;
 import com.ycuwq.todo.databinding.FragTaskBinding;
@@ -19,7 +20,7 @@ public class TaskFragment extends BaseFragment{
 	private FragTaskBinding mBinding;
 
 	private TaskViewModel mViewModel;
-
+	private ExtraCalendarView extraCalendarView;
 	private Observable.OnPropertyChangedCallback mSnakeBarCallback;
 	public TaskFragment() {}
 
@@ -31,12 +32,23 @@ public class TaskFragment extends BaseFragment{
 
 	@Nullable
 	@Override
-	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+	                         @Nullable Bundle savedInstanceState) {
 		mBinding = FragTaskBinding.inflate(inflater, container, false);
+		extraCalendarView = mBinding.extraCalendarView;
+		extraCalendarView.setStartDate(2017,6, 15);
+//		extraCalendarView.setCurrentMonth(2017, 7);
+
 		setupSnakeBar();
-//		mBinding.monthView.setDates(CalendarUtil.getDates(2017, 6), 30);
+
 		return mBinding.getRoot();
 
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		extraCalendarView.setCurrentMonth(2017, 7);
 	}
 
 	public void setViewModel(TaskViewModel mViewModel) {
@@ -53,6 +65,9 @@ public class TaskFragment extends BaseFragment{
 				SnakeBarUtil.showSnackBar(getView(), mViewModel.getSnakeBarText());
 			}
 		};
+		if (mViewModel == null) {
+			return;
+		}
 		mViewModel.snakeBarText.addOnPropertyChangedCallback(mSnakeBarCallback);
 	}
 

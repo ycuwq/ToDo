@@ -44,6 +44,13 @@ public class MonthViewAdapter extends PagerAdapter{
 		mBackgroundColor = backgroundColor;
 	}
 
+	void setStartDate(int startYear, int startMonth, int count) {
+		mCount = count;
+		mStartYear = startYear;
+		mStartMonth = startMonth;
+		notifyDataSetChanged();
+	}
+
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 		MonthItemView monthItemView;
@@ -65,7 +72,13 @@ public class MonthViewAdapter extends PagerAdapter{
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
 		container.removeView((MonthItemView) object);
+		mCache.addLast((MonthItemView) object);
+		mViews.remove(position);
+	}
 
+	public MonthItemView getItem(int position) {
+		MonthItemView view = mViews.get(position);
+		return view;
 	}
 
 	@Override

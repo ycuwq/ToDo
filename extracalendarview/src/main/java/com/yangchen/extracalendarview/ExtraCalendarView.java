@@ -14,7 +14,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.yangchen.extracalendarview.util.DateUtil;
 import com.yangchen.extracalendarview.util.DensityUtil;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * 自定义的扩展日历
@@ -46,8 +50,10 @@ public class ExtraCalendarView extends ViewGroup{
 	private Drawable mRightArrowMask = getResources().getDrawable(R.drawable.mcv_action_next);
 	private @ColorInt int mArrowColor = Color.BLACK;
 
-	private MonthView mMonthView;
+	private Date mCurrentMonth;              //标记的当前月份
 
+	private MonthView mMonthView;
+	private SimpleDateFormat monthDateFormat = new SimpleDateFormat("yyyy年MM月", Locale.SIMPLIFIED_CHINESE);
 	private OnClickListener onClickListener = v -> {
 		if (v == mButtonPast) {
 			if (mMonthView == null)
@@ -68,6 +74,8 @@ public class ExtraCalendarView extends ViewGroup{
 
 		@Override
 		public void onPageSelected(int position) {
+			mCurrentMonth = mMonthViewAdapter.getItem(position).getCurrentMonth();
+
 			//TODO 第一次加载页面时，不会触发此事件
 			updateTitleUI();
 		}
@@ -209,10 +217,17 @@ public class ExtraCalendarView extends ViewGroup{
 	}
 
 	private void updateTitleUI() {
-		//TODO 设置信息变更
-		mTitleTv.setText("");
+		mTitleTv.setText(mCurrentMonth.getDate(monthDateFormat));
 		mButtonPast.setEnabled(canGoBack());
 		mButtonFuture.setEnabled(canGoForward());
+	}
+
+	public void setCurrentMonth(int year, int month) {
+		int position = DateUtil.getBetweenDatePosition(mStartYear, mStartMonth, year, month);
+		if (position < 0) {
+			throw new RuntimeException("currentMonth not less than startMonth");
+		}
+		mMonthView.setCurrentItem(position);
 	}
 
 	public void setArrowColor(@ColorInt int color) {
@@ -259,6 +274,7 @@ public class ExtraCalendarView extends ViewGroup{
 		mStartYear = startYear;
 		mStartMonth = startMonth;
 		mMonthCount = monthCount;
+		mMonthViewAdapter.setStartDate(mStartYear, mStartMonth, mMonthCount);
 	}
 
 	public boolean canGoBack() {

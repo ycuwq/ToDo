@@ -1,5 +1,8 @@
 package com.yangchen.extracalendarview;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 /**
  * Created by 杨晨 on 2017/5/18.
  */
@@ -98,4 +101,12 @@ public class Date {
 	public void setLunarHoliday(String lunarHoliday) {
 		this.lunarHoliday = lunarHoliday;
 	}
+
+	public String getDate(DateFormat dateFormat) {
+		Calendar calendar = Calendar.getInstance();
+		//Calendar月份是从第0个月开始算的，所以要减一
+		calendar.set(year, month -1, day);
+		return dateFormat.format(calendar.getTime());
+	}
+
 }

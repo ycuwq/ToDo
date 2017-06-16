@@ -9,6 +9,12 @@ import static org.junit.Assert.assertEquals;
  */
 public class DateUtilTest {
 	@Test
+	public void getBetweenDatePosition() throws Exception {
+		int position = DateUtil.getBetweenDatePosition(2017, 5, 2016, 5);
+		assertEquals(-12, position);
+	}
+
+	@Test
 	public void getDayForWeek() throws Exception {
 		int day = DateUtil.getDayForWeek(2017, 5, 14);
 		assertEquals(1, day);

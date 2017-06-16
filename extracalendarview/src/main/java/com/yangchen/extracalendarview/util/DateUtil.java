@@ -35,4 +35,14 @@ public class DateUtil {
 		return calendar.get(Calendar.MONTH) + 1;
 	}
 
+	/**
+	 * 获取两个日期的月分之间的差
+	 * @return 第二个 - 第一个
+	 */
+	public static int getBetweenDatePosition(int year1, int month1, int year2, int month2) {
+		int year = year2 - year1;
+		int month = month2 - month1;
+
+		return year * 12 + month;
+	}
 }

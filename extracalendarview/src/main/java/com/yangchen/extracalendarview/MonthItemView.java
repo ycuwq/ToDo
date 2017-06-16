@@ -32,7 +32,8 @@ public class MonthItemView extends ViewGroup {
 	private @ColorInt int mBackgroundColor;
 
 	private int mCurrentMonthDay, mLastMonthDay, mNextMonthDay; //当前月份天数，上月天数，下月天数。
-
+	private Date mCurrentMonth;
+	private Date mCurrentDay;
 	public MonthItemView(@NonNull Context context) {
 		this(context, null);
 	}
@@ -99,6 +100,7 @@ public class MonthItemView extends ViewGroup {
 			}
 			addView(view);
 		}
+		mCurrentMonth = dates.get(mLastMonthDay);
 		requestLayout();
 	}
 
@@ -153,6 +155,10 @@ public class MonthItemView extends ViewGroup {
 			childView.measure(MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY),
 					MeasureSpec.makeMeasureSpec(itemHeight, MeasureSpec.EXACTLY));
 		}
+	}
+
+	public Date getCurrentMonth() {
+		return mCurrentMonth;
 	}
 
 	@Override
