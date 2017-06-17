@@ -26,6 +26,8 @@ import java.util.Locale;
  */
 public class ExtraCalendarView extends ViewGroup{
 
+	private final String TAG = getClass().getSimpleName();
+
 	private boolean mShowLunar = true;                          //是否显示农历
 	private boolean mShowHoliday = true;                        //是否显示节假日(不显示农历则节假日无法显示，节假日会覆盖农历显示)
 	private @ColorInt int mBackgroundMonth = Color.WHITE;       //日历的背景颜色
@@ -33,7 +35,7 @@ public class ExtraCalendarView extends ViewGroup{
 	private @ColorInt int mTextColorTop = Color.BLACK;          //日历的日期颜色
 	private @ColorInt int mTextColorBottom = Color.parseColor("#999999");   //节日，阴历的日期颜色
 	private @ColorInt int mTextColorWeekInfo = Color.BLACK;     //日历的周信息字体颜色
-	private @ColorInt int mTextColorTitle;    //标题字体颜色
+	private @ColorInt int mTextColorTitle = Color.BLACK;    //标题字体颜色
 	private int mTextSizeTop = 14;                              //日历的日期字体
 	private int mTextSizeBottom = 8;                            //节日，阴历的字体
 	private int mTextSizeWeekInfo = 14;                         //周信息字体大小
@@ -50,8 +52,8 @@ public class ExtraCalendarView extends ViewGroup{
 	private Drawable mRightArrowMask = getResources().getDrawable(R.drawable.mcv_action_next);
 	private @ColorInt int mArrowColor = Color.BLACK;
 
-	private Date mCurrentMonth;              //标记的当前月份
-
+	private Date mCurrentMonth;              //标记的当前显示的月份
+	private Date mClickDate;                    //当前选中的日期
 	private MonthView mMonthView;
 	private SimpleDateFormat monthDateFormat = new SimpleDateFormat("yyyy年MM月", Locale.SIMPLIFIED_CHINESE);
 	private OnClickListener onClickListener = v -> {
@@ -101,6 +103,8 @@ public class ExtraCalendarView extends ViewGroup{
 
 		initAttrs(attrs);
 		setupChild();
+
+		setCurrentMonth(2017, 12);
 	}
 
 	private void initAttrs(AttributeSet attrs) {
@@ -154,19 +158,22 @@ public class ExtraCalendarView extends ViewGroup{
 		mButtonFuture.setImageDrawable(mRightArrowMask);
 		setArrowColor(mArrowColor);
 		mTitleTv = new TextView(getContext());
+		mTitleTv.setTextColor(mTextColorTitle);
+		mTitleTv.setTextSize(mTextSizeTitle);
+		mTitleTv.setGravity(Gravity.CENTER);
 		mTitleLayout = new LinearLayout(getContext());
 		mTitleLayout.setOrientation(LinearLayout.HORIZONTAL);
 		mTitleLayout.setClipChildren(false);
 		mTitleLayout.setClipToPadding(false);
 
 		mButtonPast.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-		mTitleLayout.addView(mButtonPast, new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1));
+		mTitleLayout.addView(mButtonPast, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
 
 		mTitleTv.setGravity(Gravity.CENTER);
-		mTitleLayout.addView(mTitleTv, new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 5));
+		mTitleLayout.addView(mTitleTv, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 5));
 
 		mButtonFuture.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-		mTitleLayout.addView(mButtonFuture, new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1));
+		mTitleLayout.addView(mButtonFuture, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
 		mTitleLayout.setPadding(16,24,16,24);
 		addView(mTitleLayout, new LayoutParams(DensityUtil.dp2px(getContext(), 48)));
 
@@ -181,7 +188,6 @@ public class ExtraCalendarView extends ViewGroup{
 		mMonthView.setAdapter(mMonthViewAdapter);
 		mMonthView.addOnPageChangeListener(onPageChangeListener);
 		addView(mMonthView);
-
 	}
 
 	@Override
@@ -223,11 +229,19 @@ public class ExtraCalendarView extends ViewGroup{
 	}
 
 	public void setCurrentMonth(int year, int month) {
+		setCurrentMonth(year, month, true);
+	}
+
+	/**
+	 *  跳转到选中日期页
+	 * @param smoothScroll 是否平滑滚动
+	 */
+	public void setCurrentMonth(int year, int month, boolean smoothScroll) {
 		int position = DateUtil.getBetweenDatePosition(mStartYear, mStartMonth, year, month);
 		if (position < 0) {
 			throw new RuntimeException("currentMonth not less than startMonth");
 		}
-		mMonthView.setCurrentItem(position);
+		mMonthView.setCurrentItem(position, smoothScroll);
 	}
 
 	public void setArrowColor(@ColorInt int color) {

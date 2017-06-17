@@ -17,6 +17,8 @@ import com.ycuwq.todo.databinding.FragTaskBinding;
  */
 public class TaskFragment extends BaseFragment{
 
+	private final String TAG = getClass().getSimpleName();
+
 	private FragTaskBinding mBinding;
 
 	private TaskViewModel mViewModel;
@@ -37,10 +39,11 @@ public class TaskFragment extends BaseFragment{
 		mBinding = FragTaskBinding.inflate(inflater, container, false);
 		extraCalendarView = mBinding.extraCalendarView;
 		extraCalendarView.setStartDate(2017,6, 15);
-//		extraCalendarView.setCurrentMonth(2017, 7);
-
+//
 		setupSnakeBar();
 
+		mBinding.button.setOnClickListener((v) ->
+				extraCalendarView.setCurrentMonth(2017, 12));
 		return mBinding.getRoot();
 
 	}
@@ -48,7 +51,7 @@ public class TaskFragment extends BaseFragment{
 	@Override
 	public void onResume() {
 		super.onResume();
-		extraCalendarView.setCurrentMonth(2017, 7);
+//		extraCalendarView.setCurrentMonth(2017, 7);
 	}
 
 	public void setViewModel(TaskViewModel mViewModel) {

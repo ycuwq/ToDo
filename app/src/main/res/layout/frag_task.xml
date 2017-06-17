@@ -21,6 +21,10 @@
         android:layout_height="wrap_content">
 
     </com.yangchen.extracalendarview.ExtraCalendarView>
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
 </layout>
