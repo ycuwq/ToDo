@@ -87,6 +87,7 @@ public class ExtraCalendarView extends ViewGroup{
 
 		}
 	};
+
 	public ExtraCalendarView(Context context) {
 		this(context, null);
 	}
@@ -104,7 +105,6 @@ public class ExtraCalendarView extends ViewGroup{
 		initAttrs(attrs);
 		setupChild();
 
-		setCurrentMonth(2017, 12);
 	}
 
 	private void initAttrs(AttributeSet attrs) {
@@ -229,6 +229,7 @@ public class ExtraCalendarView extends ViewGroup{
 	}
 
 	public void setCurrentMonth(int year, int month) {
+		//TODO 页面没有加载完成时，调用此方法会Crash。
 		setCurrentMonth(year, month, true);
 	}
 
