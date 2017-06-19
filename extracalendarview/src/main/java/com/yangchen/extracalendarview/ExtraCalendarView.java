@@ -14,10 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.yangchen.extracalendarview.util.CalendarUtil;
 import com.yangchen.extracalendarview.util.DateUtil;
 import com.yangchen.extracalendarview.util.DensityUtil;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 /**
@@ -101,7 +103,9 @@ public class ExtraCalendarView extends ViewGroup{
 
 		setClipToPadding(false);
 		setClipChildren(false);
-
+		Calendar calendar = Calendar.getInstance();
+		mClickDate = CalendarUtil.getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+				calendar.get(Calendar.DAY_OF_MONTH), Date.TYPE_THIS_MONTH);
 		initAttrs(attrs);
 		setupChild();
 
