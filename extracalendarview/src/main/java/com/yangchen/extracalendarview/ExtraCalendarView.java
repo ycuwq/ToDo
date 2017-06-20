@@ -49,7 +49,6 @@ public class ExtraCalendarView extends ViewGroup{
 	private DirectionButton mButtonPast;    //切换到上个月的按钮
 	private DirectionButton mButtonFuture;  //切换到下个月的按钮
 	private TextView mTitleTv;                //用来显示当前月份的
-	private LinearLayout mTitleLayout;      //标题的父布局
 	private Drawable mLeftArrowMask = getResources().getDrawable(R.drawable.mcv_action_previous);
 	private Drawable mRightArrowMask = getResources().getDrawable(R.drawable.mcv_action_next);
 	private @ColorInt int mArrowColor = Color.BLACK;
@@ -78,9 +77,11 @@ public class ExtraCalendarView extends ViewGroup{
 
 		@Override
 		public void onPageSelected(int position) {
-			mCurrentMonth = mMonthViewAdapter.getItem(position).getCurrentMonth();
-
-			//TODO 第一次加载页面时，不会触发此事件
+			//View没有绘制完成时，adapter得不到数据
+			MonthItemView monthItemView = mMonthViewAdapter.getItem(position);
+			if (monthItemView != null) {
+				mCurrentMonth = monthItemView.getCurrentMonth();
+			}
 			updateTitleUI();
 		}
 
@@ -104,11 +105,13 @@ public class ExtraCalendarView extends ViewGroup{
 		setClipToPadding(false);
 		setClipChildren(false);
 		Calendar calendar = Calendar.getInstance();
-		mClickDate = CalendarUtil.getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-				calendar.get(Calendar.DAY_OF_MONTH), Date.TYPE_THIS_MONTH);
+
 		initAttrs(attrs);
 		setupChild();
-
+		//Calendar中月是从第0个月算起的
+		mClickDate = CalendarUtil.getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
+				calendar.get(Calendar.DAY_OF_MONTH), Date.TYPE_THIS_MONTH);
+		setCurrentMonth(mClickDate.getYear(), mClickDate.getMonth(), false);
 	}
 
 	private void initAttrs(AttributeSet attrs) {
@@ -165,7 +168,7 @@ public class ExtraCalendarView extends ViewGroup{
 		mTitleTv.setTextColor(mTextColorTitle);
 		mTitleTv.setTextSize(mTextSizeTitle);
 		mTitleTv.setGravity(Gravity.CENTER);
-		mTitleLayout = new LinearLayout(getContext());
+		LinearLayout mTitleLayout = new LinearLayout(getContext());
 		mTitleLayout.setOrientation(LinearLayout.HORIZONTAL);
 		mTitleLayout.setClipChildren(false);
 		mTitleLayout.setClipToPadding(false);
@@ -233,7 +236,6 @@ public class ExtraCalendarView extends ViewGroup{
 	}
 
 	public void setCurrentMonth(int year, int month) {
-		//TODO 页面没有加载完成时，调用此方法会Crash。
 		setCurrentMonth(year, month, true);
 	}
 
@@ -241,11 +243,13 @@ public class ExtraCalendarView extends ViewGroup{
 	 *  跳转到选中日期页
 	 * @param smoothScroll 是否平滑滚动
 	 */
-	public void setCurrentMonth(int year, int month, boolean smoothScroll) {
+	public void setCurrentMonth(int year, int month , boolean smoothScroll) {
 		int position = DateUtil.getBetweenDatePosition(mStartYear, mStartMonth, year, month);
 		if (position < 0) {
 			throw new RuntimeException("currentMonth not less than startMonth");
 		}
+		//此处是防止View没有绘制完成时调用此方法，onPageChangeListener中adapter还没有加载页面，得不到日期数据
+		mCurrentMonth = CalendarUtil.getDate(year, month, 1, Date.TYPE_THIS_MONTH);
 		mMonthView.setCurrentItem(position, smoothScroll);
 	}
 
