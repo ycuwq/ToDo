@@ -2,7 +2,6 @@ package com.yangchen.extracalendarview;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -23,17 +22,13 @@ public class MonthItemView extends ViewGroup {
 	private static final int MAX_ROW = 6;       //最大显示的行数
 	private static final int COLUMN = 7;        //显示的列数
 
-	private boolean mShowLunar;
-	private boolean mShowHoliday;
-	private int mTextSizeTop;
-	private int mTextSizeBottom;
-	private @ColorInt int mTextColorTop;
-	private @ColorInt int mTextColorBottom;
-	private @ColorInt int mBackgroundColor;
-
 	private int mCurrentMonthDay, mLastMonthDay, mNextMonthDay; //当前月份天数，上月天数，下月天数。
 	private Date mCurrentMonth;
 	private Date mCurrentDay;
+
+	private DayItemAttrs mDayItemAttrs;
+	private com.yangchen.extracalendarview.OnClickListener onClickListener;
+	private View mLastClickedView;              //上次点击过的View
 	public MonthItemView(@NonNull Context context) {
 		this(context, null);
 	}
@@ -45,16 +40,9 @@ public class MonthItemView extends ViewGroup {
 		super(context, attrs, defStyleAttr);
 	}
 
-	public void initAttr(boolean isShowLunar, boolean isShowHoliday, int textSizeTop, int textSizeBottom,
-	                      int textColorTop, int textColorBottom, int backgroundColor) {
-		mShowLunar = isShowLunar;
-		mShowHoliday = isShowHoliday;
-		mTextSizeTop = textSizeTop;
-		mTextSizeBottom = textSizeBottom;
-		mTextColorTop = textColorTop;
-		mTextColorBottom = textColorBottom;
-		mBackgroundColor = backgroundColor;
-		super.setBackgroundColor(mBackgroundColor);
+	public void initAttr(DayItemAttrs dayItemAttrs) {
+		mDayItemAttrs = dayItemAttrs;
+		super.setBackgroundColor(mDayItemAttrs.getBackgroundColor());
 	}
 
 	public void setDates(List<Date> dates, int currentMonthDays) {
@@ -80,17 +68,17 @@ public class MonthItemView extends ViewGroup {
 			View view = LayoutInflater.from(getContext()).inflate(R.layout.item_month_layout, null);
 			TextView topTv = (TextView) view.findViewById(R.id.tv_item_month_top);
 			TextView bottomTv = (TextView) view.findViewById(R.id.tv_item_month_bottom);
-			topTv.setTextColor(mTextColorTop);
-			bottomTv.setTextColor(mTextColorBottom);
-			topTv.setTextSize(mTextSizeTop);
-			bottomTv.setTextSize(mTextSizeBottom);
+			topTv.setTextColor(mDayItemAttrs.getTextColorTop());
+			bottomTv.setTextColor(mDayItemAttrs.getTextColorBottom());
+			topTv.setTextSize(mDayItemAttrs.getTextSizeTop());
+			bottomTv.setTextSize(mDayItemAttrs.getTextSizeBottom());
 			topTv.setText(String.valueOf(date.getDay()));
 			//设置农历数据
-			if (mShowLunar) {
+			if (mDayItemAttrs.isShowLunar()) {
 				bottomTv.setText(date.getLunarDay());
 			}
 			//设置节日数据
-			if (mShowHoliday) {
+			if (mDayItemAttrs.isShowHoliday()) {
 				if (!TextUtils.isEmpty(date.getLunarHoliday())) {
 					bottomTv.setText(date.getLunarHoliday());
 				}
@@ -98,10 +86,46 @@ public class MonthItemView extends ViewGroup {
 					bottomTv.setText(date.getHoliday());
 				}
 			}
+			view.setOnClickListener(v -> {
+				//TODO 由于ViewPager的复用策略，翻两页之后再回来，点击效果消失。
+				mCurrentDay = date;
+				if (mLastClickedView != null) {
+					setClickedViewStyle(mLastClickedView, true);
+				}
+				setClickedViewStyle(view, false);
+				mLastClickedView = view;
+				if (onClickListener != null) {
+					onClickListener.onClick(view, date);
+				}
+			});
 			addView(view);
 		}
 		mCurrentMonth = dates.get(mLastMonthDay);
 		requestLayout();
+	}
+
+	public void setChildClicked() {
+	}
+
+	/**
+	 * 设置点击样式或回复原状
+	 * @param view      选定的view
+	 * @param reset     true 恢复， false 设置点击样式
+	 */
+	private void setClickedViewStyle(View view, boolean reset) {
+		TextView topTv = (TextView) view.findViewById(R.id.tv_item_month_top);
+		TextView bottomTv = (TextView) view.findViewById(R.id.tv_item_month_bottom);
+
+		if (reset) {
+			view.setBackgroundResource(0);
+			topTv.setTextColor(mDayItemAttrs.getTextColorTop());
+			bottomTv.setTextColor(mDayItemAttrs.getTextColorBottom());
+		} else {
+			view.setBackground(mDayItemAttrs.getClickBg());
+			topTv.setTextColor(mDayItemAttrs.getClickTextColor());
+			bottomTv.setTextColor(mDayItemAttrs.getClickTextColor());
+		}
+
 	}
 
 	@Override
@@ -155,6 +179,10 @@ public class MonthItemView extends ViewGroup {
 			childView.measure(MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY),
 					MeasureSpec.makeMeasureSpec(itemHeight, MeasureSpec.EXACTLY));
 		}
+	}
+
+	public void setOnClickListener(com.yangchen.extracalendarview.OnClickListener onClickListener) {
+		this.onClickListener = onClickListener;
 	}
 
 	public Date getCurrentMonth() {

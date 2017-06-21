@@ -1,8 +1,6 @@
 package com.yangchen.extracalendarview;
 
-import android.support.annotation.ColorInt;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,27 +20,15 @@ public class MonthViewAdapter extends PagerAdapter{
 	private SparseArray<MonthItemView> mViews = new SparseArray<>();
 
 	private int mCount;     //一共显示多少个月
-	private boolean isShowHoliday;
-	private boolean isShowLunar;
-	private int mTextSizeTop;
-	private int mTextSizeBottom;
-	private @ColorInt int mTextColorTop;
-	private @ColorInt int mTextColorBottom;
-	private int mStartYear, mStartMonth;
-	private @ColorInt int mBackgroundColor;
 
-	MonthViewAdapter(int count, int startYear, int startMonth, boolean isShowHoliday, boolean isShowLunar, int textSizeTop,
-	                 int textSizeBottom, int textColorTop, int textColorBottom, int backgroundColor) {
+	private int mStartYear, mStartMonth;
+	private DayItemAttrs mDayItemAttrs;
+
+	MonthViewAdapter(int count, int startYear, int startMonth, DayItemAttrs dayItemAttrs) {
 		mCount = count;
 		mStartYear = startYear;
 		mStartMonth = startMonth;
-		this.isShowHoliday = isShowHoliday;
-		this.isShowLunar = isShowLunar;
-		this.mTextSizeTop = textSizeTop;
-		this.mTextSizeBottom = textSizeBottom;
-		this.mTextColorTop = textColorTop;
-		this.mTextColorBottom = textColorBottom;
-		mBackgroundColor = backgroundColor;
+		mDayItemAttrs = dayItemAttrs;
 	}
 
 	void setStartDate(int startYear, int startMonth, int count) {
@@ -63,7 +49,7 @@ public class MonthViewAdapter extends PagerAdapter{
 		}
 
 		int date[] = CalendarUtil.positionToDate(position, mStartYear, mStartMonth);
-		monthItemView.initAttr(isShowLunar, isShowHoliday, mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom, mBackgroundColor);
+		monthItemView.initAttr(mDayItemAttrs);
 		monthItemView.setDates(CalendarUtil.getDates(date[0], date[1]), SolarUtil.getMonthDays(date[0], date[1]));
 		mViews.put(position, monthItemView);
 		container.addView(monthItemView);
@@ -77,6 +63,7 @@ public class MonthViewAdapter extends PagerAdapter{
 		mViews.remove(position);
 	}
 
+	//TODO 处理一下作用域
 	public MonthItemView getItem(int position) {
 		MonthItemView view = mViews.get(position);
 		return view;

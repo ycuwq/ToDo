@@ -32,14 +32,9 @@ public class ExtraCalendarView extends ViewGroup{
 
 	private boolean mShowLunar = true;                          //是否显示农历
 	private boolean mShowHoliday = true;                        //是否显示节假日(不显示农历则节假日无法显示，节假日会覆盖农历显示)
-	private @ColorInt int mBackgroundMonth = Color.WHITE;       //日历的背景颜色
 	private @ColorInt int mBackgroundWeekInfo = Color.WHITE;    //日历的周信息背景颜色
-	private @ColorInt int mTextColorTop = Color.BLACK;          //日历的日期颜色
-	private @ColorInt int mTextColorBottom = Color.parseColor("#999999");   //节日，阴历的日期颜色
-	private @ColorInt int mTextColorWeekInfo = Color.BLACK;     //日历的周信息字体颜色
-	private @ColorInt int mTextColorTitle = Color.BLACK;    //标题字体颜色
-	private int mTextSizeTop = 14;                              //日历的日期字体
-	private int mTextSizeBottom = 8;                            //节日，阴历的字体
+	private @ColorInt int mTextColorTitle = Color.BLACK;        //标题的字体颜色
+	private @ColorInt int mTextColorWeekInfo = Color.BLACK;
 	private int mTextSizeWeekInfo = 14;                         //周信息字体大小
 	private int mTextSizeTitle = 14;                            //标题字体大小
 	private int mStartYear = 2017;      //日历开始显示的年份
@@ -52,11 +47,12 @@ public class ExtraCalendarView extends ViewGroup{
 	private Drawable mLeftArrowMask = getResources().getDrawable(R.drawable.mcv_action_previous);
 	private Drawable mRightArrowMask = getResources().getDrawable(R.drawable.mcv_action_next);
 	private @ColorInt int mArrowColor = Color.BLACK;
-
 	private Date mCurrentMonth;              //标记的当前显示的月份
 	private Date mClickDate;                    //当前选中的日期
 	private MonthView mMonthView;
+	private DayItemAttrs mDayItemAttrs = new DayItemAttrs();
 	private SimpleDateFormat monthDateFormat = new SimpleDateFormat("yyyy年MM月", Locale.SIMPLIFIED_CHINESE);
+
 	private OnClickListener onClickListener = v -> {
 		if (v == mButtonPast) {
 			if (mMonthView == null)
@@ -126,23 +122,24 @@ public class ExtraCalendarView extends ViewGroup{
 			} else if (attr == R.styleable.ExtraCalendarView_showLunar) {
 				mShowLunar = a.getBoolean(attr, true);
 			} else if (attr == R.styleable.ExtraCalendarView_textColorTitle) {
+
 				mTextColorTitle = a.getColor(attr, Color.BLACK);
 			} else if (attr == R.styleable.ExtraCalendarView_textColorTop) {
-				mTextColorTop = a.getColor(attr, Color.BLACK);
+				mDayItemAttrs.setTextColorTop(a.getColor(attr, Color.BLACK));
 			} else if (attr == R.styleable.ExtraCalendarView_textColorTopBottom) {
-				mTextColorBottom = a.getColor(attr, Color.parseColor("#999999"));
+				mDayItemAttrs.setTextColorBottom(a.getColor(attr, Color.parseColor("#999999")));
 			} else if(attr == R.styleable.ExtraCalendarView_textColorWeekInfo) {
 				mTextColorWeekInfo = a.getColor(attr, Color.BLACK);
 			} else if (attr == R.styleable.ExtraCalendarView_textSizeBottom) {
-				mTextSizeBottom = a.getInt(attr, 8);
+				mDayItemAttrs.setTextSizeBottom(a.getInt(attr, 8));
 			} else if (attr == R.styleable.ExtraCalendarView_textSizeTop) {
-				mTextSizeTop = a.getInt(attr, 14);
+				mDayItemAttrs.setTextSizeTop(a.getInt(attr, 14));
 			} else if (attr == R.styleable.ExtraCalendarView_textSizeTitle) {
 				mTextSizeTitle = a.getInt(attr, 14);
 			} else if (attr == R.styleable.ExtraCalendarView_textSizeWeekInfo) {
 				mTextSizeWeekInfo = a.getInt(attr, 14);
 			} else if (attr == R.styleable.ExtraCalendarView_backgroundColorMonth) {
-				mBackgroundMonth = a.getInt(attr, Color.WHITE);
+				mDayItemAttrs.setBackgroundColor(a.getInt(attr, Color.WHITE));
 			} else if (attr == R.styleable.ExtraCalendarView_backgroundColorWeekInfo) {
 				mBackgroundWeekInfo = a.getInt(attr, Color.WHITE);
 			} else if (attr == R.styleable.ExtraCalendarView_leftArrowMask) {
@@ -153,6 +150,7 @@ public class ExtraCalendarView extends ViewGroup{
 				setRightArrowMask(mask);
 			}
 		}
+		mDayItemAttrs.setClickBg(getResources().getDrawable(R.drawable.blue_circle));
 	}
 
 	private void setupChild() {
@@ -190,8 +188,7 @@ public class ExtraCalendarView extends ViewGroup{
 		addView(weekView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
 		mMonthView = new MonthView(getContext());
-		mMonthViewAdapter = new MonthViewAdapter(mMonthCount, mStartYear, mStartMonth, mShowHoliday, mShowLunar,
-				mTextSizeTop, mTextSizeBottom, mTextColorTop, mTextColorBottom, mBackgroundMonth);
+		mMonthViewAdapter = new MonthViewAdapter(mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
 		mMonthView.setAdapter(mMonthViewAdapter);
 		mMonthView.addOnPageChangeListener(onPageChangeListener);
 		addView(mMonthView);
