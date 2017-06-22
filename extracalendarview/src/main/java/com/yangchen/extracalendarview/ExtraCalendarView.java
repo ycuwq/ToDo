@@ -30,8 +30,6 @@ public class ExtraCalendarView extends ViewGroup{
 
 	private final String TAG = getClass().getSimpleName();
 
-	private boolean mShowLunar = true;                          //是否显示农历
-	private boolean mShowHoliday = true;                        //是否显示节假日(不显示农历则节假日无法显示，节假日会覆盖农历显示)
 	private @ColorInt int mBackgroundWeekInfo = Color.WHITE;    //日历的周信息背景颜色
 	private @ColorInt int mTextColorTitle = Color.BLACK;        //标题的字体颜色
 	private @ColorInt int mTextColorWeekInfo = Color.BLACK;
@@ -53,6 +51,7 @@ public class ExtraCalendarView extends ViewGroup{
 	private DayItemAttrs mDayItemAttrs = new DayItemAttrs();
 	private SimpleDateFormat monthDateFormat = new SimpleDateFormat("yyyy年MM月", Locale.SIMPLIFIED_CHINESE);
 
+	private DayView mLastClickedView;
 	private OnClickListener onClickListener = v -> {
 		if (v == mButtonPast) {
 			if (mMonthView == null)
@@ -73,10 +72,14 @@ public class ExtraCalendarView extends ViewGroup{
 
 		@Override
 		public void onPageSelected(int position) {
-			//View没有绘制完成时，adapter得不到数据
 			MonthItemView monthItemView = mMonthViewAdapter.getItem(position);
+			// View没有绘制完成时，adapter得不到MonthItemView
 			if (monthItemView != null) {
 				mCurrentMonth = monthItemView.getCurrentMonth();
+				if (mLastClickedView != null) {
+					mLastClickedView.setClickedViewStyle(false);
+				}
+
 			}
 			updateTitleUI();
 		}
@@ -118,11 +121,10 @@ public class ExtraCalendarView extends ViewGroup{
 			int attr = a.getIndex(i);
 
 			if (attr == R.styleable.ExtraCalendarView_showHoliday) {
-				mShowHoliday = a.getBoolean(attr, true);
+				mDayItemAttrs.setShowHoliday(a.getBoolean(attr, true));
 			} else if (attr == R.styleable.ExtraCalendarView_showLunar) {
-				mShowLunar = a.getBoolean(attr, true);
+				mDayItemAttrs.setShowLunar(a.getBoolean(attr, true));
 			} else if (attr == R.styleable.ExtraCalendarView_textColorTitle) {
-
 				mTextColorTitle = a.getColor(attr, Color.BLACK);
 			} else if (attr == R.styleable.ExtraCalendarView_textColorTop) {
 				mDayItemAttrs.setTextColorTop(a.getColor(attr, Color.BLACK));
@@ -188,10 +190,10 @@ public class ExtraCalendarView extends ViewGroup{
 		addView(weekView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
 		mMonthView = new MonthView(getContext());
-		mMonthViewAdapter = new MonthViewAdapter(mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
+		mMonthViewAdapter = new MonthViewAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
 		mMonthView.setAdapter(mMonthViewAdapter);
 		mMonthView.addOnPageChangeListener(onPageChangeListener);
-		addView(mMonthView);
+		addView(mMonthView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	}
 
 	@Override
@@ -232,8 +234,32 @@ public class ExtraCalendarView extends ViewGroup{
 		mButtonFuture.setEnabled(canGoForward());
 	}
 
+	public Date getClickDate() {
+		return mClickDate;
+	}
+
+	/**
+	 * 设置跳转到选定的月份， 如果超出范围则不会跳转
+	 * @param year  选择的年
+	 * @param month 选择的月
+	 */
 	public void setCurrentMonth(int year, int month) {
 		setCurrentMonth(year, month, true);
+	}
+
+	/**
+	 * 每个ViewPager的Item是相互独立的，mLastClickedView每个Item都可以有一个。
+	 * 所以为了保证全局只有一个点击效果，只能将点击事件的处理向上抛。
+	 * TODO 当点击上月的信息是跳转到上月
+	 * @param dayView
+	 */
+	public void onDateClicked(DayView dayView) {
+		if (mLastClickedView != null) {
+			mLastClickedView.setClickedViewStyle(true);
+		}
+		dayView.setClickedViewStyle(false);
+		mLastClickedView = dayView;
+		mClickDate = dayView.getDate();
 	}
 
 	/**
@@ -242,8 +268,8 @@ public class ExtraCalendarView extends ViewGroup{
 	 */
 	public void setCurrentMonth(int year, int month , boolean smoothScroll) {
 		int position = DateUtil.getBetweenDatePosition(mStartYear, mStartMonth, year, month);
-		if (position < 0) {
-			throw new RuntimeException("currentMonth not less than startMonth");
+		if (position < 0 || position >= mMonthCount) {
+			return;
 		}
 		//此处是防止View没有绘制完成时调用此方法，onPageChangeListener中adapter还没有加载页面，得不到日期数据
 		mCurrentMonth = CalendarUtil.getDate(year, month, 1, Date.TYPE_THIS_MONTH);

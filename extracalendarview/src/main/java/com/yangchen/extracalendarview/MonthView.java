@@ -2,21 +2,16 @@ package com.yangchen.extracalendarview;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
-import android.util.AttributeSet;
 
 /**
- * Created by 杨晨 on 2017/5/27.
+ * 包装ViewPager
+ * 主要用来计算MonthItemView的高度
+ * Created by yangchen on 2017/6/22.
  */
 public class MonthView extends ViewPager {
-
 	public MonthView(Context context) {
-		this(context, null);
+		super(context);
 	}
-
-	public MonthView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -29,7 +24,4 @@ public class MonthView extends ViewPager {
 			}
 		}
 	}
-
-
-
 }

@@ -1,5 +1,7 @@
 package com.yangchen.extracalendarview;
 
+import android.support.annotation.NonNull;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 
@@ -107,6 +109,35 @@ public class Date {
 		//Calendar月份是从第0个月开始算的，所以要减一
 		calendar.set(year, month -1, day);
 		return dateFormat.format(calendar.getTime());
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Date) {
+			Date other = (Date) obj;
+			if (other.year == year && other.month == month && other.day == day) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	public boolean isBefore(@NonNull Date other) {
+		if (year == other.year) {
+			return ((month == other.month) ? (day < other.day) : (month < other.month));
+		} else {
+			return year < other.year;
+		}
+	}
+
+	public boolean isAfter(@NonNull Date other) {
+
+		if (year == other.year) {
+			return (month == other.month) ? (day > other.day) : (month > other.month);
+		} else {
+			return year > other.year;
+		}
 	}
 
 }

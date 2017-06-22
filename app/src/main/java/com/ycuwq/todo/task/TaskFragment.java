@@ -41,8 +41,6 @@ public class TaskFragment extends BaseFragment{
 		extraCalendarView.setStartDate(2017,5, 15);
 //
 		setupSnakeBar();
-		mBinding.button.setOnClickListener((v) ->
-				extraCalendarView.setCurrentMonth(2017, 12));
 		return mBinding.getRoot();
 
 	}

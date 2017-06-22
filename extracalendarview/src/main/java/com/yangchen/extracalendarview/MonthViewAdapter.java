@@ -23,8 +23,9 @@ public class MonthViewAdapter extends PagerAdapter{
 
 	private int mStartYear, mStartMonth;
 	private DayItemAttrs mDayItemAttrs;
-
-	MonthViewAdapter(int count, int startYear, int startMonth, DayItemAttrs dayItemAttrs) {
+	private ExtraCalendarView mExtraCalendarView;
+	MonthViewAdapter(ExtraCalendarView extraCalendarView, int count, int startYear, int startMonth, DayItemAttrs dayItemAttrs) {
+		mExtraCalendarView = extraCalendarView;
 		mCount = count;
 		mStartYear = startYear;
 		mStartMonth = startMonth;
@@ -44,7 +45,7 @@ public class MonthViewAdapter extends PagerAdapter{
 		if (!mCache.isEmpty()) {
 			monthItemView = mCache.removeFirst();
 		} else {
-			monthItemView = new MonthItemView(container.getContext());
+			monthItemView = new MonthItemView(mExtraCalendarView, container.getContext());
 
 		}
 
