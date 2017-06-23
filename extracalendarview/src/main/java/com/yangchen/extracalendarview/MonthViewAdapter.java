@@ -66,8 +66,7 @@ public class MonthViewAdapter extends PagerAdapter{
 
 	//TODO 处理一下作用域
 	public MonthItemView getItem(int position) {
-		MonthItemView view = mViews.get(position);
-		return view;
+		return mViews.get(position);
 	}
 
 	@Override

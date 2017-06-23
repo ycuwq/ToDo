@@ -39,7 +39,6 @@ public class TaskFragment extends BaseFragment{
 		mBinding = FragTaskBinding.inflate(inflater, container, false);
 		extraCalendarView = mBinding.extraCalendarView;
 		extraCalendarView.setStartDate(2017,5, 15);
-//
 		setupSnakeBar();
 		return mBinding.getRoot();
 

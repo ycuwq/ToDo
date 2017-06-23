@@ -113,9 +113,16 @@ public class Date {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
 		if (obj instanceof Date) {
 			Date other = (Date) obj;
-			if (other.year == year && other.month == month && other.day == day) {
+			if (other.year == year && other.month == month && other.day == day &&
+					other.getType() == type) {
 				return true;
 			}
 		}
@@ -140,4 +147,8 @@ public class Date {
 		}
 	}
 
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }

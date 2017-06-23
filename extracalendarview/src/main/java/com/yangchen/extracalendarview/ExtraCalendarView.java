@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.yangchen.extracalendarview.listener.OnDayClickListener;
+import com.yangchen.extracalendarview.listener.OnMonthChangeListener;
 import com.yangchen.extracalendarview.util.CalendarUtil;
 import com.yangchen.extracalendarview.util.DateUtil;
 import com.yangchen.extracalendarview.util.DensityUtil;
@@ -26,6 +28,7 @@ import java.util.Locale;
  * 自定义的扩展日历
  * Created by yangchen on 2017/6/7.
  */
+@SuppressWarnings("unused")
 public class ExtraCalendarView extends ViewGroup{
 
 	private final String TAG = getClass().getSimpleName();
@@ -50,8 +53,12 @@ public class ExtraCalendarView extends ViewGroup{
 	private MonthView mMonthView;
 	private DayItemAttrs mDayItemAttrs = new DayItemAttrs();
 	private SimpleDateFormat monthDateFormat = new SimpleDateFormat("yyyy年MM月", Locale.SIMPLIFIED_CHINESE);
-
+	private LinearLayout mTitleLayout;
 	private DayView mLastClickedView;
+
+	private OnDayClickListener mOnDayClickListener;
+	private OnMonthChangeListener mOnMonthChangeListener;
+
 	private OnClickListener onClickListener = v -> {
 		if (v == mButtonPast) {
 			if (mMonthView == null)
@@ -79,7 +86,9 @@ public class ExtraCalendarView extends ViewGroup{
 				if (mLastClickedView != null) {
 					mLastClickedView.setClickedViewStyle(false);
 				}
-
+				if (mOnMonthChangeListener != null) {
+					mOnMonthChangeListener.onChange(mCurrentMonth);
+				}
 			}
 			updateTitleUI();
 		}
@@ -168,7 +177,7 @@ public class ExtraCalendarView extends ViewGroup{
 		mTitleTv.setTextColor(mTextColorTitle);
 		mTitleTv.setTextSize(mTextSizeTitle);
 		mTitleTv.setGravity(Gravity.CENTER);
-		LinearLayout mTitleLayout = new LinearLayout(getContext());
+		mTitleLayout = new LinearLayout(getContext());
 		mTitleLayout.setOrientation(LinearLayout.HORIZONTAL);
 		mTitleLayout.setClipChildren(false);
 		mTitleLayout.setClipToPadding(false);
@@ -182,7 +191,7 @@ public class ExtraCalendarView extends ViewGroup{
 		mButtonFuture.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 		mTitleLayout.addView(mButtonFuture, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
 		mTitleLayout.setPadding(16,24,16,24);
-		addView(mTitleLayout, new LayoutParams(DensityUtil.dp2px(getContext(), 48)));
+		addView(mTitleLayout, new LayoutParams(LayoutParams.MATCH_PARENT, DensityUtil.dp2px(getContext(), 48)));
 
 		//周显示信息
 		WeekView weekView = new WeekView(getContext());
@@ -210,6 +219,9 @@ public class ExtraCalendarView extends ViewGroup{
 		int childHeightSum = 0;
 		for (int i = 0; i < childCount; i ++) {
 			final View child = getChildAt(i);
+			if (child.getVisibility() == View.GONE) {
+				continue;
+			}
 			measureChild(child, widthMeasureSpec, heightMeasureSpec);
 			ViewGroup.LayoutParams p = child.getLayoutParams();
 
@@ -250,10 +262,46 @@ public class ExtraCalendarView extends ViewGroup{
 	/**
 	 * 每个ViewPager的Item是相互独立的，mLastClickedView每个Item都可以有一个。
 	 * 所以为了保证全局只有一个点击效果，只能将点击事件的处理向上抛。
-	 * TODO 当点击上月的信息是跳转到上月
-	 * @param dayView
 	 */
-	public void onDateClicked(DayView dayView) {
+	void onDateClicked(DayView dayView) {
+		Date clickDate = dayView.getDate();
+		//判断如果是点击当前月中的上月或下月的日期，则翻页
+		int position = mMonthView.getCurrentItem();
+		if (clickDate.getType() == Date.TYPE_LAST_MONTH) {
+			MonthItemView monthItemView = mMonthViewAdapter.getItem(position - 1);
+			DayView tempDayView;
+			//找到上月中的此日期的View，添加点击的效果
+			if (monthItemView != null) {
+				tempDayView = monthItemView.getDayView(dayView.getDate());
+				if (tempDayView != null) {
+					changeDayClickedStyle(tempDayView);
+				}
+			}
+			onClickListener.onClick(mButtonPast);
+		} else if (clickDate.getType() == Date.TYPE_NEXT_MONTH) {
+			MonthItemView monthItemView = mMonthViewAdapter.getItem(position + 1);
+			DayView tempDayView;
+			if (monthItemView != null) {
+				tempDayView = monthItemView.getDayView(dayView.getDate());
+				if (tempDayView != null) {
+					changeDayClickedStyle(tempDayView);
+				}
+			}
+			onClickListener.onClick(mButtonFuture);
+		} else {
+			changeDayClickedStyle(dayView);
+		}
+		if (mOnDayClickListener != null) {
+			mOnDayClickListener.onClick(dayView, mClickDate);
+		}
+
+	}
+
+	/**
+	 * 改变点击日期的样式，和取消上次点击的样式。
+	 * @param dayView 返回的DayView
+	 */
+	void changeDayClickedStyle(DayView dayView) {
 		if (mLastClickedView != null) {
 			mLastClickedView.setClickedViewStyle(true);
 		}
@@ -276,6 +324,10 @@ public class ExtraCalendarView extends ViewGroup{
 		mMonthView.setCurrentItem(position, smoothScroll);
 	}
 
+	/**
+	 * 设置全部Title箭头的颜色
+	 * @param color     颜色
+	 */
 	public void setArrowColor(@ColorInt int color) {
 		if (color == 0) {
 			return;
@@ -316,6 +368,28 @@ public class ExtraCalendarView extends ViewGroup{
 		}
 	}
 
+	public void setOnDayClickListener(OnDayClickListener onDayClickListener) {
+		mOnDayClickListener = onDayClickListener;
+	}
+
+	public void setOnMonthChangeListener(OnMonthChangeListener onMonthChangeListener) {
+		mOnMonthChangeListener = onMonthChangeListener;
+	}
+
+	/**
+	 * 设置标题栏是否显示
+	 * @param isVisible     true 显示， false 不显示
+	 */
+	public void setTitleVisible(boolean isVisible){
+		mTitleLayout.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+	}
+
+	/**
+	 * 设置开始显示的月份
+	 * @param startYear         开始年
+	 * @param startMonth        开始月
+	 * @param monthCount        一共显示的月份数量
+	 */
 	public void setStartDate(int startYear, int startMonth, int monthCount) {
 		mStartYear = startYear;
 		mStartMonth = startMonth;
@@ -331,16 +405,4 @@ public class ExtraCalendarView extends ViewGroup{
 		return mMonthView.getCurrentItem() < (mMonthViewAdapter.getCount() - 1);
 	}
 
-	protected static class LayoutParams extends MarginLayoutParams {
-
-		/**
-		 * Create a layout that matches parent width, and is X number of tiles high
-		 *
-		 * @param tileHeight view height in number of tiles
-		 */
-		public LayoutParams(int tileHeight) {
-			super(MATCH_PARENT, tileHeight);
-		}
-
-	}
 }
