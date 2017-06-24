@@ -47,7 +47,6 @@ public class TaskFragment extends BaseFragment{
 	@Override
 	public void onResume() {
 		super.onResume();
-//		extraCalendarView.setCurrentMonth(2017, 7);
 	}
 
 	public void setViewModel(TaskViewModel mViewModel) {
