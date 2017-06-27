@@ -1,15 +1,19 @@
 package com.yangchen.extracalendarview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.yangchen.extracalendarview.base.Date;
+
 /**
  * 日期View
  * Created by yangchen on 2017/6/22.
  */
+@SuppressLint("ViewConstructor")
 public class DayView extends LinearLayout {
 
 	private Date mDate;

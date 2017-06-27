@@ -1,21 +1,18 @@
 package com.yangchen.extracalendarview;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.support.annotation.NonNull;
 import android.view.View;
 
 /**
- * 显示一个月的日期
- * Created by 杨晨 on 2017/5/11.
+ * 显示一周的日期
+ * Created by yangchen on 2017/6/27.
  */
-@SuppressLint("ViewConstructor")
-class MonthItemView extends BaseItemView {
+public class WeekItemView extends BaseItemView {
 
-	private static final int MAX_ROW = 6;       //最大显示的行数
+	private static final int MAX_ROW = 1;       //最大显示的行数
 
-	public MonthItemView(ExtraCalendarView extraCalendarView, @NonNull Context context) {
+	public WeekItemView(ExtraCalendarView extraCalendarView, Context context) {
 		super(extraCalendarView, context);
 	}
 
@@ -73,13 +70,10 @@ class MonthItemView extends BaseItemView {
 	}
 
 
-
-
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 	}
-
 
 
 }

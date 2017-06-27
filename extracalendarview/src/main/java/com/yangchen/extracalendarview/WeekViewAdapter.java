@@ -5,18 +5,17 @@ import android.view.ViewGroup;
 import com.yangchen.extracalendarview.util.CalendarUtil;
 
 /**
- * MonthView 的适配器
- * Created by 杨晨 on 2017/5/31.
+ * Created by yangchen on 2017/6/27.
  */
-public class MonthViewAdapter extends BaseCalendarAdapter<MonthItemView> {
+public class WeekViewAdapter extends BaseCalendarAdapter<WeekItemView> {
 
-	private int mCount;     //一共显示多少个月
+	private int mCount;     //一共显示多少个星期
 
 	private int mStartYear, mStartMonth;
 	private DayItemAttrs mDayItemAttrs;
 	private ExtraCalendarView mExtraCalendarView;
 
-	MonthViewAdapter(ExtraCalendarView extraCalendarView, int count, int startYear, int startMonth, DayItemAttrs dayItemAttrs) {
+	WeekViewAdapter(ExtraCalendarView extraCalendarView, int count, int startYear, int startMonth, DayItemAttrs dayItemAttrs) {
 		mExtraCalendarView = extraCalendarView;
 		mCount = count;
 		mStartYear = startYear;
@@ -39,19 +38,17 @@ public class MonthViewAdapter extends BaseCalendarAdapter<MonthItemView> {
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
-		MonthItemView monthItemView;
+		WeekItemView weekItemView;
 		if (!mCache.isEmpty()) {
-			monthItemView = mCache.removeFirst();
+			weekItemView = mCache.removeFirst();
 		} else {
-			monthItemView = new MonthItemView(mExtraCalendarView, container.getContext());
+			weekItemView = new WeekItemView(mExtraCalendarView, container.getContext());
 
 		}
-
-		int date[] = CalendarUtil.positionToDate(position, mStartYear, mStartMonth);
-		monthItemView.initAttr(mDayItemAttrs);
-		monthItemView.setDates(CalendarUtil.getMonthDates(date[0], date[1]));
-		mViews.put(position, monthItemView);
-		container.addView(monthItemView);
-		return monthItemView;
+		weekItemView.initAttr(mDayItemAttrs);
+		weekItemView.setDates(CalendarUtil.getWeekDays(mStartYear, mStartMonth, position));
+		mViews.put(position, weekItemView);
+		container.addView(weekItemView);
+		return weekItemView;
 	}
 }
