@@ -52,5 +52,4 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11-rc2'
     //数据库
     compile 'org.greenrobot:greendao:3.2.2'
-
 }

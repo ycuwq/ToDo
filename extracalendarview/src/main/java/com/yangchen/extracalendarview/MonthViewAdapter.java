@@ -8,7 +8,7 @@ import com.yangchen.extracalendarview.util.CalendarUtil;
  * MonthView 的适配器
  * Created by 杨晨 on 2017/5/31.
  */
-public class MonthViewAdapter extends BaseCalendarAdapter<MonthItemView> {
+public class MonthViewAdapter extends CalendarAdapter<MonthItemView> {
 
 	private int mCount;     //一共显示多少个月
 

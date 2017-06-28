@@ -7,7 +7,7 @@ import com.yangchen.extracalendarview.util.CalendarUtil;
 /**
  * Created by yangchen on 2017/6/27.
  */
-public class WeekViewAdapter extends BaseCalendarAdapter<WeekItemView> {
+public class WeekViewAdapter extends CalendarAdapter<WeekItemView> {
 
 	private int mCount;     //一共显示多少个星期
 

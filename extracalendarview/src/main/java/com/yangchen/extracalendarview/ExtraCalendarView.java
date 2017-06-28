@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yangchen.extracalendarview.base.Date;
+import com.yangchen.extracalendarview.behavior.CalendarViewBehavior;
 import com.yangchen.extracalendarview.listener.OnDayClickListener;
 import com.yangchen.extracalendarview.listener.OnMonthChangeListener;
 import com.yangchen.extracalendarview.util.CalendarUtil;
@@ -30,13 +32,13 @@ import java.util.Locale;
  * Created by yangchen on 2017/6/7.
  */
 @SuppressWarnings("unused")
+@CoordinatorLayout.DefaultBehavior(CalendarViewBehavior.class)
 public class ExtraCalendarView extends ViewGroup{
 
-	private final String TAG = getClass().getSimpleName();
+	public final static int CALENDAR_TYPE_WEEK = 1;        //周模式
+	public final static int CALENDAR_TYPE_MONTH = 2;       //月模式
+	private int mCalendarType = CALENDAR_TYPE_MONTH;        //显示的日历类型，显示一周，或者一月
 
-	private final int TYPE_WEEK = 1;
-	private final int TYPE_MONTH = 2;
-	private int showType = TYPE_MONTH;
 	private @ColorInt int mBackgroundWeekInfo = Color.WHITE;    //日历的周信息背景颜色
 	private @ColorInt int mTextColorTitle = Color.BLACK;        //标题的字体颜色
 	private @ColorInt int mTextColorWeekInfo = Color.BLACK;
@@ -44,7 +46,9 @@ public class ExtraCalendarView extends ViewGroup{
 	private int mTextSizeTitle = 14;                            //标题字体大小
 	private int mStartYear = 2017;      //日历开始显示的年份
 	private int mStartMonth = 5;        //日历开始显示的月份
-	private BaseCalendarAdapter<?> calendarAdapter;
+	private CalendarAdapter<?> mCalendarAdapter;
+	private MonthViewAdapter mMonthViewAdapter;
+	private WeekViewAdapter mWeekViewAdapter;
 	private int mMonthCount = 12;
 	private DirectionButton mButtonPast;    //切换到上个月的按钮
 	private DirectionButton mButtonFuture;  //切换到下个月的按钮
@@ -54,8 +58,8 @@ public class ExtraCalendarView extends ViewGroup{
 	private @ColorInt int mArrowColor = Color.BLACK;
 	private Date mCurrentMonth;              //标记的当前显示的月份
 	private Date mClickDate;                    //当前选中的日期
-	private WeekView mMonthView;
-//	private MonthView mMonthView;
+//	private WeekView mMonthView;
+	private CalendarView mCalendarView;
 
 	private DayItemAttrs mDayItemAttrs = new DayItemAttrs();
 	private SimpleDateFormat monthDateFormat = new SimpleDateFormat("yyyy年MM月", Locale.SIMPLIFIED_CHINESE);
@@ -67,13 +71,13 @@ public class ExtraCalendarView extends ViewGroup{
 
 	private OnClickListener onClickListener = v -> {
 		if (v == mButtonPast) {
-			if (mMonthView == null)
+			if (mCalendarView == null)
 				return;
-			mMonthView.setCurrentItem(mMonthView.getCurrentItem() - 1, true);
+			mCalendarView.setCurrentItem(mCalendarView.getCurrentItem() - 1, true);
 		} else if (v == mButtonFuture) {
-			if (mMonthView == null)
+			if (mCalendarView == null)
 				return;
-			mMonthView.setCurrentItem(mMonthView.getCurrentItem() + 1, true);
+			mCalendarView.setCurrentItem(mCalendarView.getCurrentItem() + 1, true);
 		}
 	};
 
@@ -85,7 +89,7 @@ public class ExtraCalendarView extends ViewGroup{
 
 		@Override
 		public void onPageSelected(int position) {
-			BaseItemView itemView = calendarAdapter.getItem(position);
+			CalendarItemView itemView = mCalendarAdapter.getItem(position);
 			// View没有绘制完成时，adapter得不到MonthItemView
 			if (itemView != null) {
 				mCurrentMonth = itemView.getCurrentMonth();
@@ -126,6 +130,9 @@ public class ExtraCalendarView extends ViewGroup{
 		mClickDate = CalendarUtil.getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
 				calendar.get(Calendar.DAY_OF_MONTH), Date.TYPE_THIS_MONTH);
 		setCurrentMonth(mClickDate.getYear(), mClickDate.getMonth(), false);
+		//TODO 为了让RecycleView能在此View下面, 实现了InCalendarBottomBehavior,
+		// 但是初始化时不调用，这里强制移动一下使方法生效
+		getViewTreeObserver().addOnGlobalLayoutListener(() -> setY(getY() + (float) 1));
 	}
 
 	private void initAttrs(AttributeSet attrs) {
@@ -204,12 +211,17 @@ public class ExtraCalendarView extends ViewGroup{
 		weekInfoView.setAttrs(mTextSizeWeekInfo, mTextColorWeekInfo, mBackgroundWeekInfo);
 		addView(weekInfoView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
-		mMonthView = new WeekView(getContext());
-//		calendarAdapter = new MonthViewAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
-		calendarAdapter = new WeekViewAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
-		mMonthView.setAdapter(calendarAdapter);
-		mMonthView.addOnPageChangeListener(onPageChangeListener);
-		addView(mMonthView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		mCalendarView = new CalendarView(getContext());
+		mMonthViewAdapter = new MonthViewAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
+		mWeekViewAdapter = new WeekViewAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
+		if (mCalendarType == CALENDAR_TYPE_WEEK) {
+			mCalendarAdapter = mWeekViewAdapter;
+		} else {
+			mCalendarAdapter = mMonthViewAdapter;
+		}
+		mCalendarView.setAdapter(mCalendarAdapter);
+		mCalendarView.addOnPageChangeListener(onPageChangeListener);
+		addView(mCalendarView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	}
 
 	@Override
@@ -272,32 +284,32 @@ public class ExtraCalendarView extends ViewGroup{
 	 */
 	void onDateClicked(DayView dayView) {
 		Date clickDate = dayView.getDate();
+		int position = mCalendarView.getCurrentItem();
 		//判断如果是点击当前月中的上月或下月的日期，则翻页
-		//FIXME 修复Week模式下点击事件不需要跳转，和style的设置
-		int position = mMonthView.getCurrentItem();
-		if (clickDate.getType() == Date.TYPE_LAST_MONTH) {
-			BaseItemView itemView = calendarAdapter.getItem(position - 1);
+		//判断是否是日期显示是否是月模式，周模式不需要改变。
+		if (mCalendarType == CALENDAR_TYPE_MONTH && clickDate.getType() == Date.TYPE_LAST_MONTH) {
+			CalendarItemView itemView = mCalendarAdapter.getItem(position - 1);
 			DayView tempDayView;
 			//找到上月中的此日期的View，添加点击的效果
 			if (itemView != null) {
 				tempDayView = itemView.getDayView(dayView.getDate());
 				if (tempDayView != null) {
-					changeDayClickedStyle(tempDayView);
+					changeDayClickedAndStyle(tempDayView);
 				}
 			}
 			onClickListener.onClick(mButtonPast);
-		} else if (clickDate.getType() == Date.TYPE_NEXT_MONTH) {
-			BaseItemView itemView = calendarAdapter.getItem(position + 1);
+		} else if (mCalendarType == CALENDAR_TYPE_MONTH && clickDate.getType() == Date.TYPE_NEXT_MONTH) {
+			CalendarItemView itemView = mCalendarAdapter.getItem(position + 1);
 			DayView tempDayView;
 			if (itemView != null) {
 				tempDayView = itemView.getDayView(dayView.getDate());
 				if (tempDayView != null) {
-					changeDayClickedStyle(tempDayView);
+					changeDayClickedAndStyle(tempDayView);
 				}
 			}
 			onClickListener.onClick(mButtonFuture);
 		} else {
-			changeDayClickedStyle(dayView);
+			changeDayClickedAndStyle(dayView);
 		}
 		if (mOnDayClickListener != null) {
 			mOnDayClickListener.onClick(dayView, mClickDate);
@@ -306,10 +318,10 @@ public class ExtraCalendarView extends ViewGroup{
 	}
 
 	/**
-	 * 改变点击日期的样式，和取消上次点击的样式。
+	 * 改变点击日期的样式，取消上次点击的样式，改变当前点击的日期
 	 * @param dayView 返回的DayView
 	 */
-	void changeDayClickedStyle(DayView dayView) {
+	void changeDayClickedAndStyle(DayView dayView) {
 		if (mLastClickedView != null) {
 			mLastClickedView.setClickedViewStyle(true);
 		}
@@ -317,7 +329,29 @@ public class ExtraCalendarView extends ViewGroup{
 		mLastClickedView = dayView;
 		mClickDate = dayView.getDate();
 	}
+	public void changeCalendarType() {
+		if (mCalendarType == CALENDAR_TYPE_MONTH) {
+			mCalendarType = CALENDAR_TYPE_WEEK;
+			mCalendarAdapter = mWeekViewAdapter;
+		} else {
+			mCalendarType = CALENDAR_TYPE_MONTH;
+			mCalendarAdapter = mMonthViewAdapter;
+		}
 
+		mCalendarView.setAdapter(mCalendarAdapter);
+	}
+
+	public void setCalendarType( int calendarType) {
+		if (calendarType == CALENDAR_TYPE_WEEK) {
+			mCalendarType = CALENDAR_TYPE_WEEK;
+			mCalendarAdapter = mWeekViewAdapter;
+		} else {
+			mCalendarType = CALENDAR_TYPE_MONTH;
+			mCalendarAdapter = mMonthViewAdapter;
+		}
+
+		mCalendarView.setAdapter(mCalendarAdapter);
+	}
 	/**
 	 *  跳转到选中日期页
 	 * @param smoothScroll 是否平滑滚动
@@ -329,7 +363,7 @@ public class ExtraCalendarView extends ViewGroup{
 		}
 		//此处是防止View没有绘制完成时调用此方法，onPageChangeListener中adapter还没有加载页面，得不到日期数据
 		mCurrentMonth = CalendarUtil.getDate(year, month, 1, Date.TYPE_THIS_MONTH);
-		mMonthView.setCurrentItem(position, smoothScroll);
+		mCalendarView.setCurrentItem(position, smoothScroll);
 	}
 
 	/**
@@ -406,15 +440,15 @@ public class ExtraCalendarView extends ViewGroup{
 		mStartYear = startYear;
 		mStartMonth = startMonth;
 		mMonthCount = monthCount;
-		calendarAdapter.setStartDate(mStartYear, mStartMonth, mMonthCount);
+		mCalendarAdapter.setStartDate(mStartYear, mStartMonth, mMonthCount);
 	}
 
 	public boolean canGoBack() {
-		return mMonthView.getCurrentItem() > 0;
+		return mCalendarView.getCurrentItem() > 0;
 	}
 
 	public boolean canGoForward() {
-		return mMonthView.getCurrentItem() < (calendarAdapter.getCount() - 1);
+		return mCalendarView.getCurrentItem() < (mCalendarAdapter.getCount() - 1);
 	}
 
 }

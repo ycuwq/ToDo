@@ -1,19 +1,28 @@
 package com.yangchen.extracalendarview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
+
+import com.yangchen.extracalendarview.base.Date;
 
 /**
  * 显示一周的日期
  * Created by yangchen on 2017/6/27.
  */
-public class WeekItemView extends BaseItemView {
+@SuppressLint("ViewConstructor")
+class WeekItemView extends CalendarItemView {
 
 	private static final int MAX_ROW = 1;       //最大显示的行数
 
 	public WeekItemView(ExtraCalendarView extraCalendarView, Context context) {
 		super(extraCalendarView, context);
+	}
+
+	@Override
+	DayView createDayView(Context context, Date date, DayItemAttrs mDayItemAttrs) {
+		return new DayView(context, date, mDayItemAttrs, false);
 	}
 
 	@Override

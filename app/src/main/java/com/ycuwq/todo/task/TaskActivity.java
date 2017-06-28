@@ -3,6 +3,7 @@ package com.ycuwq.todo.task;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
 import com.ycuwq.todo.R;
 import com.ycuwq.todo.app.BaseActivity;
@@ -33,6 +34,12 @@ public class TaskActivity extends BaseActivity {
 	private void initToolbar() {
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.task, menu);
+		return true;
 	}
 
 	private TaskFragment findTaskFragment() {

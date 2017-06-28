@@ -4,12 +4,12 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 
 /**
- *  包装ViewPager
- * 主要用来计算WeekItemView的高度
- * Created by yangchen on 2017/6/27.
+ * 包装ViewPager
+ * 主要用来计算MonthItemView的高度
+ * Created by yangchen on 2017/6/22.
  */
-public class WeekView extends ViewPager {
-	public WeekView(Context context) {
+public class CalendarView extends ViewPager {
+	public CalendarView(Context context) {
 		super(context);
 	}
 	@Override
@@ -17,7 +17,7 @@ public class WeekView extends ViewPager {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		int calendarHeight;
 		if (getAdapter() != null) {
-			WeekItemView view = (WeekItemView) getChildAt(0);
+			CalendarItemView view = (CalendarItemView) getChildAt(0);
 			if (view != null) {
 				calendarHeight = view.getMeasuredHeight();
 				setMeasuredDimension(widthMeasureSpec, MeasureSpec.makeMeasureSpec(calendarHeight, MeasureSpec.EXACTLY));

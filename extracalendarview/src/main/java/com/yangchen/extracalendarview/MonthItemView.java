@@ -6,17 +6,24 @@ import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.yangchen.extracalendarview.base.Date;
+
 /**
  * 显示一个月的日期
  * Created by 杨晨 on 2017/5/11.
  */
 @SuppressLint("ViewConstructor")
-class MonthItemView extends BaseItemView {
+class MonthItemView extends CalendarItemView {
 
 	private static final int MAX_ROW = 6;       //最大显示的行数
 
 	public MonthItemView(ExtraCalendarView extraCalendarView, @NonNull Context context) {
 		super(extraCalendarView, context);
+	}
+
+	@Override
+	DayView createDayView(Context context, Date date, DayItemAttrs mDayItemAttrs) {
+		return new DayView(context, date, mDayItemAttrs, true);
 	}
 
 	@Override

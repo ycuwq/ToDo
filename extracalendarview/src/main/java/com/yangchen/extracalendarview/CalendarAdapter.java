@@ -10,7 +10,7 @@ import java.util.LinkedList;
 /**
  * Created by yangchen on 2017/6/27.
  */
-abstract class BaseCalendarAdapter<V extends BaseItemView> extends PagerAdapter {
+abstract class CalendarAdapter<V extends CalendarItemView> extends PagerAdapter {
 
 	LinkedList<V> mCache = new LinkedList<>();
 	SparseArray<V> mViews = new SparseArray<>();

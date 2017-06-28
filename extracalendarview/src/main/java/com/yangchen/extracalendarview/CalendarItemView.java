@@ -8,9 +8,10 @@ import com.yangchen.extracalendarview.base.Date;
 import java.util.List;
 
 /**
+ * ItemView的基类，
  * Created by yangchen on 2017/6/27.
  */
-public abstract class BaseItemView extends ViewGroup {
+public abstract class CalendarItemView extends ViewGroup {
 	protected static final int COLUMN = 7;        //显示的列数
 	protected DayItemAttrs mDayItemAttrs;
 	protected ExtraCalendarView mExtraCalendarView;
@@ -18,7 +19,7 @@ public abstract class BaseItemView extends ViewGroup {
 	protected int  mLastMonthDay; //当前月份天数，上月天数，下月天数。
 	protected Date mCurrentMonth;
 
-	public BaseItemView(ExtraCalendarView extraCalendarView, Context context) {
+	public CalendarItemView(ExtraCalendarView extraCalendarView, Context context) {
 		super(context);
 		mExtraCalendarView = extraCalendarView;
 		mLastMonthDay = 0;
@@ -33,24 +34,26 @@ public abstract class BaseItemView extends ViewGroup {
 		mDates = dates;
 		if (dates.size() > 0) {
 			removeAllViews();
-
 		}
 		for (int i = 0; i < dates.size(); i++) {
 			Date date = dates.get(i);
 			if (date.getType() == Date.TYPE_LAST_MONTH) {
 				mLastMonthDay++;
 			}
-			final DayView view = new DayView(getContext(), date, mDayItemAttrs);
+			final DayView view = createDayView(getContext(), date, mDayItemAttrs);
 			view.setOnClickListener(v -> mExtraCalendarView.onDateClicked(view));
-			//判断点击的日期是否和加载的日期是同一天，这个为了解决ViewPager复用后重新创建View的点击效果消失的问题
+			//判断点击的日期是否和加载的日期是同一天如果是同一天，设置为选中的样式，
+			// 这个为了解决ViewPager复用后重新创建View的点击效果消失的问题
 			if (date.equals(mExtraCalendarView.getClickDate())) {
-				mExtraCalendarView.changeDayClickedStyle(view);
+				mExtraCalendarView.changeDayClickedAndStyle(view);
 			}
 			addView(view);
 		}
 		mCurrentMonth = dates.get(mLastMonthDay);
 		requestLayout();
 	}
+
+	abstract DayView createDayView(Context context, Date date, DayItemAttrs mDayItemAttrs);
 
 	public Date getCurrentMonth() {
 		return mCurrentMonth;
