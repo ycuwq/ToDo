@@ -130,9 +130,7 @@ public class ExtraCalendarView extends ViewGroup{
 		mClickDate = CalendarUtil.getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
 				calendar.get(Calendar.DAY_OF_MONTH), Date.TYPE_THIS_MONTH);
 		setCurrentMonth(mClickDate.getYear(), mClickDate.getMonth(), false);
-		//TODO 为了让RecycleView能在此View下面, 实现了InCalendarBottomBehavior,
-		// 但是初始化时不调用，这里强制移动一下使方法生效
-		getViewTreeObserver().addOnGlobalLayoutListener(() -> setY(getY() + (float) 1));
+
 	}
 
 	private void initAttrs(AttributeSet attrs) {
@@ -178,7 +176,7 @@ public class ExtraCalendarView extends ViewGroup{
 	}
 
 	private void setupChild() {
-		//初始化头布局和箭头文字
+		//初始化头布局 箭头 文字
 		mButtonPast = new DirectionButton(getContext());
 		mButtonFuture = new DirectionButton(getContext());
 		mButtonPast.setOnClickListener(onClickListener);
@@ -211,6 +209,7 @@ public class ExtraCalendarView extends ViewGroup{
 		weekInfoView.setAttrs(mTextSizeWeekInfo, mTextColorWeekInfo, mBackgroundWeekInfo);
 		addView(weekInfoView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
+		//日历显示的ViewPager
 		mCalendarView = new CalendarView(getContext());
 		mMonthViewAdapter = new MonthViewAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
 		mWeekViewAdapter = new WeekViewAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
@@ -222,6 +221,7 @@ public class ExtraCalendarView extends ViewGroup{
 		mCalendarView.setAdapter(mCalendarAdapter);
 		mCalendarView.addOnPageChangeListener(onPageChangeListener);
 		addView(mCalendarView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+
 	}
 
 	@Override
@@ -341,6 +341,9 @@ public class ExtraCalendarView extends ViewGroup{
 		mCalendarView.setAdapter(mCalendarAdapter);
 	}
 
+	public void offsetCalendarView(int dy) {
+		mCalendarView.offsetTopAndBottom(dy);
+	}
 	public void setCalendarType( int calendarType) {
 		if (calendarType == CALENDAR_TYPE_WEEK) {
 			mCalendarType = CALENDAR_TYPE_WEEK;
