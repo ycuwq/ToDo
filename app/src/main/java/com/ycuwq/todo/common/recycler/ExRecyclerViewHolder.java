@@ -14,7 +14,7 @@ public class ExRecyclerViewHolder extends RecyclerView.ViewHolder {
 
 	private SparseArray<View> views;
 
-	public ExRecyclerViewHolder(View itemView) {
+	ExRecyclerViewHolder(View itemView) {
 		super(itemView);
 		views = new SparseArray<>();
 	}

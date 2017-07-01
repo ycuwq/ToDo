@@ -1,8 +1,9 @@
 package com.yangchen.extracalendarview.util;
 
-import com.yangchen.extracalendarview.Date;
+import com.yangchen.extracalendarview.base.Date;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -23,7 +24,13 @@ public class CalendarUtil {
 		return date;
 	}
 
-	public static List<Date> getDates(int year, int month) {
+	/**
+	 * 获取一个月的日期数据
+	 * @param year
+	 * @param month
+	 * @return
+	 */
+	public static List<Date> getMonthDates(int year, int month) {
 		List<Date> dates = new ArrayList<>();
 		int week = SolarUtil.getFirstWeekOfMonth(year, month);
 		int lastYear, lastMonth, nextYear, nextMonth;
@@ -65,6 +72,46 @@ public class CalendarUtil {
 	}
 
 	/**
+	 * 获取距离开始日期 + 周数的一周的日期。
+	 * @param startYear     开始年
+	 * @param startMonth    开始月
+	 * @param positionWeek  偏移周数
+	 * @return  返回一周的日期，第一天是周日
+	 */
+	public static List<Date> getWeekDays(int startYear, int startMonth, int positionWeek) {
+		ArrayList<Date> dates = new ArrayList<>();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+		calendar.set(startYear, startMonth - 1, 1);
+
+		//将日期设置为开始日期 + 距离周数的日期。
+		int week = calendar.get(Calendar.WEEK_OF_YEAR);
+		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		calendar.set(Calendar.WEEK_OF_YEAR, week + positionWeek);
+
+		int currentMonth = calendar.get(Calendar.MONTH);
+		int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+		for (int i = 0; i < 7; i++) {
+			calendar.set(Calendar.DAY_OF_YEAR, dayOfYear + i);
+			int year = calendar.get(Calendar.YEAR);
+			int month = calendar.get(Calendar.MONTH);
+			int day = calendar.get(Calendar.DATE);
+			int type;
+			//月的类型，当月、上月、下月
+			if (currentMonth > month) {
+				type = Date.TYPE_LAST_MONTH;
+			} else if (currentMonth < month) {
+				type = Date.TYPE_NEXT_MONTH;
+			} else {
+				type = Date.TYPE_THIS_MONTH;
+			}
+			dates.add(getDate(year, month + 1, day, type));
+		}
+		return dates;
+	}
+
+	/**
 	 * 计算当前月需要显示几行
 	 *
 	 * @param year
@@ -83,7 +130,6 @@ public class CalendarUtil {
 	/**
 	 * 根据ViewPager position 得到对应年月
 	 * @param position  开始年月的延后月份
-	 * @return
 	 */
 	public static int[] positionToDate(int position, int startY, int startM) {
 		int year = position / 12 + startY;
@@ -93,8 +139,8 @@ public class CalendarUtil {
 			month = month % 12;
 			year = year + 1;
 		}
-
 		return new int[]{year, month};
 	}
+
 
 }

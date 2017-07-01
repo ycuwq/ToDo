@@ -69,7 +69,7 @@ class DayItemAttrs {
 		this.textColorBottom = textColorBottom;
 	}
 
-	int getBackgroundColor() {
+	public int getBackgroundColor() {
 		return backgroundColor;
 	}
 

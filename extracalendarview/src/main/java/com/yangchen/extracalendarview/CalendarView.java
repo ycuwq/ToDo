@@ -8,8 +8,8 @@ import android.support.v4.view.ViewPager;
  * 主要用来计算MonthItemView的高度
  * Created by yangchen on 2017/6/22.
  */
-public class MonthView extends ViewPager {
-	public MonthView(Context context) {
+public class CalendarView extends ViewPager {
+	public CalendarView(Context context) {
 		super(context);
 	}
 	@Override
@@ -17,7 +17,7 @@ public class MonthView extends ViewPager {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		int calendarHeight;
 		if (getAdapter() != null) {
-			MonthItemView view = (MonthItemView) getChildAt(0);
+			CalendarItemView view = (CalendarItemView) getChildAt(0);
 			if (view != null) {
 				calendarHeight = view.getMeasuredHeight();
 				setMeasuredDimension(widthMeasureSpec, MeasureSpec.makeMeasureSpec(calendarHeight, MeasureSpec.EXACTLY));

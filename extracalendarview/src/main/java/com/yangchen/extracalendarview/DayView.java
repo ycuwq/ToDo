@@ -1,37 +1,47 @@
 package com.yangchen.extracalendarview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.yangchen.extracalendarview.base.Date;
+
 /**
  * 日期View
  * Created by yangchen on 2017/6/22.
  */
+@SuppressLint("ViewConstructor")
 public class DayView extends LinearLayout {
 
 	private Date mDate;
 	private DayItemAttrs mDayItemAttrs;
 	private TextView topTv;
 	private TextView bottomTv;
-	public DayView(Context context, Date date, DayItemAttrs dayItemAttrs) {
+	private boolean mChangeTopViewColor;
+	public DayView(Context context, Date date, DayItemAttrs dayItemAttrs, boolean changeTopViewColor) {
 		super(context);
 		mDate = date;
 		mDayItemAttrs = dayItemAttrs;
+		mChangeTopViewColor = changeTopViewColor;
 		initView();
 	}
-
+	/**
+	 * 初始化View
+	 * @param changeTopViewColor 设置是否将非当月日期和当月日期颜色区分， true ： 区分，false： 不区分
+	 */
 	private void initView() {
 		LayoutInflater.from(getContext()).inflate(R.layout.item_month_layout, this);
 		topTv = (TextView) findViewById(R.id.tv_item_month_top);
 		bottomTv = (TextView) findViewById(R.id.tv_item_month_bottom);
+
 		//将非当月的信息设置为Bottom的颜色，与当月日期区别
-		if (mDate.getType() == Date.TYPE_THIS_MONTH) {
-			topTv.setTextColor(mDayItemAttrs.getTextColorTop());
-		} else {
+		if (mDate.getType() != Date.TYPE_THIS_MONTH && mChangeTopViewColor) {
 			topTv.setTextColor(mDayItemAttrs.getTextColorBottom());
+		} else {
+			topTv.setTextColor(mDayItemAttrs.getTextColorTop());
 		}
 
 		bottomTv.setTextColor(mDayItemAttrs.getTextColorBottom());
@@ -59,11 +69,11 @@ public class DayView extends LinearLayout {
 	public void setClickedViewStyle(boolean reset) {
 		if (reset) {
 			setBackgroundResource(0);
-			//将非当月的信息设置为Bottom的颜色，与当月日期区别
-			if (mDate.getType() == Date.TYPE_THIS_MONTH) {
-				topTv.setTextColor(mDayItemAttrs.getTextColorTop());
-			} else {
+			//将非当月的信息设置为Bottom的颜色，与当月日期区别.
+			if (mDate.getType() != Date.TYPE_THIS_MONTH && mChangeTopViewColor) {
 				topTv.setTextColor(mDayItemAttrs.getTextColorBottom());
+			} else {
+				topTv.setTextColor(mDayItemAttrs.getTextColorTop());
 			}
 			bottomTv.setTextColor(mDayItemAttrs.getTextColorBottom());
 		} else {
@@ -71,8 +81,9 @@ public class DayView extends LinearLayout {
 			topTv.setTextColor(mDayItemAttrs.getClickTextColor());
 			bottomTv.setTextColor(mDayItemAttrs.getClickTextColor());
 		}
-
 	}
+
+
 
 	public Date getDate() {
 		return mDate;

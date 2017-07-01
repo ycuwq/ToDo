@@ -17,7 +17,7 @@ import com.yangchen.extracalendarview.util.DensityUtil;
  * Created by 杨晨 on 2017/5/15.
  */
 @SuppressWarnings("unused")
-public class WeekView extends View {
+public class WeekInfoView extends View {
 	private final String TAG = getClass().getSimpleName();
 	private Context mContext;
 
@@ -27,15 +27,15 @@ public class WeekView extends View {
 	private @ColorInt int mBackgroundColor = Color.GRAY;
 	private int mTextSize = 15;
 
-	public WeekView(Context context) {
+	public WeekInfoView(Context context) {
 		this(context, null);
 	}
 
-	public WeekView(Context context, @Nullable AttributeSet attrs) {
+	public WeekInfoView(Context context, @Nullable AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
 
-	public WeekView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+	public WeekInfoView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		mContext = context;
 
