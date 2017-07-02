@@ -41,9 +41,9 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 		}  else if (dyConsumed > 0) {
 			clickViewTop -= dyConsumed;
-			Log.d(TAG, "onNestedScroll: " + clickViewTop);
-			
+
 			if (clickViewTop > 0) {
+				Log.d(TAG, "onNestedScroll: " + child.getPaddingTop());
 				child.getCalendarView().setTranslationY(child.getCalendarView().getTranslationY() - dyConsumed);
 				target.offsetTopAndBottom(-dyConsumed);
 			}
