@@ -3,6 +3,7 @@ package com.yangchen.extracalendarview.behavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.yangchen.extracalendarview.ExtraCalendarView;
@@ -14,6 +15,12 @@ import com.yangchen.extracalendarview.ExtraCalendarView;
 public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalendarView> {
 	private final String TAG = getClass().getSimpleName();
 	private int clickViewTop = Integer.MIN_VALUE;
+
+	@Override
+	public boolean onInterceptTouchEvent(CoordinatorLayout parent, ExtraCalendarView child, MotionEvent ev) {
+		return super.onInterceptTouchEvent(parent, child, ev);
+	}
+
 	@Override
 	public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View directTargetChild, View target, int nestedScrollAxes) {
 		final boolean started = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0
