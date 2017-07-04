@@ -347,6 +347,9 @@ public class ExtraCalendarView extends ViewGroup{
 
 		mCalendarView.setAdapter(mCalendarAdapter);
 	}
+	public int getCalendarType() {
+		return mCalendarType;
+	}
 
 	public CalendarView getCalendarView() {
 		return mCalendarView;

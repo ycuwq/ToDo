@@ -3,7 +3,6 @@ package com.yangchen.extracalendarview.behavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.yangchen.extracalendarview.ExtraCalendarView;
@@ -15,23 +14,26 @@ import com.yangchen.extracalendarview.ExtraCalendarView;
 public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalendarView> {
 	private final String TAG = getClass().getSimpleName();
 	private int clickViewTop = Integer.MIN_VALUE;
+	private int top;
+	private float ox, oy;
 
 	@Override
-	public boolean onInterceptTouchEvent(CoordinatorLayout parent, ExtraCalendarView child, MotionEvent ev) {
-		return super.onInterceptTouchEvent(parent, child, ev);
+	public boolean onLayoutChild(CoordinatorLayout parent, ExtraCalendarView child, int layoutDirection) {
+		parent.onLayoutChild(child, layoutDirection);
+		child.offsetTopAndBottom(top);
+		return true;
+	}
+
+	@Override
+	public boolean onDependentViewChanged(CoordinatorLayout parent, ExtraCalendarView child, View dependency) {
+		top = child.getTop();
+		return true;
 	}
 
 	@Override
 	public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View directTargetChild, View target, int nestedScrollAxes) {
-		final boolean started = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0
-				&& coordinatorLayout.getHeight() - directTargetChild.getHeight() <= child.getHeight();
+		final boolean started = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
 		return started;
-	}
-
-	@Override
-	public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target) {
-		super.onStopNestedScroll(coordinatorLayout, child, target);
-		clickViewTop = child.getClickView().getTop();
 	}
 
 	@Override
@@ -39,22 +41,15 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		//如果在最上方还在下滑
 
 		if (dyUnconsumed < 0) {
-			if (clickViewTop >= child.getClickView().getTop()) {
-				return;
-			}
-			clickViewTop -= dyUnconsumed;
 			child.getCalendarView().setTranslationY(child.getCalendarView().getTranslationY() - dyUnconsumed);
 			target.setY(target.getY() - dyUnconsumed);
 
 		}  else if (dyConsumed > 0) {
-			clickViewTop -= dyConsumed;
-
-			if (clickViewTop > 0) {
-				Log.d(TAG, "onNestedScroll: " + child.getPaddingTop());
-				child.getCalendarView().setTranslationY(child.getCalendarView().getTranslationY() - dyConsumed);
-				target.offsetTopAndBottom(-dyConsumed);
-			}
+			child.getCalendarView().setTranslationY(child.getCalendarView().getTranslationY() - dyConsumed);
+			target.offsetTopAndBottom(-dyConsumed);
 		}
+
+		Log.d(TAG, "onNestedScroll: " + child.getCalendarView().getTop());
 	}
 
 }
