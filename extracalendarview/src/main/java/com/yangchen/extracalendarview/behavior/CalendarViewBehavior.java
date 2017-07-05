@@ -67,6 +67,11 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 	@Override
 	public void onNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
+		int clickViewTop = child.getClickView().getTop();
+		int clickViewHeight = child.getClickView().getHeight();
+		float calendarViewTop = child.getCalendarView().getTop();
+		float calendarViewY = child.getCalendarView().getY();
+		float targetViewY = target.getTop();
 		//如果在最上方还在下滑
 		if (dyUnconsumed < 0) {
 //			ViewCompat.offsetTopAndBottom(child.getCalendarView(), -dyUnconsumed);
@@ -74,24 +79,25 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 //			target.setY(target.getY() - dyUnconsumed);
 
 		}  else if (dyConsumed > 0) {
-//			ViewCompat.offsetTopAndBottom(child.getCalendarView(), - dyConsumed);
-			if (computeDy(child, dyConsumed) > 0)
-			child.getCalendarView().setTranslationY(child.getCalendarView().getTranslationY() - computeDy(child, dyConsumed));
-//			target.offsetTopAndBottom(-dyConsumed);
+			//这里利用Translation移动View，而不是ViewCompat.offsetTopAndBottom，因为移动Translation View的Top不变只有Y和TranslationY改变，
+			//可以方便的利用Top - Y计算出移动的距离
+			float dy = clickViewTop - (calendarViewTop - calendarViewY);
+			//判断点击的View是否还在页面上。
+			if (dy > 0) {
+				//这里判断选中的日期View的距离是否大于滑动的距离，防止滑动速度过快而遮挡View
+				if (dy - dyConsumed > 0) {
+					dy = dyConsumed;
+				}
+				setMoveY(child.getCalendarView(), -dy);
+			} else if (child.getBottom() > (calendarViewTop + clickViewHeight)){
+				child.setBottom(child.getBottom() - dyConsumed);
+			}
 		}
-		Log.d(TAG, "onNestedScroll: " + child.getCalendarView().getY());
-		Log.d(TAG, "onNestedScroll: " + child.getCalendarView().getTop());
+		Log.d(TAG, "getBottom: " + child.getBottom());
+		Log.d(TAG, "clickViewBottom: " + calendarViewTop);
 	}
 
-	private int computeDy(ExtraCalendarView view, int consumed) {
-		int clickHeight = view.getClickView().getTop();
-		int viewTop = view.getCalendarView().getTop();
-		int viewY = (int) view.getCalendarView().getY();
-		int dy = clickHeight - (viewY - viewTop);
-		if (dy - consumed > 0) {
-			return consumed;
-		}
-		return -1;
+	private void setMoveY(View view, float dy) {
+		view.setTranslationY(view.getTranslationY() + dy);
 	}
-
 }

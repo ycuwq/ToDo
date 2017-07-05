@@ -131,7 +131,7 @@ public class ExtraCalendarView extends ViewGroup{
 		mClickDate = CalendarUtil.getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
 				calendar.get(Calendar.DAY_OF_MONTH), Date.TYPE_THIS_MONTH);
 		setCurrentMonth(mClickDate.getYear(), mClickDate.getMonth(), false);
-
+		setTranslationZ(-1);
 	}
 
 	private void initAttrs(AttributeSet attrs) {
@@ -212,7 +212,7 @@ public class ExtraCalendarView extends ViewGroup{
 
 		//日历显示的ViewPager
 		mCalendarView = new CalendarView(getContext());
-		mCalendarView.setTranslationZ(-1);
+		mCalendarView.setTranslationZ(-2);
 		mMonthViewAdapter = new MonthViewAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
 		mWeekViewAdapter = new WeekViewAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
 		if (mCalendarType == CALENDAR_TYPE_WEEK) {
