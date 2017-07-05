@@ -12,7 +12,7 @@ import com.yangchen.extracalendarview.ExtraCalendarView;
  * Created by yangchen on 2017/6/28.
  */
 public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
-
+	private final String TAG = getClass().getSimpleName();
 
 	public InCalendarBottomBehavior(Context context, AttributeSet attrs) {
 		super(context, attrs);
