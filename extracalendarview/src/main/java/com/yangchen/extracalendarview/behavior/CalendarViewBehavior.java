@@ -72,17 +72,23 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		float calendarViewTop = child.getCalendarView().getTop();
 		float calendarViewY = child.getCalendarView().getY();
 		float targetViewY = target.getTop();
+		int dy = (int) (clickViewTop - (calendarViewTop - calendarViewY));
+		Log.d(TAG, "dy: " + dy);
+		Log.d(TAG, "child bottom: " + child.getBottom());
+		Log.d(TAG, "calendarViewTop: " + calendarViewTop);
 		//如果在最上方还在下滑
 		if (dyUnconsumed < 0) {
-//			ViewCompat.offsetTopAndBottom(child.getCalendarView(), -dyUnconsumed);
-			child.getCalendarView().setTranslationY(child.getCalendarView().getTranslationY() - dyUnconsumed);
-//			target.setY(target.getY() - dyUnconsumed);
-
+			if (calendarViewY < calendarViewTop) {
+				setMoveY(child.getCalendarView(), -dyUnconsumed);
+			} else if (child.getBottom() <= (calendarViewTop + child.getCalendarView().getHeight())) {
+				child.setBottom(child.getBottom() - dyUnconsumed);
+			}
 		}  else if (dyConsumed > 0) {
 			//这里利用Translation移动View，而不是ViewCompat.offsetTopAndBottom，因为移动Translation View的Top不变只有Y和TranslationY改变，
 			//可以方便的利用Top - Y计算出移动的距离
-			float dy = clickViewTop - (calendarViewTop - calendarViewY);
+//			float dy = clickViewTop - (calendarViewTop - calendarViewY);
 			//判断点击的View是否还在页面上。
+
 			if (dy > 0) {
 				//这里判断选中的日期View的距离是否大于滑动的距离，防止滑动速度过快而遮挡View
 				if (dy - dyConsumed > 0) {
@@ -93,8 +99,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				child.setBottom(child.getBottom() - dyConsumed);
 			}
 		}
-		Log.d(TAG, "getBottom: " + child.getBottom());
-		Log.d(TAG, "clickViewBottom: " + calendarViewTop);
+
 	}
 
 	private void setMoveY(View view, float dy) {
