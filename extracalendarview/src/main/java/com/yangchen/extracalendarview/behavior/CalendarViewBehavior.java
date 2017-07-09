@@ -39,7 +39,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 	@Override
 	public boolean onInterceptTouchEvent(CoordinatorLayout parent, ExtraCalendarView child, MotionEvent ev) {
-//		Log.d(TAG, "onInterceptTouchEvent: " + child.getCalendarView().getTop());
+		Log.d(TAG, "onInterceptTouchEvent: " + child.getCalendarView().getTop());
 		return super.onInterceptTouchEvent(parent, child, ev);
 //		return true;
 	}
@@ -52,11 +52,13 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 	@Override
 	public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target, int dx, int dy, int[] consumed) {
+		Log.d(TAG, "onNestedPreScroll: ");
 		super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
 	}
 
 	@Override
 	public boolean onNestedFling(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target, float velocityX, float velocityY, boolean consumed) {
+		Log.d(TAG, "onNestedFling: ");
 		return super.onNestedFling(coordinatorLayout, child, target, velocityX, velocityY, consumed);
 	}
 
