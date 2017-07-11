@@ -147,8 +147,4 @@ public class Date {
 		}
 	}
 
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
 }
