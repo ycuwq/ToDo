@@ -99,6 +99,8 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 			//判断点击的View是否还在页面上。
 			if (surplusTop > 0) {
+
+
 				//这里判断选中的日期View的距离是否大于滑动的距离，防止滑动速度过快而遮挡View
 				if (surplusTop - dy > 0) {
 					surplusTop = dy;
