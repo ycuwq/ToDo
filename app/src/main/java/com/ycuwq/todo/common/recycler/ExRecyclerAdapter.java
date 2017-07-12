@@ -24,12 +24,10 @@ public abstract class ExRecyclerAdapter<T> extends RecyclerView.Adapter<ExRecycl
 		this.layoutRes = layoutRes;
 	}
 
-
 	public void setList(List<T> mList) {
 		this.mList = mList;
 		notifyDataSetChanged();
 	}
-
 
 	public void addList(List<T> list) {
 		int positionStart = mList.size();
@@ -40,7 +38,7 @@ public abstract class ExRecyclerAdapter<T> extends RecyclerView.Adapter<ExRecycl
 
 	@Override
 	public ExRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(mContext).inflate(layoutRes, null);
+		View view = LayoutInflater.from(mContext).inflate(layoutRes, parent, false);
 		return new ExRecyclerViewHolder(view);
 	}
 
@@ -55,5 +53,4 @@ public abstract class ExRecyclerAdapter<T> extends RecyclerView.Adapter<ExRecycl
 	}
 
 	public abstract void bindData(ExRecyclerViewHolder holder, T t, int position);
-
 }
