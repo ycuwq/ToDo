@@ -142,5 +142,20 @@ public class CalendarUtil {
 		return new int[]{year, month};
 	}
 
+	/**
+	 * 获取两个日期之间的周数  TODO 未完成
+	 * @param startYear     开始年
+	 * @param startMonth    开始月
+	 * @return  开始日期到目标日期经过的周数。
+	 */
+	public static int getWeekPosition(int startYear, int startMonth, int year, int month, int day) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(startYear, startMonth - 1, 1);
+		calendar.get(Calendar.WEEK_OF_YEAR);
+		for (int i = startYear; i <= year; i++) {
+
+		}
+		return 0;
+	}
 
 }

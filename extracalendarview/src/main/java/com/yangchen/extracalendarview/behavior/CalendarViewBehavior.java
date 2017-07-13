@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.yangchen.extracalendarview.CalendarView;
+import com.yangchen.extracalendarview.DayView;
 import com.yangchen.extracalendarview.ExtraCalendarView;
 
 /**
@@ -55,8 +56,12 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 	@Override
 	public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target, int dx, int dy, int[] consumed) {
 		CalendarView calendarView = child.getCalendarView();
-		int clickViewTop = child.getClickView().getTop();
-		int clickViewHeight = child.getClickView().getHeight();
+		DayView clickView = child.getClickView();
+		if (clickView == null) {
+			return;
+		}
+		int clickViewTop = clickView.getTop();
+		int clickViewHeight = clickView.getHeight();
 		float calendarViewTop = child.getCalendarView().getTop();
 		float calendarViewY = child.getCalendarView().getY();
 		Log.d(TAG, "dy" + dy);
@@ -105,6 +110,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				//这里利用Translation移动View，而不是ViewCompat.offsetTopAndBottom，因为移动Translation View的Top不变只有Y和TranslationY改变，
 				//可以利用Top - Y计算出移动的距离
 				calendarView.setTranslationY(calendarView.getTranslationY() - surplusTop);
+//				target.setTop((int) (target.getTop() - surplusTop));
 //				calendarView.setTop((int) (calendarView.getTop() - surplusTop));
 				consumed[1] = dy;
 //				ViewCompat.offsetTopAndBottom(target, -consumed[1]);
