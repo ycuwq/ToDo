@@ -30,7 +30,6 @@ public class DayView extends LinearLayout {
 	}
 	/**
 	 * 初始化View
-	 * @param changeTopViewColor 设置是否将非当月日期和当月日期颜色区分， true ： 区分，false： 不区分
 	 */
 	private void initView() {
 		LayoutInflater.from(getContext()).inflate(R.layout.item_month_layout, this);

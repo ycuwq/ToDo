@@ -121,8 +121,7 @@ public class Date {
 		}
 		if (obj instanceof Date) {
 			Date other = (Date) obj;
-			if (other.year == year && other.month == month && other.day == day &&
-					other.getType() == type) {
+			if (other.year == year && other.month == month && other.day == day) {
 				return true;
 			}
 		}

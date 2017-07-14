@@ -20,7 +20,7 @@ public class CalendarUtil {
 		date.setLunarMonth(lunar[0]);
 		date.setLunarDay(lunar[1]);
 		date.setLunarHoliday(lunar[2]);
-		date.setWeek(DateUtil.getDayForWeek(year, month, day));
+		date.setWeek(getDayForWeek(year, month, day));
 		return date;
 	}
 
@@ -53,8 +53,8 @@ public class CalendarUtil {
 			nextYear = year;
 		}
 
-		int lastMonthDay = DateUtil.getMaxDayForMonth(lastYear, lastMonth);
-		int thisMonthDay = DateUtil.getMaxDayForMonth(year, month);
+		int lastMonthDay = getMaxDayForMonth(lastYear, lastMonth);
+		int thisMonthDay = getMaxDayForMonth(year, month);
 		//加入在当前月第一个星期的上个月的日期。
 		for (int i = 0; i < week; i++) {
 			Date date = getDate(lastYear, lastMonth, lastMonthDay - week + 1 + i, Date.TYPE_LAST_MONTH);
@@ -143,19 +143,74 @@ public class CalendarUtil {
 	}
 
 	/**
-	 * 获取两个日期之间的周数  TODO 未完成
+	 * 获取两个日期之间的周数
 	 * @param startYear     开始年
 	 * @param startMonth    开始月
 	 * @return  开始日期到目标日期经过的周数。
 	 */
-	public static int getWeekPosition(int startYear, int startMonth, int year, int month, int day) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(startYear, startMonth - 1, 1);
-		calendar.get(Calendar.WEEK_OF_YEAR);
-		for (int i = startYear; i <= year; i++) {
+	public static int getWeekPosition(int startYear, int startMonth, int startDay, int year, int month, int day) {
 
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(startYear, startMonth - 1, startDay);
+		int startDayWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+		calendar.set(year, month - 1, day);
+		int endDayWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+
+		//由于Calendar的算法，有可能一年的最后几天按照下一年的第一周算,一年最多52周。所以便是第53周
+		if (endDayWeek ==1 && month ==12) {
+			endDayWeek = 53;
 		}
-		return 0;
+		//在同一年的计算。
+		if (startYear == year) {
+
+			//由于Calendar的算法，有可能一年的最后几天按照下一年的第一周算,一年最多52周。
+			if (endDayWeek < startDayWeek) {
+				return 52 - startDayWeek + endDayWeek;
+			}
+			return endDayWeek - startDayWeek;
+		}
+		int  week = (52 - startDayWeek) + endDayWeek + (year - startYear - 1) * 52;
+		return week;
 	}
+
+	/**
+	 * 获取两个日期的月分之间的差
+	 * @return 第二个 - 第一个
+	 */
+	public static int getMonthPosition(int year1, int month1, int year2, int month2) {
+		int year = year2 - year1;
+		int month = month2 - month1;
+
+		return year * 12 + month;
+	}
+
+	/**
+	 * 获取时期的星期几
+	 */
+	public static int getDayForWeek(int y, int m, int d) {
+		Calendar calendar = Calendar.getInstance();
+		//Month是从0开始算的，所以要-1
+		calendar.set(y, m -1, d);
+		return calendar.get(Calendar.DAY_OF_WEEK);
+	}
+
+	/**
+	 * 获取是这个月的最大天数
+	 */
+	public static int getMaxDayForMonth(int y, int m) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(y, m - 1, 1);
+		return calendar.getActualMaximum(Calendar.DATE);
+	}
+
+	/**
+	 * 获取第几个月
+	 */
+	public static int getMonthInYear(int y, int m) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(y, m - 1, 1);
+		return calendar.get(Calendar.MONTH) + 1;
+	}
+
 
 }

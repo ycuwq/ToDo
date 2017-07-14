@@ -13,6 +13,12 @@ import static org.junit.Assert.assertEquals;
  */
 public class CalendarUtilTest {
 	@Test
+	public void getWeekPosition() throws Exception {
+		int weekPosition = CalendarUtil.getWeekPosition(2017, 7, 14, 2017, 8, 16);
+		assertEquals(5, weekPosition);
+	}
+
+	@Test
 	public void getMonthDates() throws Exception {
 		List<Date> dates = CalendarUtil.getMonthDates(2017, 5);
 		assertEquals(35, dates.size());
@@ -36,6 +42,29 @@ public class CalendarUtilTest {
 	public void getDate() throws Exception {
 		Date date = CalendarUtil.getDate(2017, 5, 19, Date.TYPE_THIS_MONTH);
 		assertEquals(6, date.getWeek());
+	}
+	@Test
+	public void getBetweenDatePosition() throws Exception {
+		int position = CalendarUtil.getMonthPosition(2017, 5, 2016, 5);
+		assertEquals(-12, position);
+	}
+
+	@Test
+	public void getDayForWeek() throws Exception {
+		int day = CalendarUtil.getDayForWeek(2017, 5, 14);
+		assertEquals(1, day);
+	}
+
+	@Test
+	public void getMaxDayForMonth() throws Exception {
+		int day = CalendarUtil.getMaxDayForMonth(2017, 5);
+		assertEquals(31, day);
+	}
+
+	@Test
+	public void getMonthInYear() throws Exception {
+		int month = CalendarUtil.getMonthInYear(2017, 5);
+		assertEquals(5, month);
 	}
 
 }

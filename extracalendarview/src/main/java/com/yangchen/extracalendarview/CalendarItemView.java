@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class CalendarItemView extends ViewGroup {
 
-	private int maxRow = 6;       //最大显示的行数
+	private int maxRow = 6;       //最大显示的行数,maxRow可变的，如果为1为周模式，可以用来进行模式判断。
 
 	protected static final int COLUMN = 7;        //显示的列数
 	protected DayItemAttrs mDayItemAttrs;
@@ -36,6 +36,7 @@ public class CalendarItemView extends ViewGroup {
 
 	public void setDates(List<Date> dates) {
 		mDates = dates;
+		mLastMonthDay = 0;
 		if (dates.size() > 0) {
 			removeAllViews();
 		}
@@ -56,10 +57,13 @@ public class CalendarItemView extends ViewGroup {
 			//判断点击的日期是否和加载的日期是同一天如果是同一天，设置为选中的样式，
 			// 这个为了解决ViewPager复用后重新创建View的点击效果消失的问题
 			if (date.equals(mExtraCalendarView.getClickDate())) {
+				//  dates.indexOf(date) < 8 是为了，如果选中的View在第一行，Week模式和Month模式切换的时候选中View的效果会消失。
+				if (date.getType() == mExtraCalendarView.getClickDate().getType() || dates.indexOf(date) < 8)
 				mExtraCalendarView.changeDayClickedAndStyle(view);
 			}
 			addView(view);
 		}
+
 		mCurrentMonth = dates.get(mLastMonthDay);
 		requestLayout();
 	}
@@ -81,6 +85,10 @@ public class CalendarItemView extends ViewGroup {
 
 
 	DayView createDayView(Context context, Date date, DayItemAttrs mDayItemAttrs) {
+		//maxRow == 1 证明是周模式，周模式不需要改变topView的颜色。
+		if (maxRow == 1) {
+			return new DayView(context, date, mDayItemAttrs, false);
+		}
 		return new DayView(context, date, mDayItemAttrs, true);
 	}
 

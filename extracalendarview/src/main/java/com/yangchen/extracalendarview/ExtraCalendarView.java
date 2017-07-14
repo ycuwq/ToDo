@@ -21,7 +21,6 @@ import com.yangchen.extracalendarview.listener.OnDayClickListener;
 import com.yangchen.extracalendarview.listener.OnMonthChangeListener;
 import com.yangchen.extracalendarview.util.Annotations;
 import com.yangchen.extracalendarview.util.CalendarUtil;
-import com.yangchen.extracalendarview.util.DateUtil;
 import com.yangchen.extracalendarview.util.DensityUtil;
 
 import java.text.SimpleDateFormat;
@@ -38,7 +37,7 @@ public class ExtraCalendarView extends ViewGroup{
 
 	public final static int CALENDAR_TYPE_WEEK = 1;        //周模式
 	public final static int CALENDAR_TYPE_MONTH = 2;       //月模式
-	private @Annotations.CalendarType int mCalendarType = ExtraCalendarView.CALENDAR_TYPE_WEEK;        //显示的日历类型，显示一周，或者一月
+	private @Annotations.CalendarType int mCalendarType = ExtraCalendarView.CALENDAR_TYPE_MONTH;        //显示的日历类型，显示一周，或者一月
 
 	private @ColorInt int mBackgroundWeekInfo = Color.WHITE;    //日历的周信息背景颜色
 	private @ColorInt int mTextColorTitle = Color.BLACK;        //标题的字体颜色
@@ -48,7 +47,7 @@ public class ExtraCalendarView extends ViewGroup{
 	private int mStartYear = 2017;      //日历开始显示的年份
 	private int mStartMonth = 5;        //日历开始显示的月份
 	private CalendarAdapter mCalendarAdapter;
-	private int mMonthCount = 12;
+	private int mMonthCount = 1200;
 	private DirectionButton mButtonPast;    //切换到上个月的按钮
 	private DirectionButton mButtonFuture;  //切换到下个月的按钮
 	private TextView mTitleTv;                //用来显示当前月份的
@@ -334,12 +333,19 @@ public class ExtraCalendarView extends ViewGroup{
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
 			mCalendarType = CALENDAR_TYPE_WEEK;
 			mCalendarAdapter.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
+			mCalendarView.setAdapter(mCalendarAdapter);
+			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
+					mClickDate.getYear(), mClickDate.getMonth(), mClickDate.getDay());
+			mCalendarView.setCurrentItem(weekPosition, false);
 		} else {
 			mCalendarType = CALENDAR_TYPE_MONTH;
 			mCalendarAdapter.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
+			mCalendarView.setAdapter(mCalendarAdapter);
+			int monthPosition = CalendarUtil.getMonthPosition(mStartYear, mStartMonth,
+					mClickDate.getYear(), mClickDate.getMonth());
+			mCalendarView.setCurrentItem(monthPosition, false);
 		}
-//		mCalendarAdapter.notifyDataSetChanged();
-		mCalendarView.setAdapter(mCalendarAdapter);
+
 	}
 	public int getCalendarType() {
 		return mCalendarType;
@@ -366,7 +372,7 @@ public class ExtraCalendarView extends ViewGroup{
 	 * @param smoothScroll 是否平滑滚动
 	 */
 	public void setCurrentMonth(int year, int month, boolean smoothScroll) {
-		int position = DateUtil.getBetweenDatePosition(mStartYear, mStartMonth, year, month);
+		int position = CalendarUtil.getMonthPosition(mStartYear, mStartMonth, year, month);
 		if (position < 0 || position >= mMonthCount) {
 			return;
 		}

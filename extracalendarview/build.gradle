@@ -35,5 +35,6 @@ dependencies {
     })
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
     compile "com.android.support:design:$supportLibraryVersion"
+    compile 'joda-time:joda-time:2.9.9'
     testCompile 'junit:junit:4.12'
 }
