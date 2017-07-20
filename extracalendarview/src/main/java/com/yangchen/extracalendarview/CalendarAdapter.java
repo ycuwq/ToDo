@@ -16,6 +16,7 @@ import java.util.LinkedList;
  */
 class CalendarAdapter extends PagerAdapter {
 	private final String TAG = getClass().getSimpleName();
+
 	private LinkedList<CalendarItemView> mCache = new LinkedList<>();
 	private SparseArray<CalendarItemView> mViews = new SparseArray<>();
 

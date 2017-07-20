@@ -79,6 +79,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			//计算未完成的滑动距离
 			float surplusTop = calendarViewTop - calendarViewY;
 			float surplusBottom = calendarViewTop + calendarView.getHeight() - child.getBottom();
+
 			if (surplusTop > 0) {
 				if (surplusTop + dy > 0) {
 					calendarView.setTranslationY(calendarView.getTranslationY() - dy);
@@ -126,4 +127,9 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		}
 	}
 
+	@Override
+	public boolean onNestedPreFling(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target, float velocityX, float velocityY) {
+		Log.d(TAG, "onNestedPreFling: " + velocityY);
+		return super.onNestedPreFling(coordinatorLayout, child, target, velocityX, velocityY);
+	}
 }
