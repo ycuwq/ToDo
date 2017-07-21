@@ -130,6 +130,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 	@Override
 	public boolean onNestedPreFling(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target, float velocityX, float velocityY) {
 		Log.d(TAG, "onNestedPreFling: " + velocityY);
+		child.getClickDate();
 		return super.onNestedPreFling(coordinatorLayout, child, target, velocityX, velocityY);
 	}
 }
