@@ -71,6 +71,37 @@ public class CalendarUtil {
 		return dates;
 	}
 
+	public static List<Date> getWeekDays(int startYear, int startMonth, int day) {
+		ArrayList<Date> dates = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+		calendar.set(startYear, startMonth - 1, day);
+		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+
+		int sundayDate = calendar.get(Calendar.DATE);
+		for (int i = 0; i < 7; i++) {
+			calendar.set(Calendar.DATE, sundayDate + i);
+			int year = calendar.get(Calendar.YEAR);
+			int month = calendar.get(Calendar.MONTH) + 1;
+			int date = calendar.get(Calendar.DATE);
+			int type;
+			//月的类型，当月、上月、下月
+			if (startMonth == 12 && month == 1) {
+				type = Date.TYPE_NEXT_MONTH;
+			} else if (startMonth == 1 && month == 12){
+				type = Date.TYPE_LAST_MONTH;
+			} else if (startMonth > month) {
+				type = Date.TYPE_LAST_MONTH;
+			} else if (startMonth < month) {
+				type = Date.TYPE_NEXT_MONTH;
+			} else {
+				type = Date.TYPE_THIS_MONTH;
+			}
+			dates.add(getDate(year, month, date, type));
+		}
+		return dates;
+	}
+
 	/**
 	 * 获取距离开始日期 + 周数的一周的日期。
 	 * @param startYear     开始年
@@ -78,7 +109,7 @@ public class CalendarUtil {
 	 * @param positionWeek  偏移周数
 	 * @return  返回一周的日期，第一天是周日
 	 */
-	public static List<Date> getWeekDays(int startYear, int startMonth, int positionWeek) {
+	public static List<Date> getWeekDaysForPosition(int startYear, int startMonth, int positionWeek) {
 		ArrayList<Date> dates = new ArrayList<>();
 
 		Calendar calendar = Calendar.getInstance();
@@ -90,23 +121,27 @@ public class CalendarUtil {
 		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 		calendar.set(Calendar.WEEK_OF_YEAR, week + positionWeek);
 
-		int currentMonth = calendar.get(Calendar.MONTH);
+		int currentMonth = calendar.get(Calendar.MONTH) + 1;
 		int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
 		for (int i = 0; i < 7; i++) {
 			calendar.set(Calendar.DAY_OF_YEAR, dayOfYear + i);
 			int year = calendar.get(Calendar.YEAR);
-			int month = calendar.get(Calendar.MONTH);
+			int month = calendar.get(Calendar.MONTH) + 1;
 			int day = calendar.get(Calendar.DATE);
 			int type;
 			//月的类型，当月、上月、下月
-			if (currentMonth > month) {
+			if (currentMonth == 12 && month == 1) {
+				type = Date.TYPE_NEXT_MONTH;
+			} else if (currentMonth == 1 && month == 12){
+				type = Date.TYPE_LAST_MONTH;
+			} else if (currentMonth > month) {
 				type = Date.TYPE_LAST_MONTH;
 			} else if (currentMonth < month) {
 				type = Date.TYPE_NEXT_MONTH;
 			} else {
 				type = Date.TYPE_THIS_MONTH;
 			}
-			dates.add(getDate(year, month + 1, day, type));
+			dates.add(getDate(year, month, day, type));
 		}
 		return dates;
 	}
@@ -212,5 +247,35 @@ public class CalendarUtil {
 		return calendar.get(Calendar.MONTH) + 1;
 	}
 
+	/**
+	 * 根据月份的偏移量获取日期
+	 * @param offset    与当前月份的偏移量 当前月份为0 之前为负，之后为正
+	 * @return
+	 */
+	public static Date getMonthForOffset(int year, int month, int day, int offset) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month - 1, day);
+		calendar.set(Calendar.MONTH, month - 1 + offset);
+		int offsetYear = calendar.get(Calendar.YEAR);
+		int offsetMonth = calendar.get(Calendar.MONTH) + 1;
+		int offsetDay = calendar.get(Calendar.DATE);
 
+		return new Date(offsetYear, offsetMonth, offsetDay);
+	}
+
+	/**
+	 * 根据周的偏移量获取日期
+	 * @param offset    与当前周的偏移量 当前周为0 之前为负，之后为正
+	 * @return
+	 */
+	public static Date getWeekForOffset(int year, int month, int day, int offset) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month - 1, day);
+		calendar.set(Calendar.WEEK_OF_YEAR, calendar.get(Calendar.WEEK_OF_YEAR) + offset);
+		int offsetYear = calendar.get(Calendar.YEAR);
+		int offsetMonth = calendar.get(Calendar.MONTH) + 1;
+		int offsetDay = calendar.get(Calendar.DATE);
+
+		return new Date(offsetYear, offsetMonth, offsetDay);
+	}
 }

@@ -47,7 +47,7 @@ public class TaskFragment extends BaseFragment{
 	                         @Nullable Bundle savedInstanceState) {
 		mBinding = FragTaskBinding.inflate(inflater, container, false);
 		mExtraCalendarView = mBinding.extraCalendarView;
-//		mExtraCalendarView.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
+		mExtraCalendarView.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
 		mExtraCalendarView.setStartDate(2017,5, 1500);
 		setupSnakeBar();
 		initView();
