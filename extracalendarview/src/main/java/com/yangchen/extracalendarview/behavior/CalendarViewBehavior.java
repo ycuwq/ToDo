@@ -38,6 +38,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 	public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View directTargetChild, View target, int nestedScrollAxes) {
 		Log.d(TAG, "onStartNestedScroll: ");
 		final boolean started = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
+
 		return started;
 	}
 
@@ -68,14 +69,12 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		//如果在最上方还在下滑
 		if (dy < 0) {
 			if (target instanceof RecyclerView) {
-
 				RecyclerView recyclerView = (RecyclerView)target;
 				//RecyclerView已经无法上滑时折叠日历，否则返回。
 				if (recyclerView.canScrollVertically(-1)) {
 					return;
 				}
 			}
-
 			//计算未完成的滑动距离
 			float surplusTop = calendarViewTop - calendarViewY;
 			float surplusBottom = calendarViewTop + calendarView.getHeight() - child.getBottom();
@@ -93,6 +92,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				if (surplusBottom + dy > 0) {
 					consumed[1] = dy;
 				} else {
+
 					consumed[1] = (int) -surplusBottom;
 				}
 				child.setBottom(child.getBottom() - consumed[1]);
@@ -114,9 +114,11 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 //				target.setTop((int) (target.getTop() - surplusTop));
 //				calendarView.setTop((int) (calendarView.getTop() - surplusTop));
 				consumed[1] = dy;
-//				ViewCompat.offsetTopAndBottom(target, -consumed[1]);
+				target.setTop((int) (target.getTop() - surplusTop));
 			} else if (surplusBottom > 0){
+				//
 				if (surplusBottom - dy > 0) {
+					//consumed[] 是使用的滑动距离，用来防止Calendar没有滑动结束时RecyclerView滑动
 					consumed[1] = dy;
 				} else {
 					consumed[1] = (int) surplusBottom;
