@@ -71,16 +71,26 @@ public class CalendarUtil {
 		return dates;
 	}
 
+	/**
+	 * 返回当前日期一周的数据
+
+	 * @return
+	 */
 	public static List<Date> getWeekDays(int startYear, int startMonth, int day) {
+		//TODO 该方法返回值不正确
 		ArrayList<Date> dates = new ArrayList<>();
 		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
 		calendar.setFirstDayOfWeek(Calendar.SUNDAY);
 		calendar.set(startYear, startMonth - 1, day);
 		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-
 		int sundayDate = calendar.get(Calendar.DATE);
+		int sundayYear = calendar.get(Calendar.YEAR);
+		int sundayMonth = calendar.get(Calendar.MONTH) + 1;
+		calendar.set(sundayYear, sundayMonth - 1, sundayDate);
 		for (int i = 0; i < 7; i++) {
 			calendar.set(Calendar.DATE, sundayDate + i);
+
 			int year = calendar.get(Calendar.YEAR);
 			int month = calendar.get(Calendar.MONTH) + 1;
 			int date = calendar.get(Calendar.DATE);

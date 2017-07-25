@@ -100,7 +100,7 @@ class CalendarAdapter extends PagerAdapter {
 	 */
 	public void switchToWeek() {
 
-		//TODO 切换周日期后点击样式消失
+
 		CalendarItemView lastView = mViews.get(mViews.keyAt(0));
 		CalendarItemView currentView = mViews.get(mViews.keyAt(1));
 		CalendarItemView nextView = mViews.get(mViews.keyAt(2));

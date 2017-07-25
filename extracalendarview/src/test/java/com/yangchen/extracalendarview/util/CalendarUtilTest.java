@@ -20,13 +20,13 @@ public class CalendarUtilTest {
 
 	@Test
 	public void getWeekForOffset() throws Exception {
-		Date date = CalendarUtil.getWeekForOffset(2017, 7, 23, -1);
-		assertEquals(16, date.getDay());
+		Date date = CalendarUtil.getWeekForOffset(2017, 7, 25, -1);
+		assertEquals(18, date.getDay());
 	}
 
 	@Test
 	public void getWeekDays() throws Exception {
-		List<Date> dates = CalendarUtil.getWeekDays(2017, 7, 23);
+		List<Date> dates = CalendarUtil.getWeekDays(2017, 7, 18);
 		assertEquals(23, dates.get(0).getDay());
 		assertEquals(29, dates.get(6).getDay());
 	}
