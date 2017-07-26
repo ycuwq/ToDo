@@ -71,18 +71,18 @@ public class CalendarUtil {
 		return dates;
 	}
 
+
 	/**
 	 * 返回当前日期一周的数据
-
 	 * @return
 	 */
-	public static List<Date> getWeekDays(int startYear, int startMonth, int day) {
+	public static List<Date> getWeekDays(int startYear, int startMonth, int startDay) {
 		//TODO 该方法返回值不正确
 		ArrayList<Date> dates = new ArrayList<>();
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear();
 		calendar.setFirstDayOfWeek(Calendar.SUNDAY);
-		calendar.set(startYear, startMonth - 1, day);
+		calendar.set(startYear, startMonth - 1, startDay);
 		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 		int sundayDate = calendar.get(Calendar.DATE);
 		int sundayYear = calendar.get(Calendar.YEAR);
@@ -119,16 +119,17 @@ public class CalendarUtil {
 	 * @param positionWeek  偏移周数
 	 * @return  返回一周的日期，第一天是周日
 	 */
-	public static List<Date> getWeekDaysForPosition(int startYear, int startMonth, int positionWeek) {
+	public static List<Date> getWeekDaysForPosition(int startYear, int startMonth, int startDay, int positionWeek) {
 		ArrayList<Date> dates = new ArrayList<>();
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setFirstDayOfWeek(Calendar.SUNDAY);
-		calendar.set(startYear, startMonth - 1, 1);
+		calendar.set(startYear, startMonth - 1, startDay);
 
 		//将日期设置为开始日期 + 距离周数的日期。
 		int week = calendar.get(Calendar.WEEK_OF_YEAR);
 		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		int date = calendar.get(Calendar.DAY_OF_WEEK);
 		calendar.set(Calendar.WEEK_OF_YEAR, week + positionWeek);
 
 		int currentMonth = calendar.get(Calendar.MONTH) + 1;
@@ -287,5 +288,18 @@ public class CalendarUtil {
 		int offsetDay = calendar.get(Calendar.DATE);
 
 		return new Date(offsetYear, offsetMonth, offsetDay);
+	}
+
+	public static Date getWeekFirstDay(int year, int month, int day) {
+		//TODO 这坨代码有毒
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+		int date = calendar.get(Calendar.DATE);
+		calendar.set(year, month -1, day);
+		int date2 = calendar.get(Calendar.DATE);
+		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+//		int date = calendar.get(Calendar.DATE);
+		return getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE), Date.TYPE_THIS_MONTH);
 	}
 }

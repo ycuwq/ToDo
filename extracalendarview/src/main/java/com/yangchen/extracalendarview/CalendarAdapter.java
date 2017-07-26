@@ -50,7 +50,7 @@ class CalendarAdapter extends PagerAdapter {
 		calendarItemView.initAttr(mDayItemAttrs);
 
 		if (mCalendarType == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
-			calendarItemView.setDates(CalendarUtil.getWeekDaysForPosition(mStartYear, mStartMonth, position));
+			calendarItemView.setDates(CalendarUtil.getWeekDaysForPosition(mStartYear, mStartMonth,1, position));
 		} else {
 			int date[] = CalendarUtil.positionToDate(position, mStartYear, mStartMonth);
 			calendarItemView.setDates(CalendarUtil.getMonthDates(date[0], date[1]));
