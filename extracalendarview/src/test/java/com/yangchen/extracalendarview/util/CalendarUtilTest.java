@@ -12,11 +12,7 @@ import static org.junit.Assert.assertEquals;
  * Created by 杨晨 on 2017/5/19.
  */
 public class CalendarUtilTest {
-	@Test
-	public void getWeekFirstDay() throws Exception {
-		Date date = CalendarUtil.getWeekFirstDay(2017, 7, 1);
-		assertEquals(16, date.getDay());
-	}
+
 
 	@Test
 	public void getMonthForOffset() throws Exception {
@@ -33,9 +29,15 @@ public class CalendarUtilTest {
 	@Test
 	public void getWeekDays() throws Exception {
 
-//		List<Date> dates = CalendarUtil.getWeekDays(2017, 7, 7);
-//		assertEquals(0, dates.get(0).getDay());
-//		assertEquals(29, dates.get(6).getDay());
+		List<Date> dates = CalendarUtil.getWeekDays(2017, 8, 1);
+		assertEquals(30, dates.get(0).getDay());
+		assertEquals(5, dates.get(6).getDay());
+		List<Date> dates2 = CalendarUtil.getWeekDays(2017, 7, 23);
+		assertEquals(23, dates2.get(0).getDay());
+		assertEquals(29, dates2.get(6).getDay());
+		List<Date> dates3 = CalendarUtil.getWeekDays(2017, 7, 1);
+		assertEquals(25, dates3.get(0).getDay());
+		assertEquals(1, dates3.get(6).getDay());
 	}
 
 	@Test
@@ -78,7 +80,7 @@ public class CalendarUtilTest {
 
 	@Test
 	public void getDayForWeek() throws Exception {
-		int day = CalendarUtil.getDayForWeek(2017, 5, 14);
+		int day = CalendarUtil.getDayForWeek(2017, 7, 29);
 		assertEquals(1, day);
 	}
 

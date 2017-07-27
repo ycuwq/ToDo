@@ -80,16 +80,14 @@ public class CalendarUtil {
 		//TODO 该方法返回值不正确
 		ArrayList<Date> dates = new ArrayList<>();
 		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
 		calendar.setFirstDayOfWeek(Calendar.SUNDAY);
-		calendar.set(startYear, startMonth - 1, startDay);
-		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-		int sundayDate = calendar.get(Calendar.DATE);
-		int sundayYear = calendar.get(Calendar.YEAR);
-		int sundayMonth = calendar.get(Calendar.MONTH) + 1;
-		calendar.set(sundayYear, sundayMonth - 1, sundayDate);
+		calendar.set(startYear, startMonth -1, startDay);
+		int dayOFWeek = calendar.get(Calendar.DAY_OF_WEEK);
+		//获取上周最后一天的日期
+		calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - dayOFWeek);
 		for (int i = 0; i < 7; i++) {
-			calendar.set(Calendar.DATE, sundayDate + i);
+			//从上周的最后一天开始每次+1，
+			calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
 
 			int year = calendar.get(Calendar.YEAR);
 			int month = calendar.get(Calendar.MONTH) + 1;
@@ -290,16 +288,5 @@ public class CalendarUtil {
 		return new Date(offsetYear, offsetMonth, offsetDay);
 	}
 
-	public static Date getWeekFirstDay(int year, int month, int day) {
-		//TODO 这坨代码有毒
-		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.setFirstDayOfWeek(Calendar.SUNDAY);
-		int date = calendar.get(Calendar.DATE);
-		calendar.set(year, month -1, day);
-		int date2 = calendar.get(Calendar.DATE);
-		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-//		int date = calendar.get(Calendar.DATE);
-		return getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE), Date.TYPE_THIS_MONTH);
-	}
+
 }

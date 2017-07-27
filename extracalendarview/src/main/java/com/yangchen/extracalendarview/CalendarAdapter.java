@@ -5,7 +5,6 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yangchen.extracalendarview.base.Date;
 import com.yangchen.extracalendarview.util.Annotations;
 import com.yangchen.extracalendarview.util.CalendarUtil;
 
@@ -75,43 +74,6 @@ class CalendarAdapter extends PagerAdapter {
 
 	public int getCalendarType() {
 		return mCalendarType;
-	}
-
-	/**
-	 * 切换到月模式
-	 */
-	public void switchToMonth() {
-		//TODO 切换月模式速度较慢，考虑优化获取月日期的数据
-		CalendarItemView lastMonth = mViews.get(mViews.keyAt(0));
-		CalendarItemView currentView = mViews.get(mViews.keyAt(1));
-		CalendarItemView nextMonth = mViews.get(mViews.keyAt(2));
-
-		Date date = mExtraCalendarView.getClickDate();
-		Date lastDate = CalendarUtil.getMonthForOffset(date.getYear(), date.getMonth(), date.getDay(),-1);
-		Date nextDate = CalendarUtil.getMonthForOffset(date.getYear(), date.getMonth(), date.getDay(),1);
-
-		lastMonth.setDates(CalendarUtil.getMonthDates(lastDate.getYear(), lastDate.getMonth()));
-		currentView.setDates(CalendarUtil.getMonthDates(date.getYear(), date.getMonth()));
-		nextMonth.setDates(CalendarUtil.getMonthDates(nextDate.getYear(), nextDate.getMonth()));
-	}
-
-	/**
-	 * 切换到周模式
-	 */
-	public void switchToWeek() {
-
-
-		CalendarItemView lastView = mViews.get(mViews.keyAt(0));
-		CalendarItemView currentView = mViews.get(mViews.keyAt(1));
-		CalendarItemView nextView = mViews.get(mViews.keyAt(2));
-
-		Date date = mExtraCalendarView.getClickDate();
-		Date lastDate = CalendarUtil.getWeekForOffset(date.getYear(), date.getMonth(), date.getDay(),-1);
-		Date nextDate = CalendarUtil.getWeekForOffset(date.getYear(), date.getMonth(), date.getDay(),1);
-
-		lastView.setDates(CalendarUtil.getWeekDays(lastDate.getYear(), lastDate.getMonth(), lastDate.getDay()));
-		currentView.setDates(CalendarUtil.getWeekDays(date.getYear(), date.getMonth(), date.getDay()));
-		nextView.setDates(CalendarUtil.getWeekDays(nextDate.getYear(), nextDate.getMonth(), nextDate.getDay()));
 	}
 
 

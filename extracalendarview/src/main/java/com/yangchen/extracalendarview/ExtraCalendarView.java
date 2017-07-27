@@ -330,22 +330,23 @@ public class ExtraCalendarView extends ViewGroup{
 		mClickDate = dayView.getDate();
 	}
 	public void changeCalendarType() {
+		//FIXME 切换成月模式速度太慢
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
 			mCalendarType = CALENDAR_TYPE_WEEK;
 			mCalendarAdapter.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
-			mCalendarAdapter.switchToWeek();
+//			mCalendarAdapter.switchToWeek();
 //			mCalendarView.setAdapter(mCalendarAdapter);
-//			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
-//					mClickDate.getYear(), mClickDate.getMonth(), mClickDate.getDay());
-//			mCalendarView.setCurrentItem(weekPosition, false);
+			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
+					mClickDate.getYear(), mClickDate.getMonth(), mClickDate.getDay());
+			mCalendarView.setCurrentItem(weekPosition, false);
 		} else {
 			mCalendarType = CALENDAR_TYPE_MONTH;
 			mCalendarAdapter.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
-			mCalendarAdapter.switchToMonth();
+//			mCalendarAdapter.switchToMonth();
 //			mCalendarView.setAdapter(mCalendarAdapter);
-//			int monthPosition = CalendarUtil.getMonthPosition(mStartYear, mStartMonth,
-//					mClickDate.getYear(), mClickDate.getMonth());
-//			mCalendarView.setCurrentItem(monthPosition, false);
+			int monthPosition = CalendarUtil.getMonthPosition(mStartYear, mStartMonth,
+					mClickDate.getYear(), mClickDate.getMonth());
+			mCalendarView.setCurrentItem(monthPosition, false);
 		}
 
 	}
