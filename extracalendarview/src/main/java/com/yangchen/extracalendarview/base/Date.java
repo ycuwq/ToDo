@@ -17,7 +17,7 @@ public class Date {
 	private int year;
 	private int month;
 	private int day;
-	private int week;
+	private int week;               //是该星期的第几点
 	private String holiday;         //节假日
 
 	private String lunarMonth;      //农历月

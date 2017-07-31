@@ -77,7 +77,6 @@ public class CalendarUtil {
 	 * @return
 	 */
 	public static List<Date> getWeekDays(int startYear, int startMonth, int startDay) {
-		//TODO 该方法返回值不正确
 		ArrayList<Date> dates = new ArrayList<>();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setFirstDayOfWeek(Calendar.SUNDAY);
@@ -94,17 +93,17 @@ public class CalendarUtil {
 			int date = calendar.get(Calendar.DATE);
 			int type;
 			//月的类型，当月、上月、下月
-			if (startMonth == 12 && month == 1) {
-				type = Date.TYPE_NEXT_MONTH;
-			} else if (startMonth == 1 && month == 12){
-				type = Date.TYPE_LAST_MONTH;
-			} else if (startMonth > month) {
-				type = Date.TYPE_LAST_MONTH;
-			} else if (startMonth < month) {
-				type = Date.TYPE_NEXT_MONTH;
-			} else {
+//			if (startMonth == 12 && month == 1) {
+//				type = Date.TYPE_NEXT_MONTH;
+//			} else if (startMonth == 1 && month == 12){
+//				type = Date.TYPE_LAST_MONTH;
+//			} else if (startMonth > month) {
+//				type = Date.TYPE_LAST_MONTH;
+//			} else if (startMonth < month) {
+//				type = Date.TYPE_NEXT_MONTH;
+//			} else {
 				type = Date.TYPE_THIS_MONTH;
-			}
+//			}
 			dates.add(getDate(year, month, date, type));
 		}
 		return dates;
@@ -138,18 +137,9 @@ public class CalendarUtil {
 			int month = calendar.get(Calendar.MONTH) + 1;
 			int day = calendar.get(Calendar.DATE);
 			int type;
-			//月的类型，当月、上月、下月
-			if (currentMonth == 12 && month == 1) {
-				type = Date.TYPE_NEXT_MONTH;
-			} else if (currentMonth == 1 && month == 12){
-				type = Date.TYPE_LAST_MONTH;
-			} else if (currentMonth > month) {
-				type = Date.TYPE_LAST_MONTH;
-			} else if (currentMonth < month) {
-				type = Date.TYPE_NEXT_MONTH;
-			} else {
-				type = Date.TYPE_THIS_MONTH;
-			}
+			//月的类型，当月、上月、下月v
+			type = Date.TYPE_THIS_MONTH;
+
 			dates.add(getDate(year, month, day, type));
 		}
 		return dates;

@@ -80,7 +80,7 @@ public class CalendarUtilTest {
 
 	@Test
 	public void getDayForWeek() throws Exception {
-		int day = CalendarUtil.getDayForWeek(2017, 7, 29);
+		int day = CalendarUtil.getDayForWeek(2017, 7, 31);
 		assertEquals(1, day);
 	}
 

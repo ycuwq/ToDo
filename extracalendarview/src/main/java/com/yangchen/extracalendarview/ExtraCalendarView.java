@@ -334,16 +334,14 @@ public class ExtraCalendarView extends ViewGroup{
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
 			mCalendarType = CALENDAR_TYPE_WEEK;
 			mCalendarAdapter.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
-//			mCalendarAdapter.switchToWeek();
-//			mCalendarView.setAdapter(mCalendarAdapter);
 			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
 					mClickDate.getYear(), mClickDate.getMonth(), mClickDate.getDay());
 			mCalendarView.setCurrentItem(weekPosition, false);
 		} else {
+			//FIXME 如果选中的是一个月的第一个星期，切换成星期会显示上个月。
 			mCalendarType = CALENDAR_TYPE_MONTH;
 			mCalendarAdapter.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
-//			mCalendarAdapter.switchToMonth();
-//			mCalendarView.setAdapter(mCalendarAdapter);
+
 			int monthPosition = CalendarUtil.getMonthPosition(mStartYear, mStartMonth,
 					mClickDate.getYear(), mClickDate.getMonth());
 			mCalendarView.setCurrentItem(monthPosition, false);

@@ -57,9 +57,10 @@ public class CalendarItemView extends ViewGroup {
 			//判断点击的日期是否和加载的日期是同一天如果是同一天，设置为选中的样式，
 			// 这个为了解决ViewPager复用后重新创建View的点击效果消失的问题
 			if (date.equals(mExtraCalendarView.getClickDate())) {
-				//  dates.indexOf(date) < 8 是为了，如果选中的View在第一行，Week模式和Month模式切换的时候选中View的效果会消失。
-				if (date.getType() == mExtraCalendarView.getClickDate().getType() || dates.indexOf(date) < 8)
-				mExtraCalendarView.changeDayClickedAndStyle(view);
+				//  周类型没有Type的概念，这里判断周的Type 是无效的。
+				if (date.getType() == mExtraCalendarView.getClickDate().getType()) {
+					mExtraCalendarView.changeDayClickedAndStyle(view);
+				}
 			}
 			addView(view);
 		}
