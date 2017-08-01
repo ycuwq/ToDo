@@ -129,7 +129,7 @@ public class ExtraCalendarView extends ViewGroup{
 		mClickDate = CalendarUtil.getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
 				calendar.get(Calendar.DAY_OF_MONTH), Date.TYPE_THIS_MONTH);
 		setCurrentMonth(mClickDate.getYear(), mClickDate.getMonth(), false);
-		setTranslationZ(-1);
+		setTranslationZ(-2);
 	}
 
 	private void initAttrs(AttributeSet attrs) {
