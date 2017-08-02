@@ -67,16 +67,16 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		if (dy > 0) {
 			if (clickViewTop > weekInfoBottom - calendarView.getTop()) {
 				ViewCompat.offsetTopAndBottom(calendarView, -dy);
+				ViewCompat.offsetTopAndBottom(target, -dy);
 			}
 		} else {
 			ViewCompat.offsetTopAndBottom(calendarView, -dy);
+			ViewCompat.offsetTopAndBottom(target, -dy);
 		}
 		Log.d(TAG, "onNestedPreScroll: " + child.getWeekInfoView().getBottom());
 		Log.d(TAG, "clickViewTop: " + clickViewTop);
-		Log.d(TAG, "clickViewHeight: " + clickViewHeight);
 		Log.d(TAG, "calendarViewTop: " + calendarView.getTop());
-		Log.d(TAG, "calendarViewY: " + calendarView.getY());
-		Log.d(TAG, "calendarView getTranslationY " + calendarView.getTranslationY());
+		Log.d(TAG, "target: " + target.getTop());
 	}
 
 	//	@Override

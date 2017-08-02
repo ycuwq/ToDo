@@ -1,5 +1,6 @@
 package com.yangchen.extracalendarview;
 
+import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.View;
@@ -14,7 +15,7 @@ import java.util.LinkedList;
  * 日历用的Adapter{@link CalendarItemView}
  * Created by yangchen on 2017/6/27.
  */
-class CalendarAdapter extends PagerAdapter {
+abstract class  CalendarAdapter extends PagerAdapter {
 	private final String TAG = getClass().getSimpleName();
 
 	private LinkedList<CalendarItemView> mCache = new LinkedList<>();
@@ -43,7 +44,7 @@ class CalendarAdapter extends PagerAdapter {
 		if (!mCache.isEmpty()) {
 			calendarItemView = mCache.removeFirst();
 		} else {
-			calendarItemView = new CalendarItemView(mExtraCalendarView, container.getContext());
+			calendarItemView = instantiateCalendarView(mExtraCalendarView, container.getContext());
 
 		}
 		calendarItemView.initAttr(mDayItemAttrs);
@@ -60,6 +61,7 @@ class CalendarAdapter extends PagerAdapter {
 		return calendarItemView;
 	}
 
+	public abstract CalendarItemView instantiateCalendarView(ExtraCalendarView extraCalendarView, Context context);
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {

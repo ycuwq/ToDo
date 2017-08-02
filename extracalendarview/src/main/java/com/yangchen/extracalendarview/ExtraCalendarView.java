@@ -33,36 +33,45 @@ import java.util.Locale;
  */
 @SuppressWarnings("unused")
 @CoordinatorLayout.DefaultBehavior(CalendarViewBehavior.class)
-public class ExtraCalendarView extends ViewGroup{
+public class ExtraCalendarView extends ViewGroup {
 
 	public final static int CALENDAR_TYPE_WEEK = 1;        //周模式
 	public final static int CALENDAR_TYPE_MONTH = 2;       //月模式
-	private @Annotations.CalendarType int mCalendarType = ExtraCalendarView.CALENDAR_TYPE_MONTH;        //显示的日历类型，显示一周，或者一月
+	private @Annotations.CalendarType
+	int mCalendarType = ExtraCalendarView.CALENDAR_TYPE_MONTH;        //显示的日历类型，显示一周，或者一月
 
-	private @ColorInt int mBackgroundWeekInfo = Color.WHITE;    //日历的周信息背景颜色
-	private @ColorInt int mTextColorTitle = Color.BLACK;        //标题的字体颜色
-	private @ColorInt int mTextColorWeekInfo = Color.BLACK;
+	private @ColorInt
+	int mBackgroundWeekInfo = Color.WHITE;    //日历的周信息背景颜色
+	private @ColorInt
+	int mTextColorTitle = Color.BLACK;        //标题的字体颜色
+	private @ColorInt
+	int mTextColorWeekInfo = Color.BLACK;
 	private int mTextSizeWeekInfo = 14;                         //周信息字体大小
 	private int mTextSizeTitle = 14;                            //标题字体大小
 	private int mStartYear = 2017;      //日历开始显示的年份
 	private int mStartMonth = 5;        //日历开始显示的月份
-	private CalendarAdapter mCalendarAdapter;
+
 	private int mMonthCount = 1200;
 	private DirectionButton mButtonPast;    //切换到上个月的按钮
 	private DirectionButton mButtonFuture;  //切换到下个月的按钮
 	private TextView mTitleTv;                //用来显示当前月份的
 	private Drawable mLeftArrowMask = getResources().getDrawable(R.drawable.mcv_action_previous);
 	private Drawable mRightArrowMask = getResources().getDrawable(R.drawable.mcv_action_next);
-	private @ColorInt int mArrowColor = Color.BLACK;
+	private @ColorInt
+	int mArrowColor = Color.BLACK;
 	private Date mCurrentMonth;              //标记的当前显示的月份
-	private Date mClickDate;                    //当前选中的日期
-//	private WeekView mMonthView;
-	private CalendarView mCalendarView;
+	private Date mClickDate;        //当前选中的日期
+	private DayView mClickedView;   //当前点击DayView
+
+	private CalendarView mCalendarView;         //当前显示CalendarView
+	private CalendarAdapter mCalendarAdapter;   //当前Calendar的Adapter
+	private CalendarView mMonthCalendarView, mWeekCalendarView;   //CalendarView 的子类，显示月或周
+	private MonthCalendarAdapter mMonthCalendarAdapter;
+	private WeekCalendarAdapter mWeekCalendarAdapter;
 
 	private DayItemAttrs mDayItemAttrs = new DayItemAttrs();
 	private SimpleDateFormat monthDateFormat = new SimpleDateFormat("yyyy年MM月", Locale.SIMPLIFIED_CHINESE);
 	private LinearLayout mTitleLayout;
-	private DayView mLastClickedView;
 
 	private OnDayClickListener mOnDayClickListener;
 	private OnMonthChangeListener mOnMonthChangeListener;
@@ -92,8 +101,8 @@ public class ExtraCalendarView extends ViewGroup{
 			// View没有绘制完成时，adapter得不到MonthItemView
 			if (itemView != null) {
 				mCurrentMonth = itemView.getCurrentMonth();
-				if (mLastClickedView != null) {
-					mLastClickedView.setClickedViewStyle(false);
+				if (mClickedView != null) {
+					mClickedView.setClickedViewStyle(false);
 				}
 				if (mOnMonthChangeListener != null) {
 					mOnMonthChangeListener.onChange(mCurrentMonth);
@@ -134,7 +143,7 @@ public class ExtraCalendarView extends ViewGroup{
 
 	private void initAttrs(AttributeSet attrs) {
 		TypedArray a = getContext().getTheme()
-				.obtainStyledAttributes(attrs, R.styleable.ExtraCalendarView, 0,0);
+				.obtainStyledAttributes(attrs, R.styleable.ExtraCalendarView, 0, 0);
 		int count = a.getIndexCount();
 		for (int i = 0; i < count; i++) {
 			int attr = a.getIndex(i);
@@ -149,7 +158,7 @@ public class ExtraCalendarView extends ViewGroup{
 				mDayItemAttrs.setTextColorTop(a.getColor(attr, Color.BLACK));
 			} else if (attr == R.styleable.ExtraCalendarView_textColorTopBottom) {
 				mDayItemAttrs.setTextColorBottom(a.getColor(attr, Color.parseColor("#999999")));
-			} else if(attr == R.styleable.ExtraCalendarView_textColorWeekInfo) {
+			} else if (attr == R.styleable.ExtraCalendarView_textColorWeekInfo) {
 				mTextColorWeekInfo = a.getColor(attr, Color.BLACK);
 			} else if (attr == R.styleable.ExtraCalendarView_textSizeBottom) {
 				mDayItemAttrs.setTextSizeBottom(a.getInt(attr, 8));
@@ -200,7 +209,7 @@ public class ExtraCalendarView extends ViewGroup{
 
 		mButtonFuture.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 		mTitleLayout.addView(mButtonFuture, new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
-		mTitleLayout.setPadding(16,24,16,24);
+		mTitleLayout.setPadding(16, 24, 16, 24);
 		addView(mTitleLayout, new LayoutParams(LayoutParams.MATCH_PARENT, DensityUtil.dp2px(getContext(), 48)));
 
 		//周显示信息
@@ -211,7 +220,7 @@ public class ExtraCalendarView extends ViewGroup{
 		//日历显示的ViewPager
 		mCalendarView = new CalendarView(getContext());
 		mCalendarView.setTranslationZ(-2);
-		mCalendarAdapter = new CalendarAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
+		mCalendarAdapter = new MonthCalendarAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
 		mCalendarAdapter.setCalendarType(mCalendarType);
 		mCalendarView.setAdapter(mCalendarAdapter);
 		mCalendarView.addOnPageChangeListener(onPageChangeListener);
@@ -231,7 +240,7 @@ public class ExtraCalendarView extends ViewGroup{
 
 		final int childCount = getChildCount();
 		int childHeightSum = 0;
-		for (int i = 0; i < childCount; i ++) {
+		for (int i = 0; i < childCount; i++) {
 			final View child = getChildAt(i);
 			if (child.getVisibility() == View.GONE) {
 				continue;
@@ -266,6 +275,7 @@ public class ExtraCalendarView extends ViewGroup{
 
 	/**
 	 * 设置跳转到选定的月份， 如果超出范围则不会跳转
+	 *
 	 * @param year  选择的年
 	 * @param month 选择的月
 	 */
@@ -311,24 +321,28 @@ public class ExtraCalendarView extends ViewGroup{
 		if (mOnDayClickListener != null) {
 			mOnDayClickListener.onClick(dayView, mClickDate);
 		}
+
 	}
+
 	public DayView getClickView() {
-		return mLastClickedView;
+		return mClickedView;
 	}
 
 
 	/**
 	 * 改变点击日期的样式，取消上次点击的样式，改变当前点击的日期
+	 *
 	 * @param dayView 返回的DayView
 	 */
 	void changeDayClickedAndStyle(DayView dayView) {
-		if (mLastClickedView != null) {
-			mLastClickedView.setClickedViewStyle(true);
+		if (mClickedView != null) {
+			mClickedView.setClickedViewStyle(true);
 		}
 		dayView.setClickedViewStyle(false);
-		mLastClickedView = dayView;
+		mClickedView = dayView;
 		mClickDate = dayView.getDate();
 	}
+
 	public void changeCalendarType() {
 		//FIXME 切换成月模式速度太慢
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
@@ -348,6 +362,7 @@ public class ExtraCalendarView extends ViewGroup{
 		}
 
 	}
+
 	public int getCalendarType() {
 		return mCalendarType;
 	}
@@ -368,8 +383,10 @@ public class ExtraCalendarView extends ViewGroup{
 		mCalendarType = calendarType;
 		mCalendarAdapter.setCalendarType(calendarType);
 	}
+
 	/**
-	 *  跳转到选中日期页
+	 * 跳转到选中日期页
+	 *
 	 * @param smoothScroll 是否平滑滚动
 	 */
 	public void setCurrentMonth(int year, int month, boolean smoothScroll) {
@@ -388,7 +405,8 @@ public class ExtraCalendarView extends ViewGroup{
 
 	/**
 	 * 设置全部Title箭头的颜色
-	 * @param color     颜色
+	 *
+	 * @param color 颜色
 	 */
 	public void setArrowColor(@ColorInt int color) {
 		if (color == 0) {
@@ -444,17 +462,19 @@ public class ExtraCalendarView extends ViewGroup{
 
 	/**
 	 * 设置标题栏是否显示
-	 * @param isVisible     true 显示， false 不显示
+	 *
+	 * @param isVisible true 显示， false 不显示
 	 */
-	public void setTitleVisible(boolean isVisible){
+	public void setTitleVisible(boolean isVisible) {
 		mTitleLayout.setVisibility(isVisible ? View.VISIBLE : View.GONE);
 	}
 
 	/**
 	 * 设置开始显示的月份
-	 * @param startYear         开始年
-	 * @param startMonth        开始月
-	 * @param monthCount        一共显示的月份数量
+	 *
+	 * @param startYear  开始年
+	 * @param startMonth 开始月
+	 * @param monthCount 一共显示的月份数量
 	 */
 	public void setStartDate(int startYear, int startMonth, int monthCount) {
 		mStartYear = startYear;

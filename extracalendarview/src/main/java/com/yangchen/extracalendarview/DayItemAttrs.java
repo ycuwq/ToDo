@@ -33,7 +33,7 @@ class DayItemAttrs {
 		return showHoliday;
 	}
 
-	public void setShowHoliday(boolean showHoliday) {
+	void setShowHoliday(boolean showHoliday) {
 		this.showHoliday = showHoliday;
 	}
 

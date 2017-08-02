@@ -13,9 +13,9 @@ import java.util.List;
  * ItemView的基类，
  * Created by yangchen on 2017/6/27.
  */
-public class CalendarItemView extends ViewGroup {
+public abstract class CalendarItemView extends ViewGroup {
 
-	private int maxRow = 6;       //最大显示的行数,maxRow可变的，如果为1为周模式，可以用来进行模式判断。
+	protected int maxRow = 6;       //最大显示的行数,maxRow可变的，如果为1为周模式，可以用来进行模式判断。
 
 	protected static final int COLUMN = 7;        //显示的列数
 	protected DayItemAttrs mDayItemAttrs;
@@ -23,11 +23,13 @@ public class CalendarItemView extends ViewGroup {
 	protected List<Date> mDates;
 	protected int  mLastMonthDay; //当前月份天数，上月天数，下月天数。
 	protected Date mCurrentMonth;
+
 	public CalendarItemView(ExtraCalendarView extraCalendarView, Context context) {
-		super(context);
+		super(context, null);
 		mExtraCalendarView = extraCalendarView;
 		mLastMonthDay = 0;
 	}
+
 
 	public void initAttr(DayItemAttrs dayItemAttrs) {
 		mDayItemAttrs = dayItemAttrs;
@@ -39,12 +41,6 @@ public class CalendarItemView extends ViewGroup {
 		mLastMonthDay = 0;
 		if (dates.size() > 0) {
 			removeAllViews();
-		}
-
-		if (dates.size() <= 7) {
-			maxRow = 1;
-		} else {
-			maxRow = 6;
 		}
 
 		for (int i = 0; i < dates.size(); i++) {
@@ -85,13 +81,7 @@ public class CalendarItemView extends ViewGroup {
 	}
 
 
-	DayView createDayView(Context context, Date date, DayItemAttrs mDayItemAttrs) {
-		//maxRow == 1 证明是周模式，周模式不需要改变topView的颜色。
-		if (maxRow == 1) {
-			return new DayView(context, date, mDayItemAttrs, false);
-		}
-		return new DayView(context, date, mDayItemAttrs, true);
-	}
+	abstract DayView createDayView(Context context, Date date, DayItemAttrs mDayItemAttrs);
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {

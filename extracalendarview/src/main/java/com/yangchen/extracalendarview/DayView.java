@@ -20,7 +20,10 @@ public class DayView extends LinearLayout {
 	private DayItemAttrs mDayItemAttrs;
 	private TextView topTv;
 	private TextView bottomTv;
+
+	//将非当月的信息设置为Bottom的颜色，与当月日期区别
 	private boolean mChangeTopViewColor;
+
 	public DayView(Context context, Date date, DayItemAttrs dayItemAttrs, boolean changeTopViewColor) {
 		super(context);
 		mDate = date;
@@ -36,7 +39,7 @@ public class DayView extends LinearLayout {
 		topTv = (TextView) findViewById(R.id.tv_item_month_top);
 		bottomTv = (TextView) findViewById(R.id.tv_item_month_bottom);
 
-		//将非当月的信息设置为Bottom的颜色，与当月日期区别
+
 		if (mDate.getType() != Date.TYPE_THIS_MONTH && mChangeTopViewColor) {
 			topTv.setTextColor(mDayItemAttrs.getTextColorBottom());
 		} else {
