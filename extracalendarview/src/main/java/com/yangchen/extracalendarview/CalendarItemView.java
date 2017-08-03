@@ -80,6 +80,13 @@ public abstract class CalendarItemView extends ViewGroup {
 		return (DayView) getChildAt(position);
 	}
 
+	public void setClickView(Date clickView) {
+		mExtraCalendarView.changeDayClickedAndStyle(getDayView(clickView));
+	}
+
+	public void setClickView(int position) {
+		mExtraCalendarView.changeDayClickedAndStyle((DayView) getChildAt(position));
+	}
 
 	abstract DayView createDayView(Context context, Date date, DayItemAttrs mDayItemAttrs);
 

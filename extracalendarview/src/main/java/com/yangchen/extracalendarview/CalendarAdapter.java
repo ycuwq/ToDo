@@ -6,10 +6,10 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yangchen.extracalendarview.util.Annotations;
-import com.yangchen.extracalendarview.util.CalendarUtil;
+import com.yangchen.extracalendarview.base.Date;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 日历用的Adapter{@link CalendarItemView}
@@ -23,8 +23,6 @@ abstract class  CalendarAdapter extends PagerAdapter {
 
 	private int mCount;     //一共显示多少个月
 
-	private @Annotations.CalendarType
-	int mCalendarType = ExtraCalendarView.CALENDAR_TYPE_MONTH;        //显示的日历类型，显示一周，或者一月
 
 	private int mStartYear, mStartMonth;
 	private DayItemAttrs mDayItemAttrs;
@@ -49,13 +47,7 @@ abstract class  CalendarAdapter extends PagerAdapter {
 		}
 		calendarItemView.initAttr(mDayItemAttrs);
 
-		if (mCalendarType == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
-			calendarItemView.setDates(CalendarUtil.getWeekDaysForPosition(mStartYear, mStartMonth,1, position));
-		} else {
-			int date[] = CalendarUtil.positionToDate(position, mStartYear, mStartMonth);
-			calendarItemView.setDates(CalendarUtil.getMonthDates(date[0], date[1]));
-		}
-
+		calendarItemView.setDates(getCalendarDates(mStartYear, mStartMonth, position));
 		mViews.put(position, calendarItemView);
 		container.addView(calendarItemView);
 		return calendarItemView;
@@ -63,19 +55,13 @@ abstract class  CalendarAdapter extends PagerAdapter {
 
 	public abstract CalendarItemView instantiateCalendarView(ExtraCalendarView extraCalendarView, Context context);
 
+	public abstract List<Date> getCalendarDates(int startYear, int startMonth, int position);
+
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
 		container.removeView((View) object);
 		mCache.addLast((CalendarItemView) object);
 		mViews.remove(position);
-	}
-
-	public void setCalendarType(@Annotations.CalendarType int type) {
-		mCalendarType = type;
-	}
-
-	public int getCalendarType() {
-		return mCalendarType;
 	}
 
 
@@ -94,6 +80,16 @@ abstract class  CalendarAdapter extends PagerAdapter {
 		mStartYear = startYear;
 		mStartMonth = startMonth;
 		notifyDataSetChanged();
+	}
+
+	/**
+	 * 找到ClickView所在的CalendarItemView 并设置点击事件
+	 * @param clickDate
+	 */
+	public void setClickDate(Date clickDate) {
+		CalendarItemView calendarItemView = mViews.get(mViews.keyAt(1));
+		calendarItemView.setClickView(clickDate);
+
 	}
 
 	@Override
