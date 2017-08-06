@@ -5,8 +5,8 @@ import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 
-import com.yangchen.extracalendarview.CalendarView;
 import com.yangchen.extracalendarview.DayView;
 import com.yangchen.extracalendarview.ExtraCalendarView;
 
@@ -55,7 +55,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 	@Override
 	public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target, int dx, int dy, int[] consumed) {
-		CalendarView calendarView = child.getCalendarView();
+		FrameLayout calendarView = child.getCalendarLayout();
 		DayView clickView = child.getClickView();
 		if (clickView == null) {
 			return;
@@ -64,19 +64,25 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		int clickViewTop = clickView.getTop();
 		int clickViewHeight = clickView.getHeight();
 		int weekInfoBottom = child.getWeekInfoView().getBottom();
-		if (dy > 0) {
+		if (dy > 0 && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
 			if (clickViewTop > weekInfoBottom - calendarView.getTop()) {
 				ViewCompat.offsetTopAndBottom(calendarView, -dy);
 				ViewCompat.offsetTopAndBottom(target, -dy);
+			} else if ((-target.getTop()) < (calendarView.getHeight() - clickView.getHeight())){
+				ViewCompat.offsetTopAndBottom(target, -dy);
+			} else if ((-target.getTop()) >= (calendarView.getHeight() - clickView.getHeight())) {
+				child.changeCalendarType();
 			}
-		} else {
+		} else if (dy < 0 && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK){
 			ViewCompat.offsetTopAndBottom(calendarView, -dy);
 			ViewCompat.offsetTopAndBottom(target, -dy);
 		}
-		Log.d(TAG, "onNestedPreScroll: " + child.getWeekInfoView().getBottom());
 		Log.d(TAG, "clickViewTop: " + clickViewTop);
-		Log.d(TAG, "calendarViewTop: " + calendarView.getTop());
-		Log.d(TAG, "target: " + target.getTop());
+		Log.d(TAG, "clickViewBottom: " + clickView.getBottom());
+		Log.d(TAG, "calendarViewHeight: " + calendarView.getHeight());
+		Log.d(TAG, "targetTop: " + target.getTop());
+		Log.d(TAG, "onDependentViewChanged: " + target.getHeight());
+
 	}
 
 	//	@Override

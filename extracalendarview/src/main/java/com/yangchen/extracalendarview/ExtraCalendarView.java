@@ -69,6 +69,7 @@ public class ExtraCalendarView extends ViewGroup {
 	private CalendarView mMonthCalendarView, mWeekCalendarView;   //CalendarView 的子类，显示月或周
 	private MonthCalendarAdapter mMonthCalendarAdapter;
 	private WeekCalendarAdapter mWeekCalendarAdapter;
+	private FrameLayout mCalendarLayout;
 
 	private DayItemAttrs mDayItemAttrs = new DayItemAttrs();
 	private SimpleDateFormat monthDateFormat = new SimpleDateFormat("yyyy年MM月", Locale.SIMPLIFIED_CHINESE);
@@ -226,7 +227,10 @@ public class ExtraCalendarView extends ViewGroup {
 		mWeekInfoView.setAttrs(mTextSizeWeekInfo, mTextColorWeekInfo, mBackgroundWeekInfo);
 		addView(mWeekInfoView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
-		FrameLayout calendarLayout = new FrameLayout(getContext());
+		//日历主体，由MonthView和WeekView两部分组成，
+		mCalendarLayout = new FrameLayout(getContext());
+		//设置Z轴，其他View可以盖在该View上方，方便滚动View。
+		mCalendarLayout.setZ(-1);
 		mWeekCalendarView = new CalendarView(getContext());
 		mMonthCalendarView = new CalendarView(getContext());
 		mMonthCalendarAdapter = new MonthCalendarAdapter(this, mMonthCount, mStartYear, mStartMonth, mDayItemAttrs);
@@ -236,13 +240,13 @@ public class ExtraCalendarView extends ViewGroup {
 		mWeekCalendarView.setVisibility(INVISIBLE);
 		mMonthCalendarView.addOnPageChangeListener(onPageChangeListener);
 		mWeekCalendarView.addOnPageChangeListener(onPageChangeListener);
-		calendarLayout.addView(mMonthCalendarView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		calendarLayout.addView(mWeekCalendarView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		mCalendarLayout.addView(mMonthCalendarView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		mCalendarLayout.addView(mWeekCalendarView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
 		mCalendarView = mMonthCalendarView;
 		mCalendarAdapter = mMonthCalendarAdapter;
 
-		addView(calendarLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		addView(mCalendarLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
 	}
 
@@ -519,4 +523,7 @@ public class ExtraCalendarView extends ViewGroup {
 		return mCalendarView.getCurrentItem() < (mCalendarAdapter.getCount() - 1);
 	}
 
+	public FrameLayout getCalendarLayout() {
+		return mCalendarLayout;
+	}
 }
