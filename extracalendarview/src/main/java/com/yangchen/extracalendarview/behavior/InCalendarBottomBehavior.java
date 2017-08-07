@@ -3,6 +3,7 @@ package com.yangchen.extracalendarview.behavior;
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.yangchen.extracalendarview.ExtraCalendarView;
@@ -45,7 +46,9 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
 	@Override
 	public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
 		//设置View的高度偏移量在dependency的下边
-		child.setTranslationY(dependency.getBottom() - dependency.getTop());
+		int offset = dependency.getBottom() - dependency.getTop();
+		Log.d(TAG, "onDependentViewChanged offset: " + dependency.getHeight());
+		child.setTranslationY(dependency.getHeight());
 		return true;
 	}
 

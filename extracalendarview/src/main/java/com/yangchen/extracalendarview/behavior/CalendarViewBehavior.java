@@ -17,22 +17,14 @@ import com.yangchen.extracalendarview.ExtraCalendarView;
 public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalendarView> {
 	private final String TAG = getClass().getSimpleName();
 	private int clickViewTop = Integer.MIN_VALUE;
-	private int top;
 	private float ox, oy;
 
 	@Override
 	public boolean onLayoutChild(CoordinatorLayout parent, ExtraCalendarView child, int layoutDirection) {
 		parent.onLayoutChild(child, layoutDirection);
-		child.offsetTopAndBottom(top);
 		return true;
 	}
 
-	@Override
-	public boolean onDependentViewChanged(CoordinatorLayout parent, ExtraCalendarView child, View dependency) {
-		top = child.getTop();
-		return true;
-	}
-	
 	@Override
 	public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View directTargetChild, View target, int nestedScrollAxes) {
 		Log.d(TAG, "onStartNestedScroll: ");
@@ -77,11 +69,13 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			ViewCompat.offsetTopAndBottom(calendarView, -dy);
 			ViewCompat.offsetTopAndBottom(target, -dy);
 		}
-		Log.d(TAG, "clickViewTop: " + clickViewTop);
-		Log.d(TAG, "clickViewBottom: " + clickView.getBottom());
-		Log.d(TAG, "calendarViewHeight: " + calendarView.getHeight());
-		Log.d(TAG, "targetTop: " + target.getTop());
-		Log.d(TAG, "onDependentViewChanged: " + target.getHeight());
+		Log.d(TAG, "ExtraHeight: " + child.getHeight());
+		Log.d(TAG, "ExtraBottom: " + child.getBottom());
+//		Log.d(TAG, "clickViewTop: " + clickViewTop);
+//		Log.d(TAG, "clickViewBottom: " + clickView.getBottom());
+//		Log.d(TAG, "calendarViewHeight: " + calendarView.getHeight());
+//		Log.d(TAG, "targetTop: " + target.getTop());
+//		Log.d(TAG, "onDependentViewChanged: " + target.getHeight());
 
 	}
 
