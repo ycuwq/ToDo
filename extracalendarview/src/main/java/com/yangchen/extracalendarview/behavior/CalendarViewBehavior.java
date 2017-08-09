@@ -57,23 +57,33 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		int clickViewHeight = clickView.getHeight();
 		int weekInfoBottom = child.getWeekInfoView().getBottom();
 		if (dy > 0 && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
-			if (clickViewTop > weekInfoBottom - calendarView.getTop()) {
-				ViewCompat.offsetTopAndBottom(calendarView, -dy);
-				ViewCompat.offsetTopAndBottom(target, -dy);
-			} else if ((-target.getTop()) < (calendarView.getHeight() - clickView.getHeight())){
-				ViewCompat.offsetTopAndBottom(target, -dy);
-			} else if ((-target.getTop()) >= (calendarView.getHeight() - clickView.getHeight())) {
+			consumed[1] = dy;
+			int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());
+			int surplusBottom = (calendarView.getHeight() - clickView.getHeight()) + target.getTop();
+			if (surplusTop > 0) {
+				int offset = Math.min(surplusTop, dy);
+				ViewCompat.offsetTopAndBottom(calendarView, -offset);
+				ViewCompat.offsetTopAndBottom(target, -offset);
+			} else if (surplusBottom > 0) {
+				int offset = Math.min(surplusBottom, dy);
+				ViewCompat.offsetTopAndBottom(target, -offset);
+			} else if (surplusTop <=0 && surplusBottom<=0) {
 				child.changeCalendarType();
 			}
+//			} else if ((-target.getTop()) >= (calendarView.getHeight() - clickView.getHeight())) {
+//				child.changeCalendarType();
+//			}
 		} else if (dy < 0 && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK){
-			ViewCompat.offsetTopAndBottom(calendarView, -dy);
+//			ViewCompat.offsetTopAndBottom(calendarView, -dy);
 			ViewCompat.offsetTopAndBottom(target, -dy);
 		}
-		Log.d(TAG, "ExtraHeight: " + child.getHeight());
-		Log.d(TAG, "ExtraBottom: " + child.getBottom());
+//		Log.d(TAG, "ExtraHeight: " + child.getHeight());
+//		Log.d(TAG, "ExtraBottom: " + child.getBottom());
 //		Log.d(TAG, "clickViewTop: " + clickViewTop);
 //		Log.d(TAG, "clickViewBottom: " + clickView.getBottom());
-//		Log.d(TAG, "calendarViewHeight: " + calendarView.getHeight());
+		Log.d(TAG, "calendarViewTop: " + calendarView.getTop());
+		Log.d(TAG, "calendarViewTY: " + calendarView.getTranslationY());
+		Log.d(TAG, "calendarViewHeight: " + calendarView.getHeight());
 //		Log.d(TAG, "targetTop: " + target.getTop());
 //		Log.d(TAG, "onDependentViewChanged: " + target.getHeight());
 

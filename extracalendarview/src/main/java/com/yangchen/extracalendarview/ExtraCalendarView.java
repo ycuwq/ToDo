@@ -372,8 +372,8 @@ public class ExtraCalendarView extends ViewGroup {
 		//FIXME 切换成月模式速度太慢
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
 			mCalendarType = CALENDAR_TYPE_WEEK;
-			mMonthCalendarView.setVisibility(INVISIBLE);
 			mWeekCalendarView.setVisibility(VISIBLE);
+			mMonthCalendarView.setVisibility(INVISIBLE);
 			mCalendarView = mWeekCalendarView;
 			mCalendarAdapter = mWeekCalendarAdapter;
 			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
@@ -382,8 +382,8 @@ public class ExtraCalendarView extends ViewGroup {
 		} else {
 			//FIXME 如果选中的是一个月的第一个星期，切换成星期会显示上个月。
 			mCalendarType = CALENDAR_TYPE_MONTH;
-			mWeekCalendarView.setVisibility(INVISIBLE);
 			mMonthCalendarView.setVisibility(VISIBLE);
+			mWeekCalendarView.setVisibility(INVISIBLE);
 			mCalendarView = mMonthCalendarView;
 			mCalendarAdapter = mMonthCalendarAdapter;
 

@@ -61,11 +61,9 @@ public class TaskFragment extends BaseFragment{
 			public void bindData(ExRecyclerViewHolder holder, String s, int position) {
 				TextView textView = holder.getView(R.id.text);
 				textView.setText(s);
-				textView.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						mExtraCalendarView.changeCalendarType();
-					}
+				textView.setOnClickListener(v -> {
+					mExtraCalendarView.changeCalendarType();
+//						mExtraCalendarView.requestLayout();
 				});
 			}
 		};

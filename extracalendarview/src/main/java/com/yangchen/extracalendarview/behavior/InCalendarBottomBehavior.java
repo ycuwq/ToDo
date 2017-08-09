@@ -31,9 +31,22 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
 		}
 		return false;
 	}
-
-
+//
 //	@Override
+//	public boolean onLayoutChild(CoordinatorLayout parent, View child, int layoutDirection) {
+//		parent.onLayoutChild(child, layoutDirection);
+//		ExtraCalendarView extraCalendarView = (ExtraCalendarView) parent.getChildAt(0);
+//		Log.d(TAG, "onLayoutChild: " + extraCalendarView.getCalendarType());
+//		if (extraCalendarView.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
+//			Log.d(TAG, "onLayoutChild childTranslationY: " + child.getTranslationY());
+//			child.setTranslationY(extraCalendarView.getClickView().getHeight() - extraCalendarView.getCalendarView().getHeight());
+//		} else {
+//			Log.d(TAG, "setMonthHeight: ");
+//			child.setTranslationY(extraCalendarView.getHeight());
+//		}
+//		return true;
+//	}
+	//	@Override
 //	public boolean onLayoutChild(CoordinatorLayout parent, View child, int layoutDirection) {
 //		child.layout(0, 0, parent.getWidth(), (parent.getHeight() - dependentView.get().getHeight()) );
 //		if (heardSize == -1) {
@@ -46,9 +59,18 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
 	@Override
 	public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
 		//设置View的高度偏移量在dependency的下边
-		int offset = dependency.getBottom() - dependency.getTop();
-		Log.d(TAG, "onDependentViewChanged offset: " + dependency.getHeight());
-		child.setTranslationY(dependency.getHeight());
+//		int offset = dependency.getBottom() - dependency.getTop();
+//		Log.d(TAG, "onDependentViewChanged offset: " + dependency.getHeight());
+//		child.setTranslationY(dependency.getHeight());
+		ExtraCalendarView extraCalendarView = (ExtraCalendarView) parent.getChildAt(0);
+		Log.d(TAG, "onLayoutChild: " + extraCalendarView.getCalendarType());
+		if (extraCalendarView.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
+			Log.d(TAG, "onLayoutChild childTranslationY: " + child.getTranslationY());
+			child.setTranslationY(extraCalendarView.getWeekInfoView().getBottom() + extraCalendarView.getCalendarView().getHeight());
+		} else {
+			Log.d(TAG, "setMonthHeight: ");
+			child.setTranslationY(extraCalendarView.getHeight());
+		}
 		return true;
 	}
 
