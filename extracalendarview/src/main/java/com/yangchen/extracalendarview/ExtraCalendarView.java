@@ -34,7 +34,7 @@ import java.util.Locale;
  */
 @SuppressWarnings("unused")
 @CoordinatorLayout.DefaultBehavior(CalendarViewBehavior.class)
-public class ExtraCalendarView extends ViewGroup {
+public class ExtraCalendarView extends LinearLayout {
 
 	public final static int CALENDAR_TYPE_WEEK = 1;        //周模式
 	public final static int CALENDAR_TYPE_MONTH = 2;       //月模式
@@ -137,7 +137,7 @@ public class ExtraCalendarView extends ViewGroup {
 
 	public ExtraCalendarView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-
+		setOrientation(VERTICAL);
 		setClipToPadding(false);
 		setClipChildren(false);
 		Calendar calendar = Calendar.getInstance();
@@ -394,6 +394,33 @@ public class ExtraCalendarView extends ViewGroup {
 		mCalendarAdapter.setClickDate(mClickDate);
 	}
 
+	public void changeCalendarStyle() {
+		//FIXME 切换成月模式速度太慢
+		if (mCalendarType == CALENDAR_TYPE_MONTH) {
+//			mCalendarType = CALENDAR_TYPE_WEEK;
+			mWeekCalendarView.setVisibility(VISIBLE);
+			mMonthCalendarView.setVisibility(INVISIBLE);
+			mCalendarView = mWeekCalendarView;
+			mCalendarAdapter = mWeekCalendarAdapter;
+			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
+					mClickDate.getYear(), mClickDate.getMonth(), mClickDate.getDay());
+			mCalendarView.setCurrentItem(weekPosition, false);
+		} else {
+			//FIXME 如果选中的是一个月的第一个星期，切换成星期会显示上个月。
+//			mCalendarType = CALENDAR_TYPE_MONTH;
+			mMonthCalendarView.setVisibility(VISIBLE);
+			mWeekCalendarView.setVisibility(INVISIBLE);
+			mCalendarView = mMonthCalendarView;
+			mCalendarAdapter = mMonthCalendarAdapter;
+
+			int monthPosition = CalendarUtil.getMonthPosition(mStartYear, mStartMonth,
+					mClickDate.getYear(), mClickDate.getMonth());
+			mCalendarView.setCurrentItem(monthPosition, false);
+		}
+		mCalendarAdapter.setClickDate(mClickDate);
+	}
+
+
 	public int getCalendarType() {
 		return mCalendarType;
 	}
@@ -460,25 +487,25 @@ public class ExtraCalendarView extends ViewGroup {
 		mButtonFuture.setImageDrawable(icon);
 	}
 
-	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		final int parentLeft = getPaddingLeft();
-		final int parentWidth = r - l - getPaddingLeft() - getPaddingRight();
-		int childTop = getPaddingTop();
-		for (int i = 0; i < getChildCount(); i++) {
-			final View child = getChildAt(i);
-			if (child.getVisibility() == View.GONE) {
-				continue;
-			}
-			int width = child.getMeasuredWidth();
-			int height = child.getMeasuredHeight();
-
-			int delta = (parentWidth - width) / 2;
-			int childLeft = parentLeft + delta;
-			child.layout(childLeft, childTop, childLeft + width, childTop + height);
-			childTop += height;
-		}
-	}
+//	@Override
+//	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+//		final int parentLeft = getPaddingLeft();
+//		final int parentWidth = r - l - getPaddingLeft() - getPaddingRight();
+//		int childTop = getPaddingTop();
+//		for (int i = 0; i < getChildCount(); i++) {
+//			final View child = getChildAt(i);
+//			if (child.getVisibility() == View.GONE) {
+//				continue;
+//			}
+//			int width = child.getMeasuredWidth();
+//			int height = child.getMeasuredHeight();
+//
+//			int delta = (parentWidth - width) / 2;
+//			int childLeft = parentLeft + delta;
+//			child.layout(childLeft, childTop, childLeft + width, childTop + height);
+//			childTop += height;
+//		}
+//	}
 
 	public void setOnDayClickListener(OnDayClickListener onDayClickListener) {
 		mOnDayClickListener = onDayClickListener;
@@ -525,5 +552,11 @@ public class ExtraCalendarView extends ViewGroup {
 
 	public FrameLayout getCalendarLayout() {
 		return mCalendarLayout;
+	}
+	public CalendarView getMonthCalendarView() {
+		return mMonthCalendarView;
+	}
+	public CalendarView getWeekCalendarView() {
+		return mWeekCalendarView;
 	}
 }
