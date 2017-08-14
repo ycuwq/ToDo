@@ -22,7 +22,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 	@Override
 	public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View directTargetChild, View target, int nestedScrollAxes) {
-		Log.d(TAG, "onStartNestedScroll: ");
+//		Log.d(TAG, "onStartNestedScroll: ");
 		final boolean started = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
 
 		return started;
@@ -30,7 +30,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 	@Override
 	public boolean onInterceptTouchEvent(CoordinatorLayout parent, ExtraCalendarView child, MotionEvent ev) {
-		Log.d(TAG, "onInterceptTouchEvent: ");
+//		Log.d(TAG, "onInterceptTouchEvent: ");
 		return super.onInterceptTouchEvent(parent, child, ev);
 	}
 
@@ -66,32 +66,34 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				int offset = Math.min(surplusTop, dy);
 				calendarView.scrollBy(0, offset);
 //				ViewCompat.offsetTopAndBottom(calendarView, -offset);
-//				ViewCompat.offsetTopAndBottom(target, -offset);
+				ViewCompat.offsetTopAndBottom(target, -offset);
 			} else if (surplusBottom > 0) {
 				int offset = Math.min(surplusBottom, dy);
+//				target.scrollBy(0, offset);
 				ViewCompat.offsetTopAndBottom(target, -offset);
-			} else if (surplusTop <=0 && surplusBottom<=0) {
+			} else if (surplusTop <= calendarView.getScrollY() && surplusBottom<=0) {
 				child.changeCalendarType();
+				Log.d(TAG, "onNestedPreScroll: ");
 			}
 //			} else if ((-target.getTop()) >= (calendarView.getHeight() - clickView.getHeight())) {
 //				child.changeCalendarType();
 //			}
 		} else if (dy < 0 && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK){
 //			ViewCompat.offsetTopAndBottom(calendarView, -dy);
-			child.changeCalendarType();
-			int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());
-			int surplusBottom = (calendarView.getHeight() - clickView.getHeight()) + target.getTop();
-			ViewCompat.offsetTopAndBottom(calendarView, -surplusTop);
-			ViewCompat.offsetTopAndBottom(target, -surplusBottom);
-			consumed[1] = dy;
+//			child.changeCalendarType();
+//			int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());
+//			int surplusBottom = (calendarView.getHeight() - clickView.getHeight()) + target.getTop();
+//			ViewCompat.offsetTopAndBottom(calendarView, -surplusTop);
+//			ViewCompat.offsetTopAndBottom(target, -surplusBottom);
+//			consumed[1] = dy;
 		}
 //		Log.d(TAG, "ExtraHeight: " + child.getHeight());
 //		Log.d(TAG, "ExtraBottom: " + child.getBottom());
 //		Log.d(TAG, "clickViewTop: " + clickViewTop);
 //		Log.d(TAG, "clickViewBottom: " + clickView.getBottom());
-		Log.d(TAG, "calendarViewTop: " + calendarView.getTop());
-		Log.d(TAG, "calendarViewTY: " + calendarView.getTranslationY());
-		Log.d(TAG, "calendarViewHeight: " + calendarView.getHeight());
+//		Log.d(TAG, "calendarViewTop: " + calendarView.getTop());
+//		Log.d(TAG, "calendarViewTY: " + calendarView.getTranslationY());
+//		Log.d(TAG, "calendarViewHeight: " + calendarView.getHeight());
 //		Log.d(TAG, "targetTop: " + target.getTop());
 //		Log.d(TAG, "onDependentViewChanged: " + target.getHeight());
 
