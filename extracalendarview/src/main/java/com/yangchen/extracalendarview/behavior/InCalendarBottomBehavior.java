@@ -3,6 +3,7 @@ package com.yangchen.extracalendarview.behavior;
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.yangchen.extracalendarview.ExtraCalendarView;
@@ -36,6 +37,7 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
 		parent.onLayoutChild(child, layoutDirection);
 		View view = parent.getChildAt(0);
 		child.setTranslationY(view.getHeight());
+		Log.d(TAG, "onLayoutChild: calendar.getHeight" + view.getHeight());
 		return true;
 	}
 

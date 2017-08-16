@@ -8,6 +8,7 @@ import android.support.annotation.ColorInt;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import com.yangchen.extracalendarview.util.DensityUtil;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * 自定义的扩展日历
@@ -147,7 +150,7 @@ public class ExtraCalendarView extends LinearLayout {
 		//Calendar中月是从第0个月算起的
 		mClickDate = CalendarUtil.getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
 				calendar.get(Calendar.DAY_OF_MONTH), Date.TYPE_THIS_MONTH);
-		setCurrentMonth(mClickDate.getYear(), mClickDate.getMonth(), false);
+		setCurrentMonth(mClickDate.getYear(), mClickDate.getMonth(), true);
 		setTranslationZ(-2);
 	}
 
@@ -456,6 +459,8 @@ public class ExtraCalendarView extends LinearLayout {
 		//此处是防止View没有绘制完成时调用此方法，onPageChangeListener中adapter还没有加载页面，得不到日期数据
 		mCurrentMonth = CalendarUtil.getDate(year, month, 1, Date.TYPE_THIS_MONTH);
 		mCalendarView.setCurrentItem(position, smoothScroll);
+		Log.d(TAG, "setCurrentMonth: ");
+		invalidate();
 	}
 
 	public void setCurrentWeek(int year, int month, int day) {
