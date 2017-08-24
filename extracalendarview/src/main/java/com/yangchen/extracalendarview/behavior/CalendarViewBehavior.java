@@ -20,6 +20,8 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 	private int clickViewTop = Integer.MIN_VALUE;
 	private float ox, oy;
 
+	private boolean flag = false;
+
 	@Override
 	public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View directTargetChild, View target, int nestedScrollAxes) {
 //		Log.d(TAG, "onStartNestedScroll: ");
@@ -73,12 +75,18 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				ViewCompat.offsetTopAndBottom(target, -offset);
 			} else if (surplusTop <= calendarView.getScrollY() && surplusBottom<=0) {
 				child.changeCalendarType();
+				calendarView.scrollTo(0, 0);
 				Log.d(TAG, "onNestedPreScroll: ");
 			}
 //			} else if ((-target.getTop()) >= (calendarView.getHeight() - clickView.getHeight())) {
 //				child.changeCalendarType();
 //			}
-		} else if (dy < 0 && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK){
+		} else if (dy < 0 && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
+			if (!flag) {
+				int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());
+				child.changeCalendarType();
+				calendarView.scrollTo(0, surplusTop);
+			}
 //			ViewCompat.offsetTopAndBottom(calendarView, -dy);
 //			child.changeCalendarType();
 //			int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());

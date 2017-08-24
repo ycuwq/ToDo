@@ -397,6 +397,14 @@ public class ExtraCalendarView extends LinearLayout {
 		mCalendarAdapter.setClickDate(mClickDate);
 	}
 
+	public int getCalendarHeight() {
+		if (mCalendarType == CALENDAR_TYPE_MONTH) {
+			return getHeight();
+		} else {
+			return mCalendarLayout.getTop() + mClickedView.getHeight();
+		}
+	}
+
 	public void changeCalendarStyle() {
 		//FIXME 切换成月模式速度太慢
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {

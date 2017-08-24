@@ -35,9 +35,9 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
 	@Override
 	public boolean onLayoutChild(CoordinatorLayout parent, View child, int layoutDirection) {
 		parent.onLayoutChild(child, layoutDirection);
-		View view = parent.getChildAt(0);
-		child.setTranslationY(view.getHeight());
-		Log.d(TAG, "onLayoutChild: calendar.getHeight" + view.getHeight());
+		ExtraCalendarView extraCalendarView = (ExtraCalendarView) parent.getChildAt(0);
+		child.setTranslationY(extraCalendarView.getCalendarHeight());
+		Log.d(TAG, "onLayoutChild: calendar.getHeight" + extraCalendarView.getCalendarHeight());
 		return true;
 	}
 
