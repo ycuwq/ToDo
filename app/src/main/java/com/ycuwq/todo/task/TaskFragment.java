@@ -62,7 +62,8 @@ public class TaskFragment extends BaseFragment{
 				TextView textView = holder.getView(R.id.text);
 				textView.setText(s);
 				textView.setOnClickListener(v -> {
-					mExtraCalendarView.changeCalendarType();
+					mExtraCalendarView.requestLayout();
+//					mExtraCalendarView.changeCalendarType();
 //						mExtraCalendarView.requestLayout();
 				});
 			}

@@ -55,7 +55,8 @@ public abstract class CalendarItemView extends ViewGroup {
 			if (date.equals(mExtraCalendarView.getClickDate())) {
 				//  周类型没有Type的概念，这里判断周的Type 是无效的。
 				if (date.getType() == mExtraCalendarView.getClickDate().getType()) {
-					mExtraCalendarView.changeDayClickedAndStyle(view);
+					mExtraCalendarView.onDateClicked(view);
+//					mExtraCalendarView.changeDayClickedAndStyle(view);
 				}
 			}
 			addView(view);
