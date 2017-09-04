@@ -73,7 +73,7 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
 //		child.setTranslationY(dependency.getHeight());
 
 		ExtraCalendarView extraCalendarView = (ExtraCalendarView) parent.getChildAt(0);
-		child.setTranslationY(extraCalendarView.getCalendarHeight());
+		extraCalendarView.post(() -> child.setTranslationY(extraCalendarView.getCalendarHeight()));
 		Log.d(TAG, "onDependentViewChanged: " + extraCalendarView.getCalendarHeight());
 		return true;
 	}

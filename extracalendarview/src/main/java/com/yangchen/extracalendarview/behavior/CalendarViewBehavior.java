@@ -79,11 +79,23 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 //			} else if ((-target.getTop()) >= (calendarView.getHeight() - clickView.getHeight())) {
 //				child.changeCalendarType();
 //			}
-		} else if (dy < 0 && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
+		} else if (dy < 0 && flag) {
+			int range = (int) (child.getBottom() - target.getY());
+			if (range > 0) {
+				if (range > -dy) {
+					ViewCompat.offsetTopAndBottom(target, -dy);
+				} else {
+					ViewCompat.offsetTopAndBottom(target, range);
+					child.changeCalendarType();
+//					child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
+				}
+			}
+		} else if (dy < 0 && !flag) {
 			consumed[1] = dy;
 			int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());
-			child.changeCalendarType();
+			child.changeCalendarStyle();
 			calendarView.scrollTo(0, surplusTop);
+			flag = true;
 //			ViewCompat.offsetTopAndBottom(calendarView, -dy);
 //			child.changeCalendarType();
 //			int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());

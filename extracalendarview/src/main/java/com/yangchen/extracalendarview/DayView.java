@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.yangchen.extracalendarview.base.Date;
@@ -14,7 +14,7 @@ import com.yangchen.extracalendarview.base.Date;
  * Created by yangchen on 2017/6/22.
  */
 @SuppressLint("ViewConstructor")
-public class DayView extends LinearLayout {
+public class DayView extends FrameLayout {
 
 	private Date mDate;
 	private DayItemAttrs mDayItemAttrs;
@@ -38,7 +38,6 @@ public class DayView extends LinearLayout {
 		LayoutInflater.from(getContext()).inflate(R.layout.item_month_layout, this);
 		topTv = (TextView) findViewById(R.id.tv_item_month_top);
 		bottomTv = (TextView) findViewById(R.id.tv_item_month_bottom);
-
 
 		if (mDate.getType() != Date.TYPE_THIS_MONTH && mChangeTopViewColor) {
 			topTv.setTextColor(mDayItemAttrs.getTextColorBottom());
@@ -86,8 +85,9 @@ public class DayView extends LinearLayout {
 	}
 
 
-
 	public Date getDate() {
 		return mDate;
 	}
+
+
 }

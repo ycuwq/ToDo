@@ -29,8 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * 自定义的扩展日历
  * Created by yangchen on 2017/6/7.
@@ -38,6 +36,8 @@ import static android.content.ContentValues.TAG;
 @SuppressWarnings("unused")
 @CoordinatorLayout.DefaultBehavior(CalendarViewBehavior.class)
 public class ExtraCalendarView extends LinearLayout {
+
+	private final String TAG = getClass().getSimpleName();
 
 	public final static int CALENDAR_TYPE_WEEK = 1;        //周模式
 	public final static int CALENDAR_TYPE_MONTH = 2;       //月模式
@@ -314,7 +314,6 @@ public class ExtraCalendarView extends LinearLayout {
 	 */
 	void onDateClicked(DayView dayView) {
 		Date clickDate = dayView.getDate();
-
 		int position = mCalendarView.getCurrentItem();
 
 		//判断如果是点击当前月中的上月或下月的日期，则翻页
