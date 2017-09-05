@@ -87,10 +87,11 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				} else {
 					ViewCompat.offsetTopAndBottom(target, range);
 					child.changeCalendarType();
+					flag = false;
 //					child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
 				}
 			}
-		} else if (dy < 0 && !flag) {
+		} else if (dy < 0 && !flag && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
 			consumed[1] = dy;
 			int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());
 			child.changeCalendarStyle();
