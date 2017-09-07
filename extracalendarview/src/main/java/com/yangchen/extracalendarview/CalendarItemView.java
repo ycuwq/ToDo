@@ -2,7 +2,9 @@ package com.yangchen.extracalendarview;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
 import com.yangchen.extracalendarview.base.Date;
@@ -23,6 +25,7 @@ public abstract class CalendarItemView extends ViewGroup {
 	protected List<Date> mDates;
 	protected int  mLastMonthDay; //当前月份天数，上月天数，下月天数。
 	protected Date mCurrentMonth;
+	private float mPosX, mPosY;         //点击事件需要用到的缓存
 
 	public CalendarItemView(ExtraCalendarView extraCalendarView, Context context) {
 		super(context, null);
@@ -49,7 +52,6 @@ public abstract class CalendarItemView extends ViewGroup {
 				mLastMonthDay++;
 			}
 			final DayView view = createDayView(getContext(), date, mDayItemAttrs);
-			view.setOnClickListener(v -> mExtraCalendarView.onDateClicked(view));
 			//判断点击的日期是否和加载的日期是同一天如果是同一天，设置为选中的样式，
 			// 这个为了解决ViewPager复用后重新创建View的点击效果消失的问题
 			if (date.equals(mExtraCalendarView.getClickDate())) {
@@ -64,6 +66,41 @@ public abstract class CalendarItemView extends ViewGroup {
 
 		mCurrentMonth = dates.get(mLastMonthDay);
 		requestLayout();
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				mPosX = event.getX();
+				mPosY = event.getY();
+				return true;
+			case MotionEvent.ACTION_UP:
+				float disX = mPosX - event.getX();
+				float disY = mPosY - event.getY();
+				int touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+				if (Math.abs(disX) < touchSlop && Math.abs(disY) < touchSlop) {
+					int itemWidth = getWidth() / COLUMN;
+					int itemHeight;
+					if (getChildCount() == 35) {
+						itemHeight = itemWidth + itemWidth / 5;
+					} else {
+						itemHeight = itemWidth;
+					}
+					int column = (int) (event.getX() / itemWidth);
+					int row = (int) (event.getY() / itemHeight);
+					int index = column + row * COLUMN;
+					if (index < getChildCount()) {
+						mExtraCalendarView.onDateClicked((DayView) getChildAt(index));
+					}
+					return true;
+				}
+				break;
+			default:
+				break;
+		}
+
+		return super.onTouchEvent(event);
 	}
 
 
@@ -109,7 +146,7 @@ public abstract class CalendarItemView extends ViewGroup {
 
 		for (int i = 0; i < getChildCount(); i++) {
 			View view = getChildAt(i);
-			int left = i % COLUMN * itemWidth;// + (2 * (i % COLUMN) + 1) * 7
+			int left = i % COLUMN * itemWidth;
 			int top = i / COLUMN * (itemHeight + dy);
 			int right = left + itemWidth;
 			int bottom = top + itemHeight;

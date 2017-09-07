@@ -112,9 +112,6 @@ public class ExtraCalendarView extends LinearLayout {
 					if (getCalendarType() == CALENDAR_TYPE_MONTH) {
 						itemView.setClickView(new Date(mCurrentMonth.getYear(),
 								mCurrentMonth.getMonth(), mClickDate.getDay()));
-					} else {
-						//周日期可直接用第几个View跳转。week的范围是1-7，所以减一
-						itemView.setClickView(mClickDate.getWeek() - 1);
 					}
 				}
 				if (mOnMonthChangeListener != null) {
@@ -375,7 +372,7 @@ public class ExtraCalendarView extends LinearLayout {
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
 			mCalendarType = CALENDAR_TYPE_WEEK;
 			mWeekCalendarView.setVisibility(VISIBLE);
-			mMonthCalendarView.setVisibility(INVISIBLE);
+			mMonthCalendarView.setVisibility(GONE);
 			mCalendarView = mWeekCalendarView;
 			mCalendarAdapter = mWeekCalendarAdapter;
 			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
@@ -385,7 +382,7 @@ public class ExtraCalendarView extends LinearLayout {
 			//FIXME 如果选中的是一个月的第一个星期，切换成星期会显示上个月。
 			mCalendarType = CALENDAR_TYPE_MONTH;
 			mMonthCalendarView.setVisibility(VISIBLE);
-			mWeekCalendarView.setVisibility(INVISIBLE);
+			mWeekCalendarView.setVisibility(GONE);
 			mCalendarView = mMonthCalendarView;
 			mCalendarAdapter = mMonthCalendarAdapter;
 
@@ -394,6 +391,9 @@ public class ExtraCalendarView extends LinearLayout {
 			mCalendarView.setCurrentItem(monthPosition, false);
 		}
 		mCalendarAdapter.setClickDate(mClickDate);
+		Log.d(TAG, "changeCalendarType: mMonthCalendarView: " + (mMonthCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
+		Log.d(TAG, "changeCalendarType:  mWeekCalendarView" + (mWeekCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
+
 	}
 
 	public int getCalendarHeight() {
@@ -409,7 +409,7 @@ public class ExtraCalendarView extends LinearLayout {
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
 //			mCalendarType = CALENDAR_TYPE_WEEK;
 			mWeekCalendarView.setVisibility(VISIBLE);
-			mMonthCalendarView.setVisibility(INVISIBLE);
+			mMonthCalendarView.setVisibility(GONE);
 			mCalendarView = mWeekCalendarView;
 			mCalendarAdapter = mWeekCalendarAdapter;
 			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
@@ -419,7 +419,7 @@ public class ExtraCalendarView extends LinearLayout {
 			//FIXME 如果选中的是一个月的第一个星期，切换成星期会显示上个月。
 //			mCalendarType = CALENDAR_TYPE_MONTH;
 			mMonthCalendarView.setVisibility(VISIBLE);
-			mWeekCalendarView.setVisibility(INVISIBLE);
+			mWeekCalendarView.setVisibility(GONE);
 			mCalendarView = mMonthCalendarView;
 			mCalendarAdapter = mMonthCalendarAdapter;
 
@@ -428,6 +428,8 @@ public class ExtraCalendarView extends LinearLayout {
 			mCalendarView.setCurrentItem(monthPosition, false);
 		}
 		mCalendarAdapter.setClickDate(mClickDate);
+		Log.d(TAG, "mMonthCalendarView: " + (mMonthCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
+		Log.d(TAG, "mWeekCalendarView:  " + (mWeekCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
 	}
 
 

@@ -12,6 +12,7 @@ import com.yangchen.extracalendarview.ExtraCalendarView;
  * Created by yangchen on 2017/6/28.
  */
 public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
+	private final String TAG = getClass().getSimpleName();
 
 	public InCalendarBottomBehavior(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -21,9 +22,17 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
 	public boolean onLayoutChild(CoordinatorLayout parent, View child, int layoutDirection) {
 		parent.onLayoutChild(child, layoutDirection);
 		ExtraCalendarView extraCalendarView = (ExtraCalendarView) parent.getChildAt(0);
-		extraCalendarView.post(() -> {
-			child.setY(extraCalendarView.getCalendarHeight());
-		});
+		int calendarHeight = extraCalendarView.getCalendarHeight();
+		//在切换周月的时候extraCalendarView没有绘制结束，导致Height为0。这里等待
+		if (calendarHeight == 0) {
+			extraCalendarView.post(() -> {
+				child.setY(extraCalendarView.getCalendarHeight());
+
+			});
+		} else {
+			child.setY(calendarHeight);
+		}
+
 		return true;
 	}
 

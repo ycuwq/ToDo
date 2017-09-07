@@ -77,35 +77,48 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			} else if (surplusTop <= calendarView.getScrollY() && surplusBottom<=0) {
 				mRunning = false;
 				child.changeCalendarType();
-				calendarView.scrollTo(0, 0);
+				calendarView.scrollTo(0,0);
 			}
 
 		} else if (dy < 0 && mRunning) {
-			int range = (int) (child.getBottom() - target.getY());
-			if (range > 0) {
-				if (range > -dy) {
-					ViewCompat.offsetTopAndBottom(target, -dy);
-				} else {
-					ViewCompat.offsetTopAndBottom(target, range);
-					mRunning = false;
-					child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
-				}
+			int range = child.getBottom() - child.getClickView().getTop();
+			if (range > target.getY()) {
+				int offset = (int) Math.min(range - target.getY(), -dy);
+				ViewCompat.offsetTopAndBottom(target, offset);
+			} else if (calendarView.getScrollY() > 0) {
+				int offset = (int) Math.min(calendarView.getScrollY(), -dy);
+				calendarView.scrollBy(0, -offset);
+				ViewCompat.offsetTopAndBottom(target, offset);
+			} else {
+//					ViewCompat.offsetTopAndBottom(target, range);
+				mRunning = false;
+				child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
 			}
 		} else if (dy < 0 && !mRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
 			consumed[1] = dy;
 
-			int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());
+//			int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());
 			child.changeCalendarStyle();
-			calendarView.scrollTo(0, surplusTop);
+			Log.d(TAG, "run: " + child.getClickView().getTop());
+			child.post(new Runnable() {
+				@Override
+				public void run() {
+					Log.d(TAG, "run: " + child.getClickView().getTop());
+				}
+			});
+//			Log.d(TAG, "onNestedPreScroll: calendarView.getScrollY()" + calendarView.getScrollY());
+			calendarView.scrollTo(0, child.getClickView().getTop());
+//			Log.d(TAG, "onNestedPreScroll: " + clickView.getTop());
 			mRunning = true;
-
+//			Log.d(TAG, "onNestedPreScroll: calendarView.getScrollY()" + calendarView.getScrollY());
 		}
+
 	}
 
 	@Override
 	public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target) {
 		super.onStopNestedScroll(coordinatorLayout, child, target);
-		Log.d(TAG, "onStopNestedScroll: ");
+//		Log.d(TAG, "onStopNestedScroll: ");
 
 	}
 

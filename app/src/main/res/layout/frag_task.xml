@@ -19,11 +19,12 @@
             android:id="@+id/extraCalendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
         <android.support.v7.widget.RecyclerView
-            app:layout_behavior="com.yangchen.extracalendarview.behavior.InCalendarBottomBehavior"
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:layout_behavior="com.yangchen.extracalendarview.behavior.InCalendarBottomBehavior"/>
     </android.support.design.widget.CoordinatorLayout>
 
 
