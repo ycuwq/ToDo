@@ -32,7 +32,6 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
 		} else {
 			child.setY(calendarHeight);
 		}
-
 		return true;
 	}
 

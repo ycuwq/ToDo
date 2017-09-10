@@ -3,7 +3,6 @@ package com.yangchen.extracalendarview.behavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -48,6 +47,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		if (clickView == null) {
 			return;
 		}
+
 		if (target instanceof RecyclerView) {
 			RecyclerView recyclerView = (RecyclerView)target;
 			//RecyclerView已经无法上滑时折叠日历，否则返回。
@@ -55,62 +55,51 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				return;
 			}
 		}
-		int clickViewTop = clickView.getTop();
-		int clickViewHeight = clickView.getHeight();
-		int weekInfoBottom = child.getWeekInfoView().getBottom();
-
-		if (dy > 0 && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
+		//对滑动的处理。对Calendar部分使用scrollY()进行滑动，对RecyclerView部分使用offsetTopAndBottom进行滑动
+		if (dy > 0 && (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH || mRunning)) {
+			//上滑的处理事项
 			consumed[1] = dy;
 			if (!mRunning) {
+				//当变成周模式在切换成月模式时，会导致RecyclerView坐标异常，当上滑时重新layout一下可以恢复
 				target.requestLayout();
 				mRunning = true;
 			}
-			int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());
+			//点击View上方距离顶部的距离
+			int clickViewTop = clickView.getTop();
+			//clickView下方应该收缩的距离
 			int surplusBottom = (calendarView.getHeight() - clickView.getHeight()) + target.getTop();
-			if (surplusTop > calendarView.getScrollY()) {
-				int offset = Math.min(surplusTop - calendarView.getScrollY(), dy);
+
+			if (clickViewTop > calendarView.getScrollY()) {
+				int offset = Math.min(clickViewTop - calendarView.getScrollY(), dy);
 				calendarView.scrollBy(0, offset);
 				ViewCompat.offsetTopAndBottom(target, -offset);
 			} else if (surplusBottom > 0) {
 				int offset = Math.min(surplusBottom, dy);
 				ViewCompat.offsetTopAndBottom(target, -offset);
-			} else if (surplusTop <= calendarView.getScrollY() && surplusBottom<=0) {
+			} else if (clickViewTop <= calendarView.getScrollY() && surplusBottom<=0) {
 				mRunning = false;
 				child.changeCalendarType();
 				calendarView.scrollTo(0,0);
 			}
 
 		} else if (dy < 0 && mRunning) {
-			int range = child.getBottom() - child.getClickView().getTop();
-			if (range > target.getY()) {
-				int offset = (int) Math.min(range - target.getY(), -dy);
+			int surplus = child.getBottom() - child.getClickView().getTop();
+			if (surplus > target.getY()) {
+				int offset = (int) Math.min(surplus - target.getY(), -dy);
 				ViewCompat.offsetTopAndBottom(target, offset);
 			} else if (calendarView.getScrollY() > 0) {
-				int offset = (int) Math.min(calendarView.getScrollY(), -dy);
+				int offset = Math.min(calendarView.getScrollY(), -dy);
 				calendarView.scrollBy(0, -offset);
 				ViewCompat.offsetTopAndBottom(target, offset);
 			} else {
-//					ViewCompat.offsetTopAndBottom(target, range);
 				mRunning = false;
 				child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
 			}
 		} else if (dy < 0 && !mRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
 			consumed[1] = dy;
-
-//			int surplusTop = clickViewTop - (weekInfoBottom - calendarView.getTop());
 			child.changeCalendarStyle();
-			Log.d(TAG, "run: " + child.getClickView().getTop());
-			child.post(new Runnable() {
-				@Override
-				public void run() {
-					Log.d(TAG, "run: " + child.getClickView().getTop());
-				}
-			});
-//			Log.d(TAG, "onNestedPreScroll: calendarView.getScrollY()" + calendarView.getScrollY());
 			calendarView.scrollTo(0, child.getClickView().getTop());
-//			Log.d(TAG, "onNestedPreScroll: " + clickView.getTop());
 			mRunning = true;
-//			Log.d(TAG, "onNestedPreScroll: calendarView.getScrollY()" + calendarView.getScrollY());
 		}
 
 	}
