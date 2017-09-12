@@ -2,7 +2,9 @@ package com.yangchen.extracalendarview.behavior;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.yangchen.extracalendarview.ExtraCalendarView;
@@ -24,13 +26,17 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
 		ExtraCalendarView extraCalendarView = (ExtraCalendarView) parent.getChildAt(0);
 		int calendarHeight = extraCalendarView.getCalendarHeight();
 		//在切换周月的时候extraCalendarView没有绘制结束，导致Height为0。这里等待
-		if (calendarHeight == 0) {
+		if (calendarHeight == 0 || calendarHeight == extraCalendarView.getCalendarLayout().getTop()) {
 			extraCalendarView.post(() -> {
-				child.setY(extraCalendarView.getCalendarHeight());
+				Log.d(TAG, "onLayoutChild: post" + extraCalendarView.getCalendarHeight());
+				ViewCompat.offsetTopAndBottom(child, extraCalendarView.getCalendarHeight());
+//				child.setTranslationY(extraCalendarView.getCalendarHeight());
 
 			});
 		} else {
-			child.setY(calendarHeight);
+			Log.d(TAG, "onLayoutChild: " + calendarHeight);
+//			child.setTranslationY(calendarHeight);
+			ViewCompat.offsetTopAndBottom(child, extraCalendarView.getCalendarHeight());
 		}
 		return true;
 	}

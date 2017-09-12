@@ -394,8 +394,8 @@ public class ExtraCalendarView extends LinearLayout {
 			mCalendarView.setCurrentItem(monthPosition, false);
 		}
 		mCalendarAdapter.setClickDate(mClickDate);
-		Log.d(TAG, "changeCalendarType: mMonthCalendarView: " + (mMonthCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
-		Log.d(TAG, "changeCalendarType:  mWeekCalendarView" + (mWeekCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
+//		Log.d(TAG, "changeCalendarType: mMonthCalendarView: " + (mMonthCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
+//		Log.d(TAG, "changeCalendarType:  mWeekCalendarView" + (mWeekCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
 
 	}
 
@@ -431,8 +431,8 @@ public class ExtraCalendarView extends LinearLayout {
 			mCalendarView.setCurrentItem(monthPosition, false);
 		}
 		mCalendarAdapter.setClickDate(mClickDate);
-		Log.d(TAG, "mMonthCalendarView: " + (mMonthCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
-		Log.d(TAG, "mWeekCalendarView:  " + (mWeekCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
+//		Log.d(TAG, "mMonthCalendarView: " + (mMonthCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
+//		Log.d(TAG, "mWeekCalendarView:  " + (mWeekCalendarView.getVisibility() == VISIBLE ? "VISIBLE" : "INVISIBLE"));
 	}
 
 

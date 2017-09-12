@@ -3,6 +3,7 @@ package com.yangchen.extracalendarview.behavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -17,7 +18,6 @@ import com.yangchen.extracalendarview.ExtraCalendarView;
 public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalendarView> {
 	private final String TAG = getClass().getSimpleName();
 
-	private boolean flag = false;
 	private boolean mRunning = false;       //进行变换中
 
 	@Override
@@ -59,27 +59,35 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		if (dy > 0 && (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH || mRunning)) {
 			//上滑的处理事项
 			consumed[1] = dy;
-			if (!mRunning) {
+			if (!mRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
 				//当变成周模式在切换成月模式时，会导致RecyclerView坐标异常，当上滑时重新layout一下可以恢复
-				target.requestLayout();
+//				Log.d(TAG, "onNestedPreScroll: requestLayout");
+//				target.requestLayout();
 				mRunning = true;
 			}
 			//点击View上方距离顶部的距离
 			int clickViewTop = clickView.getTop();
 			//clickView下方应该收缩的距离
-			int surplusBottom = (calendarView.getHeight() - clickView.getHeight()) + target.getTop();
-
+			int surplusBottom = target.getTop() - (calendarView.getTop() + clickView.getHeight());
+//			int surplusBottom = (calendarView.getHeight() - clickView.getHeight()) + target.getTop();
+			Log.d(TAG, "onNestedPreScroll: surplusBottom" + surplusBottom);
 			if (clickViewTop > calendarView.getScrollY()) {
 				int offset = Math.min(clickViewTop - calendarView.getScrollY(), dy);
 				calendarView.scrollBy(0, offset);
 				ViewCompat.offsetTopAndBottom(target, -offset);
 			} else if (surplusBottom > 0) {
+//				Log.d(TAG, "onNestedPreScroll: target.getTop" + target.getTop());
+//				Log.d(TAG, "onNestedPreScroll: target.getTranY" + target.getTranslationY());
+//				Log.d(TAG, "onNestedPreScroll: target.getY" + target.getY());
 				int offset = Math.min(surplusBottom, dy);
 				ViewCompat.offsetTopAndBottom(target, -offset);
 			} else if (clickViewTop <= calendarView.getScrollY() && surplusBottom<=0) {
+				if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
+					Log.d(TAG, "onNestedPreScroll: change");
+					child.changeCalendarType();
+					calendarView.scrollTo(0, 0);
+				}
 				mRunning = false;
-				child.changeCalendarType();
-				calendarView.scrollTo(0,0);
 			}
 
 		} else if (dy < 0 && mRunning) {
@@ -96,12 +104,14 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
 			}
 		} else if (dy < 0 && !mRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
+			//FIXME 修复第一次上滑到周模式，切换时出现dy = -419，导致调用此处。
+			mRunning = true;
+			Log.d(TAG, "onNestedPreScroll: change to Month");
 			consumed[1] = dy;
 			child.changeCalendarStyle();
 			calendarView.scrollTo(0, child.getClickView().getTop());
-			mRunning = true;
 		}
-
+		Log.d(TAG, "onNestedPreScroll: " + dy);
 	}
 
 	@Override
