@@ -144,7 +144,7 @@ public class ExtraCalendarView extends LinearLayout {
 		setClipToPadding(false);
 		setClipChildren(false);
 		Calendar calendar = Calendar.getInstance();
-
+		long a = System.currentTimeMillis();
 		initAttrs(attrs);
 		setupChild();
 		//Calendar中月是从第0个月算起的
@@ -152,6 +152,13 @@ public class ExtraCalendarView extends LinearLayout {
 				calendar.get(Calendar.DAY_OF_MONTH), Date.TYPE_THIS_MONTH);
 		setCurrentMonth(mClickDate.getYear(), mClickDate.getMonth(), true);
 		setTranslationZ(-2);
+		Log.d(TAG, "ExtraCalendarView: " + (System.currentTimeMillis() - a));
+		post(new Runnable() {
+			@Override
+			public void run() {
+				Log.d(TAG, "ExtraCalendarView: post" + (System.currentTimeMillis() - a));
+			}
+		});
 	}
 
 	private void initAttrs(AttributeSet attrs) {

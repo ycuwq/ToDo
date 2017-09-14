@@ -91,6 +91,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			}
 
 		} else if (dy < 0 && mRunning) {
+			consumed[1] = dy;
 			int surplus = child.getBottom() - child.getClickView().getTop();
 			if (surplus > target.getY()) {
 				int offset = (int) Math.min(surplus - target.getY(), -dy);
