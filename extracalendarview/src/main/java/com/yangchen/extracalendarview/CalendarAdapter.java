@@ -2,6 +2,7 @@ package com.yangchen.extracalendarview;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,6 @@ abstract class  CalendarAdapter extends PagerAdapter {
 
 		}
 		calendarItemView.initAttr(mDayItemAttrs);
-
 		calendarItemView.setDates(getCalendarDates(mStartYear, mStartMonth, position));
 		mViews.put(position, calendarItemView);
 		container.addView(calendarItemView);

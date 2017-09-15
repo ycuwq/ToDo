@@ -366,9 +366,9 @@ public class ExtraCalendarView extends LinearLayout {
 	 * @param dayView 返回的DayView
 	 */
 	void changeDayClickedAndStyle(DayView dayView) {
-//		if (dayView == null) {
-//			return;
-//		}
+		if (dayView == null) {
+			return;
+		}
 		if (mClickedView != null) {
 			mClickedView.setClickedViewStyle(true);
 		}
