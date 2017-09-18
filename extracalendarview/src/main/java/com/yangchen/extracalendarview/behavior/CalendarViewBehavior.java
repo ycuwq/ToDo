@@ -112,7 +112,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			child.changeCalendarStyle();
 			calendarView.scrollTo(0, child.getClickView().getTop());
 		}
-		Log.d(TAG, "onNestedPreScroll: " + dy);
+//		Log.d(TAG, "onNestedPreScroll: " + dy);
 	}
 
 	@Override

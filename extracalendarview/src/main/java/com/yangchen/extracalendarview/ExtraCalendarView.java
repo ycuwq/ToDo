@@ -107,7 +107,7 @@ public class ExtraCalendarView extends LinearLayout {
 			if (itemView != null) {
 				mCurrentMonth = itemView.getCurrentMonth();
 				if (mClickedView != null) {
-					mClickedView.setClickedViewStyle(true);
+					mClickedView.setClickedViewStyle(false);
 					//切换Page后，将选择的日期变成当前页的日期。
 					if (getCalendarType() == CALENDAR_TYPE_MONTH) {
 						itemView.setClickView(new Date(mCurrentMonth.getYear(),
@@ -370,9 +370,9 @@ public class ExtraCalendarView extends LinearLayout {
 			return;
 		}
 		if (mClickedView != null) {
-			mClickedView.setClickedViewStyle(true);
+			mClickedView.setClickedViewStyle(false);
 		}
-		dayView.setClickedViewStyle(false);
+		dayView.setClickedViewStyle(true);
 		mClickedView = dayView;
 		mClickDate = dayView.getDate();
 	}
