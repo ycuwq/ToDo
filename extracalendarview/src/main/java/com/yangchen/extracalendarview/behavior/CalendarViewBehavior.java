@@ -1,5 +1,6 @@
 package com.yangchen.extracalendarview.behavior;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.OverScroller;
 
 import com.yangchen.extracalendarview.DayView;
 import com.yangchen.extracalendarview.ExtraCalendarView;
@@ -19,6 +21,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 	private final String TAG = getClass().getSimpleName();
 
 	private boolean mRunning = false;       //进行变换中
+	private boolean mReadyToMonth = false;
 
 	@Override
 	public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View directTargetChild, View target, int nestedScrollAxes) {
@@ -70,15 +73,12 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			//clickView下方应该收缩的距离
 			int surplusBottom = target.getTop() - (calendarView.getTop() + clickView.getHeight());
 //			int surplusBottom = (calendarView.getHeight() - clickView.getHeight()) + target.getTop();
-			Log.d(TAG, "onNestedPreScroll: surplusBottom" + surplusBottom);
 			if (clickViewTop > calendarView.getScrollY()) {
 				int offset = Math.min(clickViewTop - calendarView.getScrollY(), dy);
 				calendarView.scrollBy(0, offset);
 				ViewCompat.offsetTopAndBottom(target, -offset);
 			} else if (surplusBottom > 0) {
-//				Log.d(TAG, "onNestedPreScroll: target.getTop" + target.getTop());
-//				Log.d(TAG, "onNestedPreScroll: target.getTranY" + target.getTranslationY());
-//				Log.d(TAG, "onNestedPreScroll: target.getY" + target.getY());
+
 				int offset = Math.min(surplusBottom, dy);
 				ViewCompat.offsetTopAndBottom(target, -offset);
 			} else if (clickViewTop <= calendarView.getScrollY() && surplusBottom<=0) {
@@ -102,6 +102,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				ViewCompat.offsetTopAndBottom(target, offset);
 			} else {
 				mRunning = false;
+				mReadyToMonth = false;
 				child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
 			}
 		} else if (dy < 0 && !mRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
@@ -111,21 +112,65 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			consumed[1] = dy;
 			child.changeCalendarStyle();
 			calendarView.scrollTo(0, child.getClickView().getTop());
+			mReadyToMonth = true;
 		}
-//		Log.d(TAG, "onNestedPreScroll: " + dy);
 	}
 
 	@Override
 	public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target) {
 		super.onStopNestedScroll(coordinatorLayout, child, target);
-//		Log.d(TAG, "onStopNestedScroll: ");
+		if (!mRunning) {
+			return;
+		}
+		FrameLayout calendarView = child.getCalendarLayout();
+		if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH && !mReadyToMonth) {
+			scrollToWeek(child, target);
+//			child.changeCalendarType();
+//			calendarView.scrollTo(0, 0);
+			mRunning = false;
+		} else if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK && mReadyToMonth) {
+			child.changeCalendarType();
+			calendarView.scrollTo(0, 0);
+			mRunning = false;
+			mReadyToMonth = false;
+		}
+	}
 
+	private void scrollToWeek(ExtraCalendarView child, View target) {
+		int surplusTop = child.getClickView().getTop() - child.getCalendarLayout().getScrollY();
+		int surplusBottom = target.getTop() - (child.getCalendarLayout().getTop() + child.getClickView().getHeight());
+		final OverScroller scroller = new OverScroller(child.getContext());
+		scroller.startScroll(0, child.getCalendarLayout().getScrollY() + child.getBottom() - target.getTop(), 0, child.getCalendarHeight() - child.getClickView().getHeight(), 2000);
+		ViewCompat.postOnAnimation(child, new Runnable() {
+			@Override
+			public void run() {
+				int detairBottom = target.getTop() - (child.getCalendarLayout().getTop() + child.getClickView().getHeight());
+				if (scroller.computeScrollOffset()) {
+					int surplus;
+					int currentY = scroller.getCurrY();
+					Log.d(TAG, "detairBottom: " + detairBottom);
+					if (scroller.getCurrY() < child.getClickView().getTop()) {
+						surplus = currentY;
+						child.getCalendarLayout().scrollTo(0, surplus);
+						ViewCompat.offsetTopAndBottom(target, (int) (surplusBottom - detairBottom - surplus));
+						ViewCompat.postOnAnimation(child, this);
+					} else if (detairBottom > 0) {
+						surplus = currentY;
+						int offset = Math.min(-(surplusBottom - detairBottom - surplus), detairBottom);
+						Log.d(TAG, "run: " + offset);
+						ViewCompat.offsetTopAndBottom(target, -offset);
+						ViewCompat.postOnAnimation(child, this);
+					} else {
+					}
+
+				}
+			}
+		});
 	}
 
 	@Override
-	public boolean onNestedPreFling(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target, float velocityX, float velocityY) {
-//		Log.d(TAG, "onNestedPreFling: " + velocityY);
-		child.getClickDate();
-		return super.onNestedPreFling(coordinatorLayout, child, target, velocityX, velocityY);
+	public boolean onNestedPreFling(@NonNull CoordinatorLayout coordinatorLayout, @NonNull ExtraCalendarView child, @NonNull View target, float velocityX, float velocityY) {
+		return mRunning;
 	}
+
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.yangchen.extracalendarview.ExtraCalendarView;
@@ -27,11 +28,13 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View>{
 		//在切换周月的时候extraCalendarView没有绘制结束，导致Height为0。这里等待
 		if (calendarHeight == 0 || calendarHeight == extraCalendarView.getCalendarLayout().getTop()) {
 			extraCalendarView.post(() -> {
+				Log.d(TAG, "onLayoutChild: post");
 				ViewCompat.offsetTopAndBottom(child, extraCalendarView.getCalendarHeight());
 //				child.setTranslationY(extraCalendarView.getCalendarHeight());
 
 			});
 		} else {
+			Log.d(TAG, "onLayoutChild:");
 //			child.setTranslationY(calendarHeight);
 			ViewCompat.offsetTopAndBottom(child, extraCalendarView.getCalendarHeight());
 		}

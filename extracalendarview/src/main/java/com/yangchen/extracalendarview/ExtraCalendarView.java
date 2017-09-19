@@ -382,7 +382,7 @@ public class ExtraCalendarView extends LinearLayout {
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
 			mCalendarType = CALENDAR_TYPE_WEEK;
 			mWeekCalendarView.setVisibility(VISIBLE);
-			mMonthCalendarView.setVisibility(GONE);
+			mMonthCalendarView.setVisibility(INVISIBLE);
 			mCalendarView = mWeekCalendarView;
 			mCalendarAdapter = mWeekCalendarAdapter;
 			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
@@ -392,7 +392,7 @@ public class ExtraCalendarView extends LinearLayout {
 			//FIXME 如果选中的是一个月的第一个星期，切换成星期会显示上个月。
 			mCalendarType = CALENDAR_TYPE_MONTH;
 			mMonthCalendarView.setVisibility(VISIBLE);
-			mWeekCalendarView.setVisibility(GONE);
+			mWeekCalendarView.setVisibility(INVISIBLE);
 			mCalendarView = mMonthCalendarView;
 			mCalendarAdapter = mMonthCalendarAdapter;
 
@@ -419,7 +419,7 @@ public class ExtraCalendarView extends LinearLayout {
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
 //			mCalendarType = CALENDAR_TYPE_WEEK;
 			mWeekCalendarView.setVisibility(VISIBLE);
-			mMonthCalendarView.setVisibility(GONE);
+			mMonthCalendarView.setVisibility(INVISIBLE);
 			mCalendarView = mWeekCalendarView;
 			mCalendarAdapter = mWeekCalendarAdapter;
 			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
@@ -429,7 +429,7 @@ public class ExtraCalendarView extends LinearLayout {
 			//FIXME 如果选中的是一个月的第一个星期，切换成星期会显示上个月。
 //			mCalendarType = CALENDAR_TYPE_MONTH;
 			mMonthCalendarView.setVisibility(VISIBLE);
-			mWeekCalendarView.setVisibility(GONE);
+			mWeekCalendarView.setVisibility(INVISIBLE);
 			mCalendarView = mMonthCalendarView;
 			mCalendarAdapter = mMonthCalendarAdapter;
 
