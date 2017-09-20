@@ -38,7 +38,7 @@ import java.util.Locale;
 public class ExtraCalendarView extends LinearLayout {
 
 	private final String TAG = getClass().getSimpleName();
-
+	public static int weekCalendarHeight;
 	public final static int CALENDAR_TYPE_WEEK = 1;        //周模式
 	public final static int CALENDAR_TYPE_MONTH = 2;       //月模式
 	private @Annotations.CalendarType
@@ -152,13 +152,8 @@ public class ExtraCalendarView extends LinearLayout {
 				calendar.get(Calendar.DAY_OF_MONTH), Date.TYPE_THIS_MONTH);
 		setCurrentMonth(mClickDate.getYear(), mClickDate.getMonth(), true);
 		setTranslationZ(-2);
-		Log.d(TAG, "ExtraCalendarView: " + (System.currentTimeMillis() - a));
-		post(new Runnable() {
-			@Override
-			public void run() {
-				Log.d(TAG, "ExtraCalendarView: post" + (System.currentTimeMillis() - a));
-			}
-		});
+
+		post(() -> weekCalendarHeight = mCalendarLayout.getTop() + mClickedView.getHeight());
 	}
 
 	private void initAttrs(AttributeSet attrs) {

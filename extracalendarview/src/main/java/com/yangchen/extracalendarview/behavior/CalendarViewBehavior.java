@@ -92,6 +92,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 		} else if (dy < 0 && mRunning) {
 			consumed[1] = dy;
+			Log.d(TAG, "onNestedPreScroll: " + child.getClickView().getTop());
 			int surplus = child.getBottom() - child.getClickView().getTop();
 			if (surplus > target.getY()) {
 				int offset = (int) Math.min(surplus - target.getY(), -dy);
@@ -124,43 +125,73 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		}
 		FrameLayout calendarView = child.getCalendarLayout();
 		if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH && !mReadyToMonth) {
-			scrollToWeek(child, target);
+			animationScrollToWeek(child, target);
 //			child.changeCalendarType();
 //			calendarView.scrollTo(0, 0);
 			mRunning = false;
 		} else if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK && mReadyToMonth) {
-			child.changeCalendarType();
-			calendarView.scrollTo(0, 0);
+			animationScrollToMonth(child, target);
+//			calendarView.scrollTo(0, 0);
 			mRunning = false;
 			mReadyToMonth = false;
 		}
 	}
 
-	private void scrollToWeek(ExtraCalendarView child, View target) {
+	private void animationScrollToWeek(ExtraCalendarView child, View target) {
 		int surplusTop = child.getClickView().getTop() - child.getCalendarLayout().getScrollY();
 		int surplusBottom = target.getTop() - (child.getCalendarLayout().getTop() + child.getClickView().getHeight());
-		final OverScroller scroller = new OverScroller(child.getContext());
-		scroller.startScroll(0, child.getCalendarLayout().getScrollY() + child.getBottom() - target.getTop(), 0, child.getCalendarHeight() - child.getClickView().getHeight(), 2000);
+		int finishedTop = child.getCalendarLayout().getScrollY();
+		final OverScroller scroller = new OverScroller(target.getContext());
+		scroller.startScroll(0, 0,
+				0, surplusTop + surplusBottom, 2000);
 		ViewCompat.postOnAnimation(child, new Runnable() {
 			@Override
 			public void run() {
 				int detairBottom = target.getTop() - (child.getCalendarLayout().getTop() + child.getClickView().getHeight());
 				if (scroller.computeScrollOffset()) {
-					int surplus;
 					int currentY = scroller.getCurrY();
-					Log.d(TAG, "detairBottom: " + detairBottom);
-					if (scroller.getCurrY() < child.getClickView().getTop()) {
-						surplus = currentY;
-						child.getCalendarLayout().scrollTo(0, surplus);
-						ViewCompat.offsetTopAndBottom(target, (int) (surplusBottom - detairBottom - surplus));
-						ViewCompat.postOnAnimation(child, this);
-					} else if (detairBottom > 0) {
-						surplus = currentY;
-						int offset = Math.min(-(surplusBottom - detairBottom - surplus), detairBottom);
-						Log.d(TAG, "run: " + offset);
-						ViewCompat.offsetTopAndBottom(target, -offset);
+					int clickViewTop = child.getClickView().getTop();
+					if (detairBottom > 0) {
+						int offsetTop = currentY + finishedTop > clickViewTop ? clickViewTop : currentY + finishedTop;
+						child.getCalendarLayout().scrollTo(0, offsetTop);
+						int offsetBottom = Math.min(-(surplusBottom - detairBottom - currentY), detairBottom);
+						ViewCompat.offsetTopAndBottom(target, -offsetBottom);
 						ViewCompat.postOnAnimation(child, this);
 					} else {
+						child.changeCalendarType();
+						child.getCalendarLayout().scrollTo(0, 0);
+						mRunning = false;
+					}
+
+				}
+			}
+		});
+	}
+
+	private void animationScrollToMonth(ExtraCalendarView child, View target) {
+		int surplusBottom = (int) (child.getBottom() - target.getY());
+		final OverScroller scroller = new OverScroller(target.getContext());
+		scroller.startScroll(0, 0,
+				0, (int) (child.getBottom() - target.getY()), 1000);
+		ViewCompat.postOnAnimation(child, new Runnable() {
+			@Override
+			public void run() {
+				if (scroller.computeScrollOffset()) {
+					int currentY = scroller.getCurrY();
+					int offsetBottomNow = (int) (child.getBottom() - target.getY());
+					if (offsetBottomNow > 0) {
+						int offset = offsetBottomNow - surplusBottom + currentY;
+						if (target.getY() - (child.getBottom() - child.getClickView().getTop()) + offset > 0) {
+							Log.d(TAG, "run: " + child.getCalendarLayout().getScrollY());
+							int shouldOffset = Math.max(0,  child.getCalendarLayout().getScrollY() - offset);
+							child.getCalendarLayout().scrollBy(0, shouldOffset);
+						}
+						ViewCompat.offsetTopAndBottom(target, offset);
+						ViewCompat.postOnAnimation(child, this);
+					} else {
+						mRunning = false;
+						mReadyToMonth = false;
+						child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
 					}
 
 				}
