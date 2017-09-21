@@ -123,12 +123,12 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		if (!mRunning) {
 			return;
 		}
-		FrameLayout calendarView = child.getCalendarLayout();
 		if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH && !mReadyToMonth) {
-			animationScrollToWeek(child, target);
-//			child.changeCalendarType();
-//			calendarView.scrollTo(0, 0);
+
+			animationScrollToMonth(child, target);
+
 			mRunning = false;
+
 		} else if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK && mReadyToMonth) {
 			animationScrollToMonth(child, target);
 //			calendarView.scrollTo(0, 0);
@@ -158,7 +158,9 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 						ViewCompat.offsetTopAndBottom(target, -offsetBottom);
 						ViewCompat.postOnAnimation(child, this);
 					} else {
-						child.changeCalendarType();
+						if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
+							child.changeCalendarType();
+						}
 						child.getCalendarLayout().scrollTo(0, 0);
 						mRunning = false;
 					}
@@ -181,14 +183,19 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 					int offsetBottomNow = (int) (child.getBottom() - target.getY());
 					if (offsetBottomNow > 0) {
 						int offset = offsetBottomNow - surplusBottom + currentY;
-						if (target.getY() - (child.getBottom() - child.getClickView().getTop()) + offset > 0) {
-							Log.d(TAG, "run: " + child.getCalendarLayout().getScrollY());
-							int shouldOffset = Math.max(0,  child.getCalendarLayout().getScrollY() - offset);
-							child.getCalendarLayout().scrollBy(0, shouldOffset);
+						int surplusTopNow = (int) (target.getY() - (child.getBottom() - child.getClickView().getTop()));
+						if (surplusTopNow + offset > 0 && surplusTopNow < 0) {
+							int shouldOffset = surplusTopNow + offset;
+							child.getCalendarLayout().scrollBy(0, -shouldOffset);
+						} else if (surplusTopNow > 0) {
+							child.getCalendarLayout().scrollBy(0, -offset);
 						}
 						ViewCompat.offsetTopAndBottom(target, offset);
 						ViewCompat.postOnAnimation(child, this);
 					} else {
+						if (!mReadyToMonth) {
+							return;
+						}
 						mRunning = false;
 						mReadyToMonth = false;
 						child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
