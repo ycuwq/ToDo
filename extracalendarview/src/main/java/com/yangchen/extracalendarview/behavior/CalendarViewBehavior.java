@@ -124,16 +124,21 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			return;
 		}
 		if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH && !mReadyToMonth) {
+			if (child.getBottom() - target.getY() > 0 && child.getBottom() - target.getY() <100) {
+				animationScrollToMonth(child, target);
+			} else if (child.getBottom() - target.getY() > 0){
+				animationScrollToWeek(child, target);
+			}
 
-			animationScrollToMonth(child, target);
-
-			mRunning = false;
 
 		} else if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK && mReadyToMonth) {
-			animationScrollToMonth(child, target);
+			int surplus = (int) ((child.getBottom() - child.getClickView().getTop()) - target.getY());
+			if (surplus > 0 && surplus < 200) {
+				animationScrollToWeek(child, target);
+			} else {
+				animationScrollToMonth(child, target);
+			}
 //			calendarView.scrollTo(0, 0);
-			mRunning = false;
-			mReadyToMonth = false;
 		}
 	}
 
@@ -163,6 +168,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 						}
 						child.getCalendarLayout().scrollTo(0, 0);
 						mRunning = false;
+						mReadyToMonth = false;
 					}
 
 				}
