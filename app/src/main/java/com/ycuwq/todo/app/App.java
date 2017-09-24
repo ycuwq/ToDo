@@ -26,7 +26,8 @@ public class App extends Application{
 				.applicationModule(new ApplicationModule(this))
 				.build();
 
-		DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "notes-db");
+
+		DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "schedule-db");
 		Database db = helper.getWritableDb();
 		daoSession = new DaoMaster(db).newSession();
 	}

@@ -133,7 +133,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 		} else if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK && mReadyToMonth) {
 			int surplus = (int) ((child.getBottom() - child.getClickView().getTop()) - target.getY());
-			if (surplus > 0 && surplus < 200) {
+			if (surplus > 0 && surplus < 100) {
 				animationScrollToWeek(child, target);
 			} else {
 				animationScrollToMonth(child, target);
