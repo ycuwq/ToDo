@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.yangchen.extracalendarview.ExtraCalendarView;
@@ -31,15 +30,12 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View> {
 				ViewCompat.offsetTopAndBottom(child, ExtraCalendarView.weekCalendarHeight);
 			} else {
 				extraCalendarView.getClickView().post(() -> {
-				Log.d(TAG, "onLayoutChild: post");
 				ViewCompat.offsetTopAndBottom(child, extraCalendarView.getCalendarHeight());
 
 				});
 			}
 
 		} else {
-			Log.d(TAG, "onLayoutChild:");
-//			child.setTranslationY(calendarHeight);
 
 			ViewCompat.offsetTopAndBottom(child, extraCalendarView.getCalendarHeight());
 		}

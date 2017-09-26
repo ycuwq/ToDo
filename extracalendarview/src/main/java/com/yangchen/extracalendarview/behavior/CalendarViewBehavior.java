@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -82,17 +81,14 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				int offset = Math.min(surplusBottom, dy);
 				ViewCompat.offsetTopAndBottom(target, -offset);
 			} else if (clickViewTop <= calendarView.getScrollY() && surplusBottom<=0) {
-				if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
-					Log.d(TAG, "onNestedPreScroll: change");
-					child.changeCalendarType();
-					calendarView.scrollTo(0, 0);
-				}
+				child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
+				calendarView.scrollTo(0, 0);
+
 				mRunning = false;
 			}
 
 		} else if (dy < 0 && mRunning) {
 			consumed[1] = dy;
-			Log.d(TAG, "onNestedPreScroll: " + child.getClickView().getTop());
 			int surplus = child.getBottom() - child.getClickView().getTop();
 			if (surplus > target.getY()) {
 				int offset = (int) Math.min(surplus - target.getY(), -dy);
@@ -107,9 +103,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
 			}
 		} else if (dy < 0 && !mRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
-			//FIXME 修复第一次上滑到周模式，切换时出现dy = -419，导致调用此处。
 			mRunning = true;
-			Log.d(TAG, "onNestedPreScroll: change to Month");
 			consumed[1] = dy;
 			child.changeCalendarStyle();
 			calendarView.scrollTo(0, child.getClickView().getTop());
@@ -124,7 +118,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			return;
 		}
 		if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH && !mReadyToMonth) {
-			if (child.getBottom() - target.getY() > 0 && child.getBottom() - target.getY() <100) {
+			if (child.getBottom() - target.getY() > 0 && child.getBottom() - target.getY() < 100) {
 				animationScrollToMonth(child, target);
 			} else if (child.getBottom() - target.getY() > 0){
 				animationScrollToWeek(child, target);
@@ -133,12 +127,11 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 		} else if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK && mReadyToMonth) {
 			int surplus = (int) ((child.getBottom() - child.getClickView().getTop()) - target.getY());
-			if (surplus > 0 && surplus < 100) {
+			if (surplus > 0 && surplus < 200) {
 				animationScrollToWeek(child, target);
 			} else {
 				animationScrollToMonth(child, target);
 			}
-//			calendarView.scrollTo(0, 0);
 		}
 	}
 
@@ -148,7 +141,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		int finishedTop = child.getCalendarLayout().getScrollY();
 		final OverScroller scroller = new OverScroller(target.getContext());
 		scroller.startScroll(0, 0,
-				0, surplusTop + surplusBottom, 2000);
+				0, surplusTop + surplusBottom, 1000);
 		ViewCompat.postOnAnimation(child, new Runnable() {
 			@Override
 			public void run() {
@@ -163,9 +156,8 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 						ViewCompat.offsetTopAndBottom(target, -offsetBottom);
 						ViewCompat.postOnAnimation(child, this);
 					} else {
-						if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
-							child.changeCalendarType();
-						}
+
+						child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
 						child.getCalendarLayout().scrollTo(0, 0);
 						mRunning = false;
 						mReadyToMonth = false;
@@ -180,7 +172,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		int surplusBottom = (int) (child.getBottom() - target.getY());
 		final OverScroller scroller = new OverScroller(target.getContext());
 		scroller.startScroll(0, 0,
-				0, (int) (child.getBottom() - target.getY()), 1000);
+				0, (int) (child.getBottom() - target.getY()), 500);
 		ViewCompat.postOnAnimation(child, new Runnable() {
 			@Override
 			public void run() {

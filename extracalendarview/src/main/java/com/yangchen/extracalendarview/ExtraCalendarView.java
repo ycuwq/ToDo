@@ -371,7 +371,30 @@ public class ExtraCalendarView extends LinearLayout {
 		mClickedView = dayView;
 		mClickDate = dayView.getDate();
 	}
+	public void setCalendarType(@Annotations.CalendarType int calendarType) {
+		mCalendarType = calendarType;
+		//FIXME 切换成月模式速度太慢
+		if (mCalendarType == CALENDAR_TYPE_WEEK) {
+			mWeekCalendarView.setVisibility(VISIBLE);
+			mMonthCalendarView.setVisibility(INVISIBLE);
+			mCalendarView = mWeekCalendarView;
+			mCalendarAdapter = mWeekCalendarAdapter;
+			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
+					mClickDate.getYear(), mClickDate.getMonth(), mClickDate.getDay());
+			mCalendarView.setCurrentItem(weekPosition, false);
+		} else {
+			//FIXME 如果选中的是一个月的第一个星期，切换成星期会显示上个月。
+			mMonthCalendarView.setVisibility(VISIBLE);
+			mWeekCalendarView.setVisibility(INVISIBLE);
+			mCalendarView = mMonthCalendarView;
+			mCalendarAdapter = mMonthCalendarAdapter;
 
+			int monthPosition = CalendarUtil.getMonthPosition(mStartYear, mStartMonth,
+					mClickDate.getYear(), mClickDate.getMonth());
+			mCalendarView.setCurrentItem(monthPosition, false);
+		}
+		mCalendarAdapter.setClickDate(mClickDate);
+	}
 	public void changeCalendarType() {
 		//FIXME 切换成月模式速度太慢
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
@@ -454,11 +477,7 @@ public class ExtraCalendarView extends LinearLayout {
 		mCalendarView.offsetTopAndBottom(dy);
 	}
 
-	public void setCalendarType(@Annotations.CalendarType int calendarType) {
-		mCalendarType = calendarType;
-		//TODO 切换日历效果
-//		mCalendarAdapter.setCalendarType(calendarType);
-	}
+
 
 	/**
 	 * 跳转到选中日期页
