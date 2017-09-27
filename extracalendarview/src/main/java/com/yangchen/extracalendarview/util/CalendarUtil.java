@@ -126,13 +126,16 @@ public class CalendarUtil {
 		//将日期设置为开始日期 + 距离周数的日期。
 		int week = calendar.get(Calendar.WEEK_OF_YEAR);
 		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-		int date = calendar.get(Calendar.DAY_OF_WEEK);
+//		int date = calendar.get(Calendar.DAY_OF_WEEK);
 		calendar.set(Calendar.WEEK_OF_YEAR, week + positionWeek);
 
-		int currentMonth = calendar.get(Calendar.MONTH) + 1;
-		int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
 		for (int i = 0; i < 7; i++) {
-			calendar.set(Calendar.DAY_OF_YEAR, dayOfYear + i);
+			int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+			if (i == 0) {
+				calendar.set(Calendar.DAY_OF_YEAR, dayOfYear);
+			} else {
+				calendar.set(Calendar.DAY_OF_YEAR, dayOfYear + 1);
+			}
 			int year = calendar.get(Calendar.YEAR);
 			int month = calendar.get(Calendar.MONTH) + 1;
 			int day = calendar.get(Calendar.DATE);

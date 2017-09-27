@@ -42,8 +42,8 @@ public class CalendarUtilTest {
 
 	@Test
 	public void getWeekDaysForPosition() throws Exception {
-		List<Date> dates = CalendarUtil.getWeekDaysForPosition(2017, 6, 1,4);
-		assertEquals(25, dates.get(0).getDay());
+		List<Date> dates = CalendarUtil.getWeekDaysForPosition(2017, 12, 28,1);
+		assertEquals(1, dates.get(0).getDay());
 	}
 
 	@Test

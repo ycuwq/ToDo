@@ -1,7 +1,5 @@
 package com.yangchen.extracalendarview.util;
 
-import android.text.TextUtils;
-
 import java.util.Calendar;
 
 public class SolarUtil {
@@ -67,7 +65,7 @@ public class SolarUtil {
                 break;
         }
 
-        if (!TextUtils.isEmpty(holiday)) {
+        if (holiday.length() >0) {
             return holiday;
         }
 

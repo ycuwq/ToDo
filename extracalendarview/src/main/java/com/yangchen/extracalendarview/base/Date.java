@@ -146,4 +146,9 @@ public class Date {
 		}
 	}
 
+
+	@Override
+	public String toString() {
+		return year + "-" + month + "-" + day;
+	}
 }

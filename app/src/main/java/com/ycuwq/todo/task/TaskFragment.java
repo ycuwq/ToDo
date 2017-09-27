@@ -6,12 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yangchen.extracalendarview.ExtraCalendarView;
+import com.yangchen.extracalendarview.base.Date;
+import com.yangchen.extracalendarview.listener.OnDayClickListener;
 import com.ycuwq.todo.R;
 import com.ycuwq.todo.app.BaseFragment;
 import com.ycuwq.todo.common.recycler.ExRecyclerAdapter;
@@ -47,7 +50,15 @@ public class TaskFragment extends BaseFragment{
 	                         @Nullable Bundle savedInstanceState) {
 		mBinding = FragTaskBinding.inflate(inflater, container, false);
 		mExtraCalendarView = mBinding.extraCalendarView;
-		mExtraCalendarView.setStartDate(2017,5, 1500);
+		mExtraCalendarView.setOnDayClickListener(new OnDayClickListener() {
+			@Override
+			public void onClick(View v, Date date) {
+				Log.d(TAG, "onClick: " + date.toString());
+			}
+		});
+//		mExtraCalendarView.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
+//		mExtraCalendarView.setTitleVisible(true);
+//		mExtraCalendarView.setStartDate(2017,5, 1500);
 //		mExtraCalendarView.changeCalendarType();
 		setupSnakeBar();
 		initView();
