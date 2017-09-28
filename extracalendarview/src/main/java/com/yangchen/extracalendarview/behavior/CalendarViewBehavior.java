@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -118,6 +119,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			return;
 		}
 		if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH && !mReadyToMonth) {
+			Log.d(TAG, "Month: " + (child.getBottom() - target.getY()));
 			if (child.getBottom() - target.getY() > 0 && child.getBottom() - target.getY() < 100) {
 				animationScrollToMonth(child, target);
 			} else if (child.getBottom() - target.getY() > 0){
@@ -127,7 +129,8 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 		} else if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK && mReadyToMonth) {
 			int surplus = (int) ((child.getBottom() - child.getClickView().getTop()) - target.getY());
-			if (surplus > 0 && surplus < 200) {
+			Log.d(TAG, "week: " + surplus);
+			if (Math.abs(surplus) < 100) {
 				animationScrollToWeek(child, target);
 			} else {
 				animationScrollToMonth(child, target);

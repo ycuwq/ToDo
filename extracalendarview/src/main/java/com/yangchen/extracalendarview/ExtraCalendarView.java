@@ -119,6 +119,8 @@ public class ExtraCalendarView extends LinearLayout {
 				if (mOnMonthChangeListener != null) {
 					mOnMonthChangeListener.onChange(mCurrentDate);
 				}
+				if (mOnDayClickListener != null) {
+				}
 			}
 			updateTitleUI();
 		}
@@ -149,7 +151,13 @@ public class ExtraCalendarView extends LinearLayout {
 		//设置日历的Z轴为负，以便RecyclerView等View可以覆盖到此View上方
 		setTranslationZ(-2);
 
-		post(() -> weekCalendarHeight = mCalendarLayout.getTop() + mClickedView.getHeight());
+		post(() -> {
+			if (mClickedView != null) {
+				weekCalendarHeight = mCalendarLayout.getTop() + mClickedView.getHeight();
+			}
+		});
+
+
 	}
 
 
@@ -159,8 +167,9 @@ public class ExtraCalendarView extends LinearLayout {
 		int count = a.getIndexCount();
 		for (int i = 0; i < count; i++) {
 			int attr = a.getIndex(i);
-
-			if (attr == R.styleable.ExtraCalendarView_showHoliday) {
+			if (attr == R.styleable.ExtraCalendarView_calendarType) {
+				mCalendarType = a.getInteger(attr, CALENDAR_TYPE_MONTH);
+			} else if (attr == R.styleable.ExtraCalendarView_showHoliday) {
 				mDayItemAttrs.setShowHoliday(a.getBoolean(attr, true));
 			} else if (attr == R.styleable.ExtraCalendarView_showLunar) {
 				mDayItemAttrs.setShowLunar(a.getBoolean(attr, true));
@@ -239,14 +248,21 @@ public class ExtraCalendarView extends LinearLayout {
 		mWeekCalendarAdapter = new WeekCalendarAdapter(this, mCalendarViewCount, mStartYear, mStartMonth, mDayItemAttrs);
 		mWeekCalendarView.setAdapter(mWeekCalendarAdapter);
 		mMonthCalendarView.setAdapter(mMonthCalendarAdapter);
-		mWeekCalendarView.setVisibility(INVISIBLE);
+
 		mMonthCalendarView.addOnPageChangeListener(onPageChangeListener);
 		mWeekCalendarView.addOnPageChangeListener(onPageChangeListener);
 		mCalendarLayout.addView(mMonthCalendarView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		mCalendarLayout.addView(mWeekCalendarView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
-		mCalendarView = mMonthCalendarView;
-		mCalendarAdapter = mMonthCalendarAdapter;
+		if (mCalendarType == CALENDAR_TYPE_MONTH) {
+			mCalendarView = mMonthCalendarView;
+			mCalendarAdapter = mMonthCalendarAdapter;
+			mWeekCalendarView.setVisibility(INVISIBLE);
+		} else {
+			mMonthCalendarView.setVisibility(INVISIBLE);
+			mCalendarView = mWeekCalendarView;
+			mCalendarAdapter = mWeekCalendarAdapter;
+		}
 
 		addView(mCalendarLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
@@ -403,11 +419,19 @@ public class ExtraCalendarView extends LinearLayout {
 		mCalendarAdapter.setClickDate(mCurrentDate);
 	}
 
+	public void setCalendarType2(@Annotations.CalendarType int calendarType) {
+		mCalendarType = calendarType;
+	}
+
 	public int getCalendarHeight() {
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
 			return getHeight();
 		} else {
-			return mCalendarLayout.getTop() + mClickedView.getHeight();
+			if (mClickedView != null) {
+				return mCalendarLayout.getTop() + mClickedView.getHeight();
+			} else {
+				return 0;
+			}
 		}
 	}
 

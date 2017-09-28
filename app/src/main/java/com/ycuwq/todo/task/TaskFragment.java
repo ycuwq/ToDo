@@ -53,13 +53,11 @@ public class TaskFragment extends BaseFragment{
 		mExtraCalendarView.setOnDayClickListener(new OnDayClickListener() {
 			@Override
 			public void onClick(View v, Date date) {
+
 				Log.d(TAG, "onClick: " + date.toString());
 			}
 		});
-//		mExtraCalendarView.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
-//		mExtraCalendarView.setTitleVisible(true);
-//		mExtraCalendarView.setStartDate(2017,5, 1500);
-//		mExtraCalendarView.changeCalendarType();
+
 		setupSnakeBar();
 		initView();
 		return mBinding.getRoot();
@@ -73,9 +71,7 @@ public class TaskFragment extends BaseFragment{
 				TextView textView = holder.getView(R.id.text);
 				textView.setText(s);
 				textView.setOnClickListener(v -> {
-					mExtraCalendarView.requestLayout();
-//					mExtraCalendarView.changeCalendarType();
-//						mExtraCalendarView.requestLayout();
+					mExtraCalendarView.setCurrentDate(2017, 10, 1, true);
 				});
 			}
 		};

@@ -17,6 +17,10 @@
         <attr name="textColorWeekInfo" format="color"/>
         <attr name="leftArrowMask" format="reference"/>
         <attr name="rightArrowMask" format="reference"/>
+        <attr name="calendarType" format="enum">
+            <enum name="week" value="1"/>
+            <enum name="month" value="2"/>
+        </attr>
     </declare-styleable>
 
 </resources>

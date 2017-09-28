@@ -30,8 +30,7 @@ public class InCalendarBottomBehavior extends CoordinatorLayout.Behavior<View> {
 				ViewCompat.offsetTopAndBottom(child, ExtraCalendarView.weekCalendarHeight);
 			} else {
 				extraCalendarView.getClickView().post(() -> {
-				ViewCompat.offsetTopAndBottom(child, extraCalendarView.getCalendarHeight());
-
+					ViewCompat.offsetTopAndBottom(child, extraCalendarView.getCalendarHeight());
 				});
 			}
 
