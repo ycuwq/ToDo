@@ -3,13 +3,14 @@ package com.yangchen.extracalendarview;
 import android.content.Context;
 
 import com.yangchen.extracalendarview.base.Date;
+import com.yangchen.extracalendarview.listener.OnDayViewClickListener;
 
 /**
  * Created by 杨晨 on 2017/8/2.
  */
 public class MonthItemView extends CalendarItemView{
-	public MonthItemView(ExtraCalendarView extraCalendarView, Context context) {
-		super(extraCalendarView, context);
+	public MonthItemView(OnDayViewClickListener onDayViewClickListener, Context context) {
+		super(onDayViewClickListener, context);
 		maxRow = 6;
 	}
 

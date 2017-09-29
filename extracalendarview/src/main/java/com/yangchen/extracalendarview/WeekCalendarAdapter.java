@@ -3,6 +3,7 @@ package com.yangchen.extracalendarview;
 import android.content.Context;
 
 import com.yangchen.extracalendarview.base.Date;
+import com.yangchen.extracalendarview.listener.OnDayViewClickListener;
 import com.yangchen.extracalendarview.util.CalendarUtil;
 
 import java.util.List;
@@ -11,13 +12,13 @@ import java.util.List;
  * Created by 杨晨 on 2017/8/2.
  */
 public class WeekCalendarAdapter extends CalendarAdapter{
-	WeekCalendarAdapter(ExtraCalendarView extraCalendarView, int count, int startYear, int startMonth, DayItemAttrs dayItemAttrs) {
-		super(extraCalendarView, count, startYear, startMonth, dayItemAttrs);
+	WeekCalendarAdapter(OnDayViewClickListener onDayViewClickListener, int count, int startYear, int startMonth, DayItemAttrs dayItemAttrs) {
+		super(onDayViewClickListener, count, startYear, startMonth, dayItemAttrs);
 	}
 
 	@Override
-	public CalendarItemView instantiateCalendarView(ExtraCalendarView extraCalendarView, Context context) {
-		return new WeekItemView(extraCalendarView, context);
+	public CalendarItemView instantiateCalendarView(OnDayViewClickListener onDayViewClickListener, Context context) {
+		return new WeekItemView(onDayViewClickListener, context);
 	}
 
 	@Override

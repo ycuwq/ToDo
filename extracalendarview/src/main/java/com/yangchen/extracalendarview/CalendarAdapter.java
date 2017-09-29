@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yangchen.extracalendarview.base.Date;
+import com.yangchen.extracalendarview.listener.OnDayViewClickListener;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,10 +28,10 @@ abstract class  CalendarAdapter extends PagerAdapter {
 
 	private int mStartYear, mStartMonth;
 	private DayItemAttrs mDayItemAttrs;
-	private ExtraCalendarView mExtraCalendarView;
+	private OnDayViewClickListener mDayViewClickListener;
 
-	CalendarAdapter(ExtraCalendarView extraCalendarView, int count, int startYear, int startMonth, DayItemAttrs dayItemAttrs) {
-		mExtraCalendarView = extraCalendarView;
+	CalendarAdapter(OnDayViewClickListener onDayViewClickListener, int count, int startYear, int startMonth, DayItemAttrs dayItemAttrs) {
+		mDayViewClickListener = onDayViewClickListener;
 		mCount = count;
 		mStartYear = startYear;
 		mStartMonth = startMonth;
@@ -43,7 +44,7 @@ abstract class  CalendarAdapter extends PagerAdapter {
 		if (!mCache.isEmpty()) {
 			calendarItemView = mCache.removeFirst();
 		} else {
-			calendarItemView = instantiateCalendarView(mExtraCalendarView, container.getContext());
+			calendarItemView = instantiateCalendarView(mDayViewClickListener, container.getContext());
 
 		}
 		calendarItemView.initAttr(mDayItemAttrs);
@@ -53,7 +54,7 @@ abstract class  CalendarAdapter extends PagerAdapter {
 		return calendarItemView;
 	}
 
-	public abstract CalendarItemView instantiateCalendarView(ExtraCalendarView extraCalendarView, Context context);
+	public abstract CalendarItemView instantiateCalendarView(OnDayViewClickListener onDayViewClickListener, Context context);
 
 	public abstract List<Date> getCalendarDates(int startYear, int startMonth, int position);
 
@@ -86,9 +87,9 @@ abstract class  CalendarAdapter extends PagerAdapter {
 	 * 找到ClickView所在的CalendarItemView 并设置点击事件
 	 * @param clickDate
 	 */
-	public void setClickDate(Date clickDate) {
+	public void setClickedView(Date clickDate) {
 		CalendarItemView calendarItemView = mViews.get(mViews.keyAt(1));
-		calendarItemView.setClickView(clickDate);
+		calendarItemView.setClickedView(clickDate);
 
 	}
 

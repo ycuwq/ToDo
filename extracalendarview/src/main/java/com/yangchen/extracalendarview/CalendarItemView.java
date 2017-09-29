@@ -8,6 +8,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
 import com.yangchen.extracalendarview.base.Date;
+import com.yangchen.extracalendarview.listener.OnDayViewClickListener;
 
 import java.util.List;
 
@@ -21,15 +22,15 @@ public abstract class CalendarItemView extends ViewGroup {
 
 	protected static final int COLUMN = 7;        //显示的列数
 	protected DayItemAttrs mDayItemAttrs;
-	protected ExtraCalendarView mExtraCalendarView;
 	protected List<Date> mDates;
 	protected int  mLastMonthDay; //当前月份天数，上月天数，下月天数。
 	protected Date mCurrentMonth;
 	private float mPosX, mPosY;         //点击事件需要用到的缓存
-
-	public CalendarItemView(ExtraCalendarView extraCalendarView, Context context) {
+	protected OnDayViewClickListener mOnDayViewClickListener;
+	private DayView mClickedView;
+	public CalendarItemView(OnDayViewClickListener onDayViewClickListener, Context context) {
 		super(context, null);
-		mExtraCalendarView = extraCalendarView;
+		mOnDayViewClickListener = onDayViewClickListener;
 		mLastMonthDay = 0;
 	}
 
@@ -52,15 +53,15 @@ public abstract class CalendarItemView extends ViewGroup {
 				mLastMonthDay++;
 			}
 			final DayView view = createDayView(getContext(), date, mDayItemAttrs);
-			//判断点击的日期是否和加载的日期是同一天如果是同一天，设置为选中的样式，
-			// 这个为了解决ViewPager复用后重新创建View的点击效果消失的问题
-			if (date.equals(mExtraCalendarView.getClickDate())) {
-				//  周类型没有Type的概念，这里判断周的Type 是无效的。
-				if (date.getType() == mExtraCalendarView.getClickDate().getType()) {
-
-					mExtraCalendarView.onDateClicked(view);
-				}
-			}
+//			//判断点击的日期是否和加载的日期是同一天如果是同一天，设置为选中的样式，
+//			// 这个为了解决ViewPager复用后重新创建View的点击效果消失的问题
+//			if (date.equals(mExtraCalendarView.getClickDate())) {
+//				//  周类型没有Type的概念，这里判断周的Type 是无效的。
+//				if (date.getType() == mExtraCalendarView.getClickDate().getType()) {
+//
+//					mExtraCalendarView.onDateClicked(view);
+//				}
+//			}
 			addView(view);
 		}
 		requestLayout();
@@ -90,7 +91,11 @@ public abstract class CalendarItemView extends ViewGroup {
 					int row = (int) (event.getY() / itemHeight);
 					int index = column + row * COLUMN;
 					if (index < getChildCount()) {
-						mExtraCalendarView.onDateClicked((DayView) getChildAt(index));
+						if (mOnDayViewClickListener != null) {
+							DayView dayView = getDayView(index);
+							mOnDayViewClickListener.onDayViewClick(dayView);
+							changeDayClickedAndStyle(dayView);
+						}
 					}
 					return true;
 				}
@@ -101,7 +106,21 @@ public abstract class CalendarItemView extends ViewGroup {
 
 		return super.onTouchEvent(event);
 	}
-
+	/**
+	 * 改变点击日期的样式，取消上次点击的样式，改变当前点击的日期
+	 *
+	 * @param dayView 返回的DayView
+	 */
+	void changeDayClickedAndStyle(DayView dayView) {
+		if (dayView == null) {
+			return;
+		}
+		if (mClickedView != null) {
+			mClickedView.setClickedViewStyle(false);
+		}
+		dayView.setClickedViewStyle(true);
+		mClickedView = dayView;
+	}
 
 	public Date getCurrentMonth() {
 		return mCurrentMonth;
@@ -117,12 +136,26 @@ public abstract class CalendarItemView extends ViewGroup {
 		return (DayView) getChildAt(position);
 	}
 
-	public void setClickView(Date clickDate) {
-		mExtraCalendarView.changeDayClickedAndStyle(getDayView(clickDate));
+	public void setClickedView(Date clickDate) {
+		DayView clickView = getDayView(clickDate);
+		changeDayClickedAndStyle(clickView);
+		if (mOnDayViewClickListener != null) {
+			mOnDayViewClickListener.onDayViewClick(clickView);
+		}
 	}
 
-	public void setClickView(int position) {
-		mExtraCalendarView.changeDayClickedAndStyle((DayView) getChildAt(position));
+	public void setClickedView(int position) {
+		DayView clickView = getDayView(position);
+		changeDayClickedAndStyle(clickView);
+		if (mOnDayViewClickListener != null) {
+			mOnDayViewClickListener.onDayViewClick(clickView);
+		}
+	}
+
+
+
+	public DayView getDayView(int position) {
+		return (DayView) getChildAt(position);
 	}
 
 	abstract DayView createDayView(Context context, Date date, DayItemAttrs mDayItemAttrs);
