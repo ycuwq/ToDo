@@ -82,6 +82,13 @@ public class ExtraCalendarView extends LinearLayout {
 	private OnMonthChangeListener mOnMonthChangeListener;
 	private WeekInfoView mWeekInfoView;
 
+
+	/**
+	 * 为了配合左右滑动后将点击的日期切换到当月，所以在onPageChangeListener做了切换。
+	 * 但是在切换周月的时候触发滑动会出现问题。所以设立flag禁用
+	 */
+	private boolean mPagerNotClickedFlag = false;
+
 	private OnClickListener mOnClickListener = v -> {
 		if (v == mButtonPast) {
 			if (mCalendarView == null)
@@ -104,7 +111,11 @@ public class ExtraCalendarView extends LinearLayout {
 
 		@Override
 		public void onPageSelected(int position) {
-			setPageChangeClicked(position);
+			if (!mPagerNotClickedFlag) {
+				setPageChangeClicked(position);
+			}
+			mPagerNotClickedFlag = false;
+
 			if (mOnMonthChangeListener != null) {
 				mOnMonthChangeListener.onChange(mCurrentDate);
 			}
@@ -268,6 +279,8 @@ public class ExtraCalendarView extends LinearLayout {
 		mCalendarLayout.setZ(-1);
 		mWeekCalendarView = new CalendarView(getContext());
 		mMonthCalendarView = new CalendarView(getContext());
+		mWeekCalendarView.setOffscreenPageLimit(1);
+		mMonthCalendarView.setOffscreenPageLimit(1);
 		mMonthCalendarAdapter = new MonthCalendarAdapter(mOnDayViewClickListener, mCalendarViewCount, mStartYear, mStartMonth, mDayItemAttrs);
 		mWeekCalendarAdapter = new WeekCalendarAdapter(mOnDayViewClickListener, mCalendarViewCount, mStartYear, mStartMonth, mDayItemAttrs);
 		mWeekCalendarView.setAdapter(mWeekCalendarAdapter);
@@ -329,7 +342,6 @@ public class ExtraCalendarView extends LinearLayout {
 			if (mOnMonthChangeListener != null) {
 				mOnMonthChangeListener.onChange(mCurrentDate);
 			}
-
 		}
 	}
 
@@ -402,6 +414,7 @@ public class ExtraCalendarView extends LinearLayout {
 	}
 
 	public void setCalendarType(@Annotations.CalendarType int calendarType) {
+		mPagerNotClickedFlag = true;
 		mCalendarType = calendarType;
 		if (mCalendarType == CALENDAR_TYPE_WEEK) {
 			mCalendarView = mWeekCalendarView;
@@ -440,25 +453,25 @@ public class ExtraCalendarView extends LinearLayout {
 	}
 
 	public void changeCalendarStyle() {
+		mPagerNotClickedFlag = true;
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
-//			mCalendarType = CALENDAR_TYPE_WEEK;
-			mWeekCalendarView.setVisibility(VISIBLE);
-			mMonthCalendarView.setVisibility(INVISIBLE);
+
 			mCalendarView = mWeekCalendarView;
 			mCalendarAdapter = mWeekCalendarAdapter;
 			int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
 					mCurrentDate.getYear(), mCurrentDate.getMonth(), mCurrentDate.getDay());
 			mCalendarView.setCurrentItem(weekPosition, false);
+			mWeekCalendarView.setVisibility(VISIBLE);
+			mMonthCalendarView.setVisibility(INVISIBLE);
 		} else {
-//			mCalendarType = CALENDAR_TYPE_MONTH;
-			mMonthCalendarView.setVisibility(VISIBLE);
-			mWeekCalendarView.setVisibility(INVISIBLE);
 			mCalendarView = mMonthCalendarView;
 			mCalendarAdapter = mMonthCalendarAdapter;
 
 			int monthPosition = CalendarUtil.getMonthPosition(mStartYear, mStartMonth,
 					mCurrentDate.getYear(), mCurrentDate.getMonth());
 			mCalendarView.setCurrentItem(monthPosition, false);
+			mMonthCalendarView.setVisibility(VISIBLE);
+			mWeekCalendarView.setVisibility(INVISIBLE);
 		}
 		mCalendarAdapter.setClickedView(mCurrentDate);
 	}
@@ -482,6 +495,7 @@ public class ExtraCalendarView extends LinearLayout {
 
 
 	public void setCurrentDate(int year, int month, int day, boolean smoothScroll) {
+		mPagerNotClickedFlag = true;
 		int position;
 		if (mCalendarType == CALENDAR_TYPE_WEEK) {
 			position = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1, year, month, day);;
@@ -493,11 +507,9 @@ public class ExtraCalendarView extends LinearLayout {
 		}
 		mCalendarView.setCurrentItem(position, smoothScroll);
 		mCurrentDate = CalendarUtil.getDate(year, month, day, Date.TYPE_THIS_MONTH);
-		post(new Runnable() {
-			@Override
-			public void run() {
-				mCalendarAdapter.setClickedView(mCurrentDate);
-			}
+		post(() -> {
+			mCalendarAdapter.setClickedView(mCurrentDate);
+			updateTitleUI();
 		});
 		invalidate();
 	}
@@ -559,10 +571,6 @@ public class ExtraCalendarView extends LinearLayout {
 
 	public void setOnMonthChangeListener(OnMonthChangeListener onMonthChangeListener) {
 		mOnMonthChangeListener = onMonthChangeListener;
-	}
-
-	public void setViewAnimation() {
-		View child = getChildAt(1);
 	}
 
 	/**

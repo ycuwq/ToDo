@@ -138,6 +138,9 @@ public abstract class CalendarItemView extends ViewGroup {
 
 	public void setClickedView(Date clickDate) {
 		DayView clickView = getDayView(clickDate);
+		if (clickView == null) {
+			return;
+		}
 		changeDayClickedAndStyle(clickView);
 		if (mOnDayViewClickListener != null) {
 			mOnDayViewClickListener.onDayViewClick(clickView);

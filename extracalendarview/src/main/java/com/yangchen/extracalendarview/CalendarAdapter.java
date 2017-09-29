@@ -2,7 +2,6 @@ package com.yangchen.extracalendarview;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +62,7 @@ abstract class  CalendarAdapter extends PagerAdapter {
 		container.removeView((View) object);
 		mCache.addLast((CalendarItemView) object);
 		mViews.remove(position);
+
 	}
 
 
@@ -88,7 +88,12 @@ abstract class  CalendarAdapter extends PagerAdapter {
 	 * @param clickDate
 	 */
 	public void setClickedView(Date clickDate) {
+		//设置的pager的缓存数为1个，当前页在中间，
 		CalendarItemView calendarItemView = mViews.get(mViews.keyAt(1));
+		//当Pager快速滑动时，由于SparseArray的Delete的机制，可能还没有销毁，在倒数第二个。
+		if (calendarItemView.getDayView(clickDate) == null && mViews.size() > 3) {
+			calendarItemView = mViews.get(mViews.keyAt(mViews.size() - 2));
+		}
 		calendarItemView.setClickedView(clickDate);
 
 	}

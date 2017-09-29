@@ -57,7 +57,7 @@ public class TaskFragment extends BaseFragment{
 				Log.d(TAG, "onClick: " + date.toString());
 			}
 		});
-
+//		mExtraCalendarView.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
 		setupSnakeBar();
 		initView();
 		return mBinding.getRoot();
