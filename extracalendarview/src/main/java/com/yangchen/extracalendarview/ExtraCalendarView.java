@@ -318,6 +318,7 @@ public class ExtraCalendarView extends LinearLayout {
 				mClickedView.setClickedViewStyle(false);
 				//切换Page后，将选择的日期变成当前页的日期。
 				if (getCalendarType() == CALENDAR_TYPE_MONTH) {
+					//在翻页的时候有可能会出现之前选中的日期超过当前月的最大天数，如果超过的话选择当前月的最后一天替代。
 					if (mCurrentDate.getDay() > 28) {
 						Calendar calendar = Calendar.getInstance();
 						calendar.set(date.getYear(), date.getMonth() - 1, 1);

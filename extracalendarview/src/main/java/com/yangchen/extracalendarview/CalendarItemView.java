@@ -127,13 +127,14 @@ public abstract class CalendarItemView extends ViewGroup {
 	}
 
 	DayView getDayView(Date date) {
-		//因为上月或者下月信息中的date的Type不一样，indexOf无法查找到，所以这里要重新创建。
-		Date date1 = new Date(date.getYear(), date.getMonth(), date.getDay());
-		date1.setType(Date.TYPE_THIS_MONTH);
+			//因为上月或者下月信息中的date的Type不一样，indexOf无法查找到，所以这里要重新创建。
+//		Date date1 = new Date(date.getYear(), date.getMonth(), date.getDay());
+//		date1.setType(Date.TYPE_THIS_MONTH);
 
-		int position = mDates.indexOf(date1);
+		int position = mDates.indexOf(date);
 
 		return (DayView) getChildAt(position);
+
 	}
 
 	public void setClickedView(Date clickDate) {
