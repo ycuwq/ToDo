@@ -90,9 +90,14 @@ abstract class  CalendarAdapter extends PagerAdapter {
 	public void setClickedView(Date clickDate) {
 		//设置的pager的缓存数为1个，当前页在中间，
 		CalendarItemView calendarItemView = mViews.get(mViews.keyAt(1));
-		//当Pager快速滑动时，由于SparseArray的Delete的机制，可能还没有销毁，在倒数第二个。
-		if (calendarItemView.getDayView(clickDate) == null && mViews.size() > 3) {
-			calendarItemView = mViews.get(mViews.keyAt(mViews.size() - 2));
+		DayView dayView = calendarItemView.getDayView(clickDate);
+		if (dayView == null) {
+			//当Pager快速滑动时，由于SparseArray的Delete的机制，可能还没有销毁，在倒数第二个。
+			if (mViews.size() > 3) {
+				calendarItemView = mViews.get(mViews.keyAt(mViews.size() - 2));
+			} else if (mViews.size() < 3) {
+				calendarItemView = mViews.get(mViews.keyAt(0));
+			}
 		}
 		calendarItemView.setClickedView(clickDate);
 
