@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +53,6 @@ public class TaskFragment extends BaseFragment{
 			@Override
 			public void onClick(View v, Date date) {
 
-				Log.d(TAG, "onClick: " + date.toString());
 			}
 		});
 //		mExtraCalendarView.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);

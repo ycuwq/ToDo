@@ -87,7 +87,7 @@ public class ExtraCalendarView extends LinearLayout {
 	 * 为了配合左右滑动后将点击的日期切换到当月，所以在onPageChangeListener做了切换。
 	 * 但是在切换周月的时候触发滑动会出现问题。所以设立flag禁用
 	 */
-	private boolean mPagerNotClickedFlag = false;
+	private boolean mPageSelectedNotClickedFlag = false;
 
 	private OnClickListener mOnClickListener = v -> {
 		if (v == mButtonPast) {
@@ -111,11 +111,10 @@ public class ExtraCalendarView extends LinearLayout {
 
 		@Override
 		public void onPageSelected(int position) {
-			if (!mPagerNotClickedFlag) {
+			if (!mPageSelectedNotClickedFlag) {
 				setPageChangeClicked(position);
 			}
-			mPagerNotClickedFlag = false;
-
+			mPageSelectedNotClickedFlag = false;
 			if (mOnMonthChangeListener != null) {
 				mOnMonthChangeListener.onChange(mCurrentDate);
 			}
@@ -415,7 +414,7 @@ public class ExtraCalendarView extends LinearLayout {
 	}
 
 	public void setCalendarType(@Annotations.CalendarType int calendarType) {
-		mPagerNotClickedFlag = true;
+		mPageSelectedNotClickedFlag = true;
 		mCalendarType = calendarType;
 		if (mCalendarType == CALENDAR_TYPE_WEEK) {
 			mCalendarView = mWeekCalendarView;
@@ -438,6 +437,11 @@ public class ExtraCalendarView extends LinearLayout {
 		}
 		mCalendarAdapter.setClickedView(mCurrentDate);
 		updateTitleUI();
+		//正常来说，mPageSelectedNotClickedFlag只会一次生效。
+		//当从周切换到月时，会调用该方法，这时会跳转到当前月。会触发onPageSelected，
+		// 并在该方法内将mPageSelectedNotClickedFlag重置。
+		// 但是当setCurrentItem的position没有发生改变时，不会触发onPageSelected，所以当这时翻页时，切换页面时将不会选中日期。
+		post(() -> mPageSelectedNotClickedFlag = false);
 	}
 
 
@@ -454,7 +458,7 @@ public class ExtraCalendarView extends LinearLayout {
 	}
 
 	public void changeCalendarStyle() {
-		mPagerNotClickedFlag = true;
+		mPageSelectedNotClickedFlag = true;
 		if (mCalendarType == CALENDAR_TYPE_MONTH) {
 
 			mCalendarView = mWeekCalendarView;
@@ -496,7 +500,7 @@ public class ExtraCalendarView extends LinearLayout {
 
 
 	public void setCurrentDate(int year, int month, int day, boolean smoothScroll) {
-		mPagerNotClickedFlag = true;
+		mPageSelectedNotClickedFlag = true;
 		int position;
 		if (mCalendarType == CALENDAR_TYPE_WEEK) {
 			position = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1, year, month, day);;
