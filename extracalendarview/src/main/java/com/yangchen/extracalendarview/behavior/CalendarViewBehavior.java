@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -20,12 +19,22 @@ import com.yangchen.extracalendarview.ExtraCalendarView;
 public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalendarView> {
 	private final String TAG = getClass().getSimpleName();
 
-	private boolean mRunning = false;       //进行变换中
-	private boolean mReadyToMonth = false;
+	private boolean mIsRunning = false;       //进行变换中
+
+	/**
+	 * 是否正在变换成月
+	 * 从week模式变换成month模式时，先显示Month的View，等到Month的View完全显示出来时才切换成Month。此flag用来标记这段时间。
+	 *
+	 */
+	private boolean mIsReadyToMonth = false;
+
+	/**
+	 * 用来标记当由动画来完成滚动的这段时间
+	 */
+	private boolean mIsAnimationScroll = false;
 
 	@Override
-	public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View directTargetChild, View target, int nestedScrollAxes) {
-//		Log.d(TAG, "onStartNestedScroll: ");
+	public boolean onStartNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull ExtraCalendarView child, @NonNull View directTargetChild, @NonNull View target, int nestedScrollAxes, int type) {
 		final boolean started = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
 
 		return started;
@@ -33,8 +42,8 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 	@Override
 	public boolean onInterceptTouchEvent(CoordinatorLayout parent, ExtraCalendarView child, MotionEvent ev) {
-//		Log.d(TAG, "onInterceptTouchEvent: ");
-		return super.onInterceptTouchEvent(parent, child, ev);
+		//当正在进行切换模式的动画时，拦截用户其他操作。避免模式还未切换完成时用户切换日期而出现问题。
+		return mIsAnimationScroll;
 	}
 
 	@Override
@@ -44,7 +53,8 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 	}
 
 	@Override
-	public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target, int dx, int dy, int[] consumed) {
+	public void onNestedPreScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull ExtraCalendarView child, @NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
+		super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type);
 		FrameLayout calendarView = child.getCalendarLayout();
 		DayView clickView = child.getClickView();
 		if (clickView == null) {
@@ -59,14 +69,14 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			}
 		}
 		//对滑动的处理。对Calendar部分使用scrollY()进行滑动，对RecyclerView部分使用offsetTopAndBottom进行滑动
-		if (dy > 0 && (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH || mRunning)) {
+		if (dy > 0 && (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH || mIsRunning)) {
 			//上滑的处理事项
 			consumed[1] = dy;
-			if (!mRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
+			if (!mIsRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
 				//当变成周模式在切换成月模式时，会导致RecyclerView坐标异常，当上滑时重新layout一下可以恢复
 //				Log.d(TAG, "onNestedPreScroll: requestLayout");
 //				target.requestLayout();
-				mRunning = true;
+				mIsRunning = true;
 			}
 			//点击View上方距离顶部的距离
 			int clickViewTop = clickView.getTop();
@@ -85,10 +95,10 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
 				calendarView.scrollTo(0, 0);
 
-				mRunning = false;
+				mIsRunning = false;
 			}
 
-		} else if (dy < 0 && mRunning) {
+		} else if (dy < 0 && mIsRunning) {
 			consumed[1] = dy;
 			int surplus = child.getBottom() - child.getClickView().getTop();
 			if (surplus > target.getY()) {
@@ -99,27 +109,27 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 				calendarView.scrollBy(0, -offset);
 				ViewCompat.offsetTopAndBottom(target, offset);
 			} else {
-				mRunning = false;
-				mReadyToMonth = false;
+				mIsRunning = false;
+				mIsReadyToMonth = false;
 				child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
 			}
-		} else if (dy < 0 && !mRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
-			mRunning = true;
+		} else if (dy < 0 && !mIsRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK) {
+			mIsRunning = true;
 			consumed[1] = dy;
 			child.changeCalendarStyle();
 			calendarView.scrollTo(0, child.getClickView().getTop());
-			mReadyToMonth = true;
+			mIsReadyToMonth = true;
 		}
 	}
 
+
 	@Override
-	public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, ExtraCalendarView child, View target) {
-		super.onStopNestedScroll(coordinatorLayout, child, target);
-		if (!mRunning) {
+	public void onStopNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull ExtraCalendarView child, @NonNull View target, int type) {
+		super.onStopNestedScroll(coordinatorLayout, child, target, type);
+		if (!mIsRunning) {
 			return;
 		}
-		if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH && !mReadyToMonth) {
-			Log.d(TAG, "Month: " + (child.getBottom() - target.getY()));
+		if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH && !mIsReadyToMonth) {
 			if (child.getBottom() - target.getY() > 0 && child.getBottom() - target.getY() < 100) {
 				animationScrollToMonth(child, target);
 			} else if (child.getBottom() - target.getY() > 0){
@@ -127,9 +137,9 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			}
 
 
-		} else if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK && mReadyToMonth) {
-			int surplus = (int) ((child.getBottom() - child.getClickView().getTop()) - target.getY());
-			Log.d(TAG, "week: " + surplus);
+		} else if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK && mIsReadyToMonth) {
+			//  （总滑动距离） - （剩余滑动距离）
+			int surplus = (int) ((child.getCalendarLayout().getHeight() - child.getClickView().getHeight()) - (child.getBottom() - target.getY()));
 			if (Math.abs(surplus) < 100) {
 				animationScrollToWeek(child, target);
 			} else {
@@ -138,7 +148,9 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		}
 	}
 
+
 	private void animationScrollToWeek(ExtraCalendarView child, View target) {
+		mIsAnimationScroll = true;
 		int surplusTop = child.getClickView().getTop() - child.getCalendarLayout().getScrollY();
 		int surplusBottom = target.getTop() - (child.getCalendarLayout().getTop() + child.getClickView().getHeight());
 		int finishedTop = child.getCalendarLayout().getScrollY();
@@ -159,11 +171,11 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 						ViewCompat.offsetTopAndBottom(target, -offsetBottom);
 						ViewCompat.postOnAnimation(child, this);
 					} else {
-
 						child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
 						child.getCalendarLayout().scrollTo(0, 0);
-						mRunning = false;
-						mReadyToMonth = false;
+						mIsRunning = false;
+						mIsReadyToMonth = false;
+						mIsAnimationScroll = false;
 					}
 
 				}
@@ -172,6 +184,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 	}
 
 	private void animationScrollToMonth(ExtraCalendarView child, View target) {
+		mIsAnimationScroll = true;
 		int surplusBottom = (int) (child.getBottom() - target.getY());
 		final OverScroller scroller = new OverScroller(target.getContext());
 		scroller.startScroll(0, 0,
@@ -194,11 +207,12 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 						ViewCompat.offsetTopAndBottom(target, offset);
 						ViewCompat.postOnAnimation(child, this);
 					} else {
-						if (!mReadyToMonth) {
+						mIsAnimationScroll = false;
+						if (!mIsReadyToMonth) {
 							return;
 						}
-						mRunning = false;
-						mReadyToMonth = false;
+						mIsRunning = false;
+						mIsReadyToMonth = false;
 						child.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_MONTH);
 					}
 
@@ -209,7 +223,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 
 	@Override
 	public boolean onNestedPreFling(@NonNull CoordinatorLayout coordinatorLayout, @NonNull ExtraCalendarView child, @NonNull View target, float velocityX, float velocityY) {
-		return mRunning;
+		return mIsRunning;
 	}
 
 }
