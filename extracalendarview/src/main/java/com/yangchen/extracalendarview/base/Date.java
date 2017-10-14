@@ -3,6 +3,7 @@ package com.yangchen.extracalendarview.base;
 import android.support.annotation.NonNull;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 /**
@@ -149,6 +150,8 @@ public class Date {
 
 	@Override
 	public String toString() {
-		return year + "-" + month + "-" + day;
+		DecimalFormat decimalFormat = new DecimalFormat();
+		decimalFormat.applyPattern("00");
+		return year + "-" + decimalFormat.format(month) + "-" + decimalFormat.format(day);
 	}
 }

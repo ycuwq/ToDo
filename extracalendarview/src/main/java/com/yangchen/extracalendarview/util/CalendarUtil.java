@@ -194,7 +194,7 @@ public class CalendarUtil {
 		int endDayWeek = calendar.get(Calendar.WEEK_OF_YEAR);
 
 		//由于Calendar的算法，有可能一年的最后几天按照下一年的第一周算,一年最多52周。所以便是第53周
-		if (endDayWeek ==1 && month ==12) {
+		if (endDayWeek ==1 && month == 12) {
 			endDayWeek = 53;
 		}
 		//在同一年的计算。

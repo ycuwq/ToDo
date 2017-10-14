@@ -25,6 +25,7 @@ import com.yangchen.extracalendarview.util.Annotations;
 import com.yangchen.extracalendarview.util.CalendarUtil;
 import com.yangchen.extracalendarview.util.DensityUtil;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -75,7 +76,7 @@ public class ExtraCalendarView extends LinearLayout {
 	private FrameLayout mCalendarLayout;
 
 	private DayItemAttrs mDayItemAttrs = new DayItemAttrs();
-	private SimpleDateFormat monthDateFormat = new SimpleDateFormat("yyyy年MM月", Locale.SIMPLIFIED_CHINESE);
+	private DateFormat mMonthDateFormat = new SimpleDateFormat("yyyy年MM月", Locale.SIMPLIFIED_CHINESE);
 	private LinearLayout mTitleLayout;
 
 	private OnDayClickListener mOnDayClickListener;
@@ -345,13 +346,13 @@ public class ExtraCalendarView extends LinearLayout {
 		}
 	}
 
-	private void setCurrentDateToToday() {
+	public void setCurrentDateToToday() {
 		Calendar calendar = Calendar.getInstance();
 
 		//Calendar中月是从第0个月算起的
 		mCurrentDate = CalendarUtil.getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
 				calendar.get(Calendar.DAY_OF_MONTH), Date.TYPE_THIS_MONTH);
-		setCurrentDate(mCurrentDate.getYear(), mCurrentDate.getMonth(), mCurrentDate.getDay(), true);
+		setCurrentDate(mCurrentDate.getYear(), mCurrentDate.getMonth(), mCurrentDate.getDay(), false);
 	}
 
 	@Override
@@ -390,7 +391,7 @@ public class ExtraCalendarView extends LinearLayout {
 	}
 
 	private void updateTitleUI() {
-		mTitleTv.setText(mCurrentDate.getDate(monthDateFormat));
+		mTitleTv.setText(mCurrentDate.getDate(mMonthDateFormat));
 		mButtonPast.setEnabled(canGoBack());
 		mButtonFuture.setEnabled(canGoForward());
 	}
@@ -501,16 +502,20 @@ public class ExtraCalendarView extends LinearLayout {
 
 	public void setCurrentDate(int year, int month, int day, boolean smoothScroll) {
 		mPageSelectedNotClickedFlag = true;
-		int position;
-		if (mCalendarType == CALENDAR_TYPE_WEEK) {
-			position = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1, year, month, day);;
-		} else {
-			position =CalendarUtil.getMonthPosition(mStartYear, mStartMonth, year, month);
-		}
-		if (position < 0 || position >= mCalendarViewCount) {
+//		int position;
+//		if (mCalendarType == CALENDAR_TYPE_WEEK) {
+//			position = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1, year, month, day);
+//		} else {
+//			position = CalendarUtil.getMonthPosition(mStartYear, mStartMonth, year, month);
+//		}
+		int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1, year, month, day);
+		int monthPosition = CalendarUtil.getMonthPosition(mStartYear, mStartMonth, year, month);
+		if (weekPosition < 0 || weekPosition >= mCalendarViewCount) {
 			return;
 		}
-		mCalendarView.setCurrentItem(position, smoothScroll);
+		mWeekCalendarView.setCurrentItem(weekPosition, false);
+		mMonthCalendarView.setCurrentItem(monthPosition, false);
+//		mCalendarView.setCurrentItem(position, smoothScroll);
 		mCurrentDate = CalendarUtil.getDate(year, month, day, Date.TYPE_THIS_MONTH);
 		post(() -> {
 			mCalendarAdapter.setClickedView(mCurrentDate);
@@ -576,6 +581,10 @@ public class ExtraCalendarView extends LinearLayout {
 
 	public void setOnMonthChangeListener(OnMonthChangeListener onMonthChangeListener) {
 		mOnMonthChangeListener = onMonthChangeListener;
+	}
+
+	public void setTitleDateFormat(DateFormat monthDateFormat) {
+		this.mMonthDateFormat = monthDateFormat;
 	}
 
 	/**
