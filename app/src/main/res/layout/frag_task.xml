@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
@@ -12,6 +13,8 @@
     </data>
 
     <android.support.design.widget.CoordinatorLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".task.TaskActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -19,6 +22,7 @@
             android:id="@+id/extraCalendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:clickBackground="@drawable/click_bg"
             android:addStatesFromChildren="true"
             app:calendarType="month"/>
 
@@ -27,6 +31,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_behavior="com.yangchen.extracalendarview.behavior.InCalendarBottomBehavior"/>
+
+        <android.support.design.widget.FloatingActionButton
+            app:fabSize="mini"
+            android:backgroundTint="@color/colorPrimary"
+            app:rippleColor="@color/colorPrimary"
+            app:borderWidth="0dp"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_action_add"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_gravity="end|bottom"/>
     </android.support.design.widget.CoordinatorLayout>
 
 

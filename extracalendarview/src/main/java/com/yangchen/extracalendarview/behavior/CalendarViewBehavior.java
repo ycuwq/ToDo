@@ -129,6 +129,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		if (!mIsRunning) {
 			return;
 		}
+
 		if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH && !mIsReadyToMonth) {
 			if (child.getBottom() - target.getY() > 0 && child.getBottom() - target.getY() < 100) {
 				animationScrollToMonth(child, target);

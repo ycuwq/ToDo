@@ -28,6 +28,8 @@ public class DayView extends View {
 	private int mTopTextColor, mBottomTextColor;
 	float mTop;
 	float mBottom;
+	private boolean isClicked = false;
+
 	public DayView(Context context, Date date, DayItemAttrs dayItemAttrs, boolean changeTopViewColor) {
 		super(context);
 		mDate = date;
@@ -59,7 +61,6 @@ public class DayView extends View {
 		} else {
 			mTopTextColor = dayItemAttrs.getTextColorTop();
 		}
-
 		mBottomTextColor = dayItemAttrs.getTextColorBottom();
 
 	}
@@ -71,12 +72,13 @@ public class DayView extends View {
 		mTextPaint.setTextSize(mTopTextSize);
 		mTextPaint.setColor(mTopTextColor);
 
-		int baseLineY = (int) (canvas.getHeight() / 2 - mTop / 2 - mBottom / 2);
-		canvas.drawText(mTopText, canvas.getWidth() / 2, baseLineY + mTop, mTextPaint);
-		if (mBottomText != null && !mBottomText.isEmpty()) {
+//		int baseLineY = (int) (canvas.getHeight() / 2 - mTop / 2 - mBottom / 2);
+		int baseLineY = (int) (canvas.getHeight() / 2 - mTop - mBottom);
+		canvas.drawText(mTopText, canvas.getWidth() / 2, baseLineY, mTextPaint);
+		if (!isClicked && mBottomText != null && !mBottomText.isEmpty()) {
 			mTextPaint.setTextSize(mBottomTextSize);
 			mTextPaint.setColor(mBottomTextColor);
-			canvas.drawText(mBottomText, canvas.getWidth() / 2, baseLineY - mTop * 2 - mBottom * 2, mTextPaint);
+			canvas.drawText(mBottomText, canvas.getWidth() / 2, baseLineY - mTop * 2 + mBottom * 2, mTextPaint);
 
 		}
 	}
@@ -86,6 +88,7 @@ public class DayView extends View {
 	 * @param click     true 恢复， false 设置点击样式
 	 */
 	public void setClickedViewStyle(boolean click) {
+		isClicked = click;
 		if (!click) {
 			setBackgroundResource(0);
 			//将非当月的信息设置为Bottom的颜色，与当月日期区别.

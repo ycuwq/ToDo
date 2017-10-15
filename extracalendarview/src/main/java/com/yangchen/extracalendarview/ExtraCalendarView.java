@@ -187,6 +187,7 @@ public class ExtraCalendarView extends LinearLayout {
 		setOrientation(VERTICAL);
 		setClipToPadding(false);
 		setClipChildren(false);
+		mDayItemAttrs.setClickBg(getResources().getDrawable(R.drawable.blue_circle));
 		initAttrs(attrs);
 		setupChild();
 
@@ -234,9 +235,12 @@ public class ExtraCalendarView extends LinearLayout {
 			} else if (attr == R.styleable.ExtraCalendarView_rightArrowMask) {
 				Drawable mask = a.getDrawable(attr);
 				setRightArrowMask(mask);
+			} else if (attr == R.styleable.ExtraCalendarView_clickBackground) {
+				Drawable drawable = a.getDrawable(attr);
+				mDayItemAttrs.setClickBg(drawable);
 			}
 		}
-		mDayItemAttrs.setClickBg(getResources().getDrawable(R.drawable.blue_circle));
+
 	}
 
 	private void setupChild() {
@@ -573,7 +577,9 @@ public class ExtraCalendarView extends LinearLayout {
 		mRightArrowMask = icon;
 		mButtonFuture.setImageDrawable(icon);
 	}
-
+	public void setClickedViewBackground(Drawable drawable) {
+		mDayItemAttrs.setClickBg(drawable);
+	}
 
 	public void setOnDayClickListener(OnDayClickListener onDayClickListener) {
 		mOnDayClickListener = onDayClickListener;
