@@ -17,7 +17,7 @@ public class CalendarView extends ViewPager {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		int calendarHeight;
 		if (getAdapter() != null) {
-			CalendarItemView view = (CalendarItemView) getChildAt(0);
+			BaseCalendarItemView view = (BaseCalendarItemView) getChildAt(0);
 			if (view != null) {
 				calendarHeight = view.getMeasuredHeight();
 				setMeasuredDimension(widthMeasureSpec, MeasureSpec.makeMeasureSpec(calendarHeight, MeasureSpec.EXACTLY));

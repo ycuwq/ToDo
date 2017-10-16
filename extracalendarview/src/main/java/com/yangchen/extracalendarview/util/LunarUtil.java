@@ -302,10 +302,11 @@ public class LunarUtil {
     }
 
     private static int daysInLunarMonth(int year, int month) {
-        if ((LUNAR_INFO[year - MIN_YEAR] & (0x100000 >> month)) == 0)
-            return 29;
-        else
-            return 30;
+        if ((LUNAR_INFO[year - MIN_YEAR] & (0x100000 >> month)) == 0) {
+	        return 29;
+        } else {
+	        return 30;
+        }
     }
 
     private static GregorianCalendar utcCal = null;

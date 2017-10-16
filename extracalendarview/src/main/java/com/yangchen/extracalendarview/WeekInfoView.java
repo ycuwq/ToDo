@@ -111,6 +111,7 @@ public class WeekInfoView extends View {
 		return mBackgroundColor;
 	}
 
+	@Override
 	public void setBackgroundColor(int backgroundColor) {
 		this.mBackgroundColor = backgroundColor;
 		super.setBackgroundColor(backgroundColor);

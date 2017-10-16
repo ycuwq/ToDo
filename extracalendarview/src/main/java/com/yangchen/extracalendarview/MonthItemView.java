@@ -8,7 +8,7 @@ import com.yangchen.extracalendarview.listener.OnDayViewClickListener;
 /**
  * Created by 杨晨 on 2017/8/2.
  */
-public class MonthItemView extends CalendarItemView{
+public class MonthItemView extends BaseCalendarItemView {
 	public MonthItemView(OnDayViewClickListener onDayViewClickListener, Context context) {
 		super(onDayViewClickListener, context);
 		maxRow = 6;

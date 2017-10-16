@@ -13,14 +13,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 日历用的Adapter{@link CalendarItemView}
+ * 日历用的Adapter{@link BaseCalendarItemView}
  * Created by yangchen on 2017/6/27.
  */
-abstract class  CalendarAdapter extends PagerAdapter {
+abstract class BaseCalendarAdapter extends PagerAdapter {
 	private final String TAG = getClass().getSimpleName();
 
-	private LinkedList<CalendarItemView> mCache = new LinkedList<>();
-	private SparseArray<CalendarItemView> mViews = new SparseArray<>();
+	private LinkedList<BaseCalendarItemView> mCache = new LinkedList<>();
+	private SparseArray<BaseCalendarItemView> mViews = new SparseArray<>();
 
 	private int mCount;     //一共显示多少个月
 
@@ -29,7 +29,7 @@ abstract class  CalendarAdapter extends PagerAdapter {
 	private DayItemAttrs mDayItemAttrs;
 	private OnDayViewClickListener mDayViewClickListener;
 
-	CalendarAdapter(OnDayViewClickListener onDayViewClickListener, int count, int startYear, int startMonth, DayItemAttrs dayItemAttrs) {
+	BaseCalendarAdapter(OnDayViewClickListener onDayViewClickListener, int count, int startYear, int startMonth, DayItemAttrs dayItemAttrs) {
 		mDayViewClickListener = onDayViewClickListener;
 		mCount = count;
 		mStartYear = startYear;
@@ -39,7 +39,7 @@ abstract class  CalendarAdapter extends PagerAdapter {
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
-		CalendarItemView calendarItemView;
+		BaseCalendarItemView calendarItemView;
 		if (!mCache.isEmpty()) {
 			calendarItemView = mCache.removeFirst();
 		} else {
@@ -53,21 +53,21 @@ abstract class  CalendarAdapter extends PagerAdapter {
 		return calendarItemView;
 	}
 
-	public abstract CalendarItemView instantiateCalendarView(OnDayViewClickListener onDayViewClickListener, Context context);
+	public abstract BaseCalendarItemView instantiateCalendarView(OnDayViewClickListener onDayViewClickListener, Context context);
 
 	public abstract List<Date> getCalendarDates(int startYear, int startMonth, int position);
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
 		container.removeView((View) object);
-		mCache.addLast((CalendarItemView) object);
+		mCache.addLast((BaseCalendarItemView) object);
 		mViews.remove(position);
 
 	}
 
 
 	//TODO 处理一下作用域
-	public CalendarItemView getItem(int position) {
+	public BaseCalendarItemView getItem(int position) {
 		return mViews.get(position);
 	}
 
@@ -89,7 +89,7 @@ abstract class  CalendarAdapter extends PagerAdapter {
 	 */
 	public void setClickedView(Date clickDate) {
 		//设置的pager的缓存数为1个，当前页在中间，
-		CalendarItemView calendarItemView = mViews.get(mViews.keyAt(1));
+		BaseCalendarItemView calendarItemView = mViews.get(mViews.keyAt(1));
 		if (calendarItemView == null) {
 			return;
 		}

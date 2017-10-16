@@ -16,7 +16,7 @@ import java.util.List;
  * ItemView的基类，
  * Created by yangchen on 2017/6/27.
  */
-public abstract class CalendarItemView extends ViewGroup {
+public abstract class BaseCalendarItemView extends ViewGroup {
 
 	protected int maxRow = 6;       //最大显示的行数,maxRow可变的，如果为1为周模式，可以用来进行模式判断。
 
@@ -28,7 +28,7 @@ public abstract class CalendarItemView extends ViewGroup {
 	private float mPosX, mPosY;         //点击事件需要用到的缓存
 	protected OnDayViewClickListener mOnDayViewClickListener;
 	private DayView mClickedView;
-	public CalendarItemView(OnDayViewClickListener onDayViewClickListener, Context context) {
+	public BaseCalendarItemView(OnDayViewClickListener onDayViewClickListener, Context context) {
 		super(context, null);
 		mOnDayViewClickListener = onDayViewClickListener;
 		mLastMonthDay = 0;

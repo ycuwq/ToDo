@@ -63,6 +63,8 @@ public class SolarUtil {
             case 1225:
                 holiday = "圣诞节";
                 break;
+            default:
+            	break;
         }
 
         if (holiday.length() >0) {

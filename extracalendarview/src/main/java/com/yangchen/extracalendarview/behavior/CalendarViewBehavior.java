@@ -19,7 +19,14 @@ import com.yangchen.extracalendarview.ExtraCalendarView;
 public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalendarView> {
 	private final String TAG = getClass().getSimpleName();
 
-	private boolean mIsRunning = false;       //进行变换中
+	/**
+	 * 进行变化的滑动距离
+	 */
+	private final int CHANGE_SPIL_BOUNDARY = 100;
+	/**
+	 * 	进行变换中
+	 */
+	private boolean mIsRunning = false;
 
 	/**
 	 * 是否正在变换成月
@@ -75,14 +82,11 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			if (!mIsRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
 				//当变成周模式在切换成月模式时，会导致RecyclerView坐标异常，当上滑时重新layout一下可以恢复
 //				Log.d(TAG, "onNestedPreScroll: requestLayout");
-//				target.requestLayout();
-				mIsRunning = true;
 			}
 			//点击View上方距离顶部的距离
 			int clickViewTop = clickView.getTop();
 			//clickView下方应该收缩的距离
 			int surplusBottom = target.getTop() - (calendarView.getTop() + clickView.getHeight());
-//			int surplusBottom = (calendarView.getHeight() - clickView.getHeight()) + target.getTop();
 			if (clickViewTop > calendarView.getScrollY()) {
 				int offset = Math.min(clickViewTop - calendarView.getScrollY(), dy);
 				calendarView.scrollBy(0, offset);
@@ -131,7 +135,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		}
 
 		if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH && !mIsReadyToMonth) {
-			if (child.getBottom() - target.getY() > 0 && child.getBottom() - target.getY() < 100) {
+			if (child.getBottom() - target.getY() > 0 && child.getBottom() - target.getY() < CHANGE_SPIL_BOUNDARY) {
 				animationScrollToMonth(child, target);
 			} else if (child.getBottom() - target.getY() > 0){
 				animationScrollToWeek(child, target);
@@ -141,7 +145,7 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 		} else if (child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_WEEK && mIsReadyToMonth) {
 			//  （总滑动距离） - （剩余滑动距离）
 			int surplus = (int) ((child.getCalendarLayout().getHeight() - child.getClickView().getHeight()) - (child.getBottom() - target.getY()));
-			if (Math.abs(surplus) < 100) {
+			if (Math.abs(surplus) < CHANGE_SPIL_BOUNDARY) {
 				animationScrollToWeek(child, target);
 			} else {
 				animationScrollToMonth(child, target);

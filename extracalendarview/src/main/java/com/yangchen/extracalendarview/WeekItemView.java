@@ -8,7 +8,7 @@ import com.yangchen.extracalendarview.listener.OnDayViewClickListener;
 /**
  * Created by 杨晨 on 2017/8/2.
  */
-public class WeekItemView extends CalendarItemView {
+public class WeekItemView extends BaseCalendarItemView {
 	public WeekItemView(OnDayViewClickListener onDayViewClickListener, Context context) {
 		super(onDayViewClickListener, context);
 		maxRow = 1;
