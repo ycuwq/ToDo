@@ -53,4 +53,9 @@ dependencies {
     //数据库
     implementation  'org.greenrobot:greendao:3.2.2'
     implementation  'net.zetetic:android-database-sqlcipher:3.5.7'
+    implementation "android.arch.lifecycle:extensions:1.0.0-beta2"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-beta2"
+    implementation "android.arch.lifecycle:common-java8:1.0.0-beta2"
+    testImplementation "android.arch.core:core-testing:1.0.0-beta2"
+    implementation "android.arch.lifecycle:reactivestreams:1.0.0-beta2"
 }
