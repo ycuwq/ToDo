@@ -32,6 +32,7 @@ public class Date {
 		this.year = year;
 		this.month = month;
 		this.day = day;
+		type = TYPE_THIS_MONTH;
 	}
 
 	public int getYear() {

@@ -509,6 +509,9 @@ public class ExtraCalendarView extends LinearLayout {
 	}
 
 	public void setCurrentDate(Date date, boolean smoothScroll) {
+		if (date.equals(mCurrentDate)) {
+			return;
+		}
 		mPageSelectedNotClickedFlag = true;
 
 		int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1,
@@ -530,22 +533,8 @@ public class ExtraCalendarView extends LinearLayout {
 	}
 
 	public void setCurrentDate(int year, int month, int day, boolean smoothScroll) {
-		mPageSelectedNotClickedFlag = true;
-
-		int weekPosition = CalendarUtil.getWeekPosition(mStartYear, mStartMonth, 1, year, month, day);
-		int monthPosition = CalendarUtil.getMonthPosition(mStartYear, mStartMonth, year, month);
-		if (weekPosition < 0 || weekPosition >= mCalendarViewCount) {
-			return;
-		}
-		mWeekCalendarView.setCurrentItem(weekPosition, false);
-		mMonthCalendarView.setCurrentItem(monthPosition, false);
-//		mCalendarView.setCurrentItem(position, smoothScroll);
-		Date date = CalendarUtil.getDate(year, month, day, Date.TYPE_THIS_MONTH);
-		post(() -> {
-			mCalendarAdapter.setClickedView(date);
-			updateTitleUI();
-		});
-		invalidate();
+		Date date = new Date(year, month, day);
+		setCurrentDate(date, smoothScroll);
 	}
 
 	/**
