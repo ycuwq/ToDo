@@ -2,7 +2,7 @@ package com.ycuwq.todo.task;
 
 import android.databinding.ObservableField;
 
-import com.ycuwq.todo.app.BaseViewModel;
+import com.ycuwq.todo.base.BaseViewModel;
 import com.ycuwq.todo.data.source.TaskRepository;
 
 import javax.inject.Inject;

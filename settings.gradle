@@ -1,1 +1,1 @@
-include ':app', ':extracalendarview'
+include ':app', ':extracalendarview', ':common'

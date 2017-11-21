@@ -5,9 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import com.ycuwq.common.util.ActivityUtils;
 import com.ycuwq.todo.R;
-import com.ycuwq.todo.app.BaseActivity;
-import com.ycuwq.todo.common.util.ActivityUtils;
+import com.ycuwq.todo.base.BaseActivity;
 
 import javax.inject.Inject;
 

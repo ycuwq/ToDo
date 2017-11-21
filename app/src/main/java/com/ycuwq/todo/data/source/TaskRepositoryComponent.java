@@ -1,6 +1,6 @@
 package com.ycuwq.todo.data.source;
 
-import com.ycuwq.todo.app.ApplicationModule;
+import com.ycuwq.todo.ApplicationModule;
 
 import javax.inject.Singleton;
 

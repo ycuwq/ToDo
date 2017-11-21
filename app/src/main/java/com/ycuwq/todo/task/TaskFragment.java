@@ -16,10 +16,10 @@ import com.yangchen.extracalendarview.ExtraCalendarView;
 import com.yangchen.extracalendarview.base.Date;
 import com.yangchen.extracalendarview.listener.OnDayClickListener;
 import com.ycuwq.todo.R;
-import com.ycuwq.todo.app.BaseFragment;
-import com.ycuwq.todo.common.recycler.ExRecyclerAdapter;
-import com.ycuwq.todo.common.recycler.ExRecyclerViewHolder;
-import com.ycuwq.todo.common.util.SnakeBarUtil;
+import com.ycuwq.todo.base.BaseFragment;
+import com.ycuwq.common.recycler.ExRecyclerAdapter;
+import com.ycuwq.common.recycler.ExRecyclerViewHolder;
+import com.ycuwq.common.util.SnakeBarUtil;
 import com.ycuwq.todo.databinding.FragTaskBinding;
 
 import java.util.ArrayList;

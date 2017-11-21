@@ -5,7 +5,10 @@ ext {
     compileSdkVersion = 26
     buildToolsVersion = '26.0.2'
 
-    // App dependencies
     supportLibraryVersion = '26.1.0'
-
+    archLifecycleVersion = '1.0.0'
+    roomVersion = "1.0.0"
+    daggerVersion = '2.12'
+    rxjava2Version = '2.1.6'
+    rxAndroidVersion = '2.0.1'
 }
