@@ -1,6 +1,6 @@
-package com.ycuwq.todo.data.source;
+package com.ycuwq.todo.di;
 
-import com.ycuwq.todo.ApplicationModule;
+import com.ycuwq.todo.data.source.TaskRepository;
 
 import javax.inject.Singleton;
 

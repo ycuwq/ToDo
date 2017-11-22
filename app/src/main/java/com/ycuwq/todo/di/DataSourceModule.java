@@ -1,4 +1,4 @@
-package com.ycuwq.todo.data.source;
+package com.ycuwq.todo.di;
 
 import com.ycuwq.todo.data.source.local.TaskLocalDataSource;
 
@@ -12,10 +12,10 @@ import dagger.Module;
  * Created by 杨晨 on 2017/5/12.
  */
 @Module
-abstract class DataSourceModule {
+public abstract class DataSourceModule {
 
 	@Binds
 	@Singleton
 	@Local
-	abstract TaskDataSource provideLocalDataSource(TaskLocalDataSource localDataSource);
+	public abstract TaskDataSource provideLocalDataSource(TaskLocalDataSource localDataSource);
 }

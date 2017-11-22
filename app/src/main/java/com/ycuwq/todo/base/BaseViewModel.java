@@ -6,8 +6,9 @@ import android.databinding.ObservableField;
 /**
  * Created by 杨晨 on 2017/10/18.
  */
-public class BaseViewModel extends ViewModel {
+public abstract class BaseViewModel extends ViewModel {
 
 	public ObservableField<String> snakeBarText = new ObservableField<>();
+
 
 }

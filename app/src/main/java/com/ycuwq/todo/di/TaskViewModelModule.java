@@ -1,4 +1,4 @@
-package com.ycuwq.todo.task;
+package com.ycuwq.todo.di;
 
 import dagger.Binds;
 import dagger.Module;

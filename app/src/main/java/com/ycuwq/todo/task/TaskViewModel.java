@@ -1,6 +1,6 @@
 package com.ycuwq.todo.task;
 
-import android.databinding.ObservableField;
+import android.support.annotation.NonNull;
 
 import com.ycuwq.todo.base.BaseViewModel;
 import com.ycuwq.todo.data.source.TaskRepository;
@@ -13,15 +13,15 @@ import javax.inject.Inject;
  */
 public class TaskViewModel extends BaseViewModel {
 
-	private TaskRepository mTaskRepository;
-	public ObservableField<String> snakeBarText = new ObservableField<>();
+	private final TaskRepository mTaskRepository;
 
 	@Inject
-	public TaskViewModel(TaskRepository taskRepository) {
+	public TaskViewModel(@NonNull TaskRepository taskRepository) {
 		mTaskRepository = taskRepository;
+
 	}
 
-	public String getSnakeBarText() {
+	String getSnakeBarText() {
 		return snakeBarText.get();
 	}
 }

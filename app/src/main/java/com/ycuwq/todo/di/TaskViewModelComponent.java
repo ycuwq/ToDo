@@ -1,7 +1,6 @@
-package com.ycuwq.todo.task;
+package com.ycuwq.todo.di;
 
-import com.ycuwq.todo.di.FragmentScoped;
-import com.ycuwq.todo.data.source.TaskRepositoryComponent;
+import com.ycuwq.todo.task.TaskActivity;
 
 import dagger.Component;
 

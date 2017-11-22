@@ -2,8 +2,9 @@ package com.ycuwq.todo;
 
 import android.app.Application;
 
-import com.ycuwq.todo.data.source.DaggerTaskRepositoryComponent;
-import com.ycuwq.todo.data.source.TaskRepositoryComponent;
+import com.ycuwq.todo.di.ApplicationModule;
+import com.ycuwq.todo.di.DaggerTaskRepositoryComponent;
+import com.ycuwq.todo.di.TaskRepositoryComponent;
 
 /**
  * 自定义Application
