@@ -3,7 +3,7 @@ package com.ycuwq.todo.data.source;
 import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.di.DataSourceModule;
 import com.ycuwq.todo.di.Local;
-import com.ycuwq.todo.di.TaskDataSource;
+import com.ycuwq.todo.data.source.local.TasksDataSource;
 
 import java.util.List;
 
@@ -12,16 +12,16 @@ import javax.inject.Singleton;
 
 /**
  * Task的仓库，利用Dagger2 实现单例和依赖注入
- * 利用{@link DataSourceModule}和
+ * 利用{@link DataSourceModule}
  * Created by 杨晨 on 2017/5/12.
  */
 @Singleton
-public class TaskRepository implements TaskDataSource{
+public class TasksRepository implements TasksDataSource {
 
-	private TaskDataSource mLocalDataSource;
+	private TasksDataSource mLocalDataSource;
 
 	@Inject
-	public TaskRepository(@Local TaskDataSource localDataSource) {
+	public TasksRepository(@Local TasksDataSource localDataSource) {
 		mLocalDataSource = localDataSource;
 	}
 

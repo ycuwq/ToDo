@@ -24,25 +24,32 @@ import com.ycuwq.todo.databinding.FragTaskBinding;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 /**
  * Created by 杨晨 on 2017/5/10.
  */
-public class TaskFragment extends BaseFragment{
+public class TasksFragment extends BaseFragment{
 
 	private final String TAG = getClass().getSimpleName();
 
 	private FragTaskBinding mBinding;
 
-	private TaskViewModel mViewModel;
+	@Inject
+	TasksViewModel mViewModel;
+
 	private ExtraCalendarView mExtraCalendarView;
 	private Observable.OnPropertyChangedCallback mSnakeBarCallback;
-	public TaskFragment() {}
 
-	public static TaskFragment newInstance(TaskViewModel taskViewModel) {
-		TaskFragment taskFragment = new TaskFragment();
-		taskFragment.setViewModel(taskViewModel);
-		return taskFragment;
-	}
+	@Inject
+	public TasksFragment() {}
+
+//	public static TasksFragment newInstance(TasksViewModel tasksViewModel) {
+//		TasksFragment tasksFragment = new TasksFragment();
+//		tasksFragment.setViewModel(tasksViewModel);
+//		return tasksFragment;
+//	}
+
 
 	@Nullable
 	@Override
@@ -90,9 +97,6 @@ public class TaskFragment extends BaseFragment{
 //		mExtraCalendarView.setCurrentMonth(2017, 7);
 	}
 
-	public void setViewModel(TaskViewModel mViewModel) {
-		this.mViewModel = mViewModel;
-	}
 
 	/**
 	 * 设置SnakeBar的监听，当mViewModel的snakeBarText发生改变时SnakeBar显示
@@ -113,6 +117,8 @@ public class TaskFragment extends BaseFragment{
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		mViewModel.snakeBarText.removeOnPropertyChangedCallback(mSnakeBarCallback);
+		if (mViewModel != null) {
+			mViewModel.snakeBarText.removeOnPropertyChangedCallback(mSnakeBarCallback);
+		}
 	}
 }

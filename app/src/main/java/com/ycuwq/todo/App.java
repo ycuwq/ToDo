@@ -1,29 +1,30 @@
 package com.ycuwq.todo;
 
-import android.app.Application;
+import com.ycuwq.todo.di.DaggerAppComponent;
 
-import com.ycuwq.todo.di.ApplicationModule;
-import com.ycuwq.todo.di.DaggerTaskRepositoryComponent;
-import com.ycuwq.todo.di.TaskRepositoryComponent;
+import dagger.android.AndroidInjector;
+import dagger.android.DaggerApplication;
+
 
 /**
  * 自定义Application
  * Created by 杨晨 on 2017/5/7.
  */
 
-public class App extends Application{
+public class App extends DaggerApplication {
 
-	private TaskRepositoryComponent mRepositoryComponent;
+
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		mRepositoryComponent = DaggerTaskRepositoryComponent.builder()
-				.applicationModule(new ApplicationModule(this))
-				.build();
+
 	}
 
-	public TaskRepositoryComponent getRepositoryComponent() {
-		return mRepositoryComponent;
+	@Override
+	protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+		return DaggerAppComponent.builder().application(this).build();
 	}
+
+
 }

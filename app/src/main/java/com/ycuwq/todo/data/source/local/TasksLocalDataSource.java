@@ -1,9 +1,6 @@
 package com.ycuwq.todo.data.source.local;
 
-import android.content.Context;
-
 import com.ycuwq.todo.data.bean.Task;
-import com.ycuwq.todo.di.TaskDataSource;
 
 import java.util.List;
 
@@ -16,12 +13,12 @@ import javax.inject.Singleton;
  * Created by 杨晨 on 2017/5/9.
  */
 @Singleton
-public class TaskLocalDataSource implements TaskDataSource{
+public class TasksLocalDataSource implements TasksDataSource {
 
 
 	@Inject
-	public TaskLocalDataSource(Context context) {
-
+	public TasksLocalDataSource() {
+		// TODO: 2017/11/29 是否需要使用Context
 	}
 
 	@Override

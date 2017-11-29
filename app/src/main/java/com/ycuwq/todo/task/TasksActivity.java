@@ -8,29 +8,34 @@ import android.view.Menu;
 import com.ycuwq.common.util.ActivityUtils;
 import com.ycuwq.todo.R;
 import com.ycuwq.todo.base.BaseActivity;
-import com.ycuwq.todo.di.DaggerTaskViewModelComponent;
 
 import javax.inject.Inject;
+
+import dagger.Lazy;
+import dagger.android.AndroidInjection;
 
 /**
  *
  * Created by 杨晨 on 2017/5/8.
  */
-public class TaskActivity extends BaseActivity {
+public class TasksActivity extends BaseActivity {
 
 	private final String TAG = getClass().getSimpleName();
+//	@Inject
+//	TasksViewModel mTasksViewModel;
 	@Inject
-	TaskViewModel mTaskViewModel;
+	Lazy<TasksFragment> taskFragmentProvider;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		AndroidInjection.inject(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_task);
 		initToolbar();
 
-		DaggerTaskViewModelComponent.builder().taskRepositoryComponent(getApp().getRepositoryComponent())
-				.build().inject(this);
-		TaskFragment taskFragment = findTaskFragment();
+//		DaggerTaskViewModelComponent.builder().taskRepositoryComponent(getApp().getRepositoryComponent())
+//				.build().inject(this);
+		findTaskFragment();
 	}
 
 	private void initToolbar() {
@@ -44,16 +49,14 @@ public class TaskActivity extends BaseActivity {
 		return true;
 	}
 
-	private TaskFragment findTaskFragment() {
-		TaskFragment taskFragment = (TaskFragment) getSupportFragmentManager().
+	private TasksFragment findTaskFragment() {
+		TasksFragment tasksFragment = (TasksFragment) getSupportFragmentManager().
 				findFragmentById(R.id.frame_task_content);
-		if (taskFragment == null) {
-			taskFragment = TaskFragment.newInstance(mTaskViewModel);
+		if (tasksFragment == null) {
+			tasksFragment = taskFragmentProvider.get();
 			ActivityUtils.addFragmentToActivity(
-					getSupportFragmentManager(), taskFragment, R.id.frame_task_content);
-		} else {
-			taskFragment.setViewModel(mTaskViewModel);
+					getSupportFragmentManager(), tasksFragment, R.id.frame_task_content);
 		}
-		return taskFragment;
+		return tasksFragment;
 	}
 }

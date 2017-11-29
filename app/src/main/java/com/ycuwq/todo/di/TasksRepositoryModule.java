@@ -9,14 +9,13 @@ import dagger.Binds;
 import dagger.Module;
 
 /**
- * Dagger2 为DataSource提供依赖注入的Module
- * Created by 杨晨 on 2017/5/12.
+ * Created by 杨晨 on 2017/11/29.
  */
 @Module
-public abstract class DataSourceModule {
+public abstract class TasksRepositoryModule {
 
-	@Binds
 	@Singleton
+	@Binds
 	@Local
-	public abstract TasksDataSource provideLocalDataSource(TasksLocalDataSource localDataSource);
+	abstract TasksDataSource provideTasksLocalDataSource(TasksLocalDataSource dataSource);
 }
