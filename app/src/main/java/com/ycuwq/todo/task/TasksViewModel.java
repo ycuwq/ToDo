@@ -12,9 +12,9 @@ import javax.inject.Inject;
  * Created by 杨晨 on 2017/5/9.
  */
 public class TasksViewModel extends BaseViewModel {
-
+	private final String TAG = getClass().getSimpleName();
 	private final TasksRepository mTasksRepository;
-	//TODO 作用域
+
 	@Inject
 	public TasksViewModel(@NonNull TasksRepository tasksRepository) {
 		mTasksRepository = tasksRepository;

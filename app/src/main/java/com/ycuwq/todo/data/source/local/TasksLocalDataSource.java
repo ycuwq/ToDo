@@ -4,19 +4,14 @@ import com.ycuwq.todo.data.bean.Task;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 /**
  * 本地数据库
  * 利用Dagger2 实现单例模式
  * Created by 杨晨 on 2017/5/9.
  */
-@Singleton
 public class TasksLocalDataSource implements TasksDataSource {
 
 
-	@Inject
 	public TasksLocalDataSource() {
 		// TODO: 2017/11/29 是否需要使用Context
 	}

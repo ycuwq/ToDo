@@ -1,6 +1,8 @@
 package com.ycuwq.todo;
 
-import com.ycuwq.todo.di.DaggerAppComponent;
+
+import com.ycuwq.todo.di.AppInjector;
+import com.ycuwq.todo.di.component.DaggerAppComponent;
 
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
@@ -13,12 +15,10 @@ import dagger.android.DaggerApplication;
 
 public class App extends DaggerApplication {
 
-
-
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
+		AppInjector.init(this);
 	}
 
 	@Override

@@ -1,9 +1,12 @@
-package com.ycuwq.todo.di;
+package com.ycuwq.todo.di.component;
 
 import android.app.Application;
 
 import com.ycuwq.todo.App;
-import com.ycuwq.todo.data.source.TasksRepository;
+import com.ycuwq.todo.di.module.ActivityBindingModule;
+import com.ycuwq.todo.di.module.AppModule;
+import com.ycuwq.todo.di.module.TasksRepositoryModule;
+import com.ycuwq.todo.di.module.ViewModelFactoryModule;
 
 import javax.inject.Singleton;
 
@@ -13,16 +16,16 @@ import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 
 /**
+ * App注入器
  * Created by 杨晨 on 2017/11/29.
  */
 @Singleton
 @Component(modules = {AppModule.class,
 		TasksRepositoryModule.class,
 		ActivityBindingModule.class,
+		ViewModelFactoryModule.class,
 		AndroidSupportInjectionModule.class})
 public interface AppComponent extends AndroidInjector<App> {
-
-	TasksRepository getTasksRepository();
 
 	@Component.Builder
 	interface Builder {
@@ -30,5 +33,4 @@ public interface AppComponent extends AndroidInjector<App> {
 		Builder application(Application application);
 		AppComponent build();
 	}
-	void inject(App app);
 }

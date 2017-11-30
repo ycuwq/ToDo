@@ -1,5 +1,7 @@
 package com.ycuwq.todo.task;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,6 +23,7 @@ import com.ycuwq.common.recycler.ExRecyclerAdapter;
 import com.ycuwq.common.recycler.ExRecyclerViewHolder;
 import com.ycuwq.common.util.SnakeBarUtil;
 import com.ycuwq.todo.databinding.FragTaskBinding;
+import com.ycuwq.todo.di.Injectable;
 
 import java.util.ArrayList;
 
@@ -29,14 +32,16 @@ import javax.inject.Inject;
 /**
  * Created by 杨晨 on 2017/5/10.
  */
-public class TasksFragment extends BaseFragment{
+public class TasksFragment extends BaseFragment implements Injectable {
 
 	private final String TAG = getClass().getSimpleName();
 
 	private FragTaskBinding mBinding;
 
+	private	TasksViewModel mViewModel;
+
 	@Inject
-	TasksViewModel mViewModel;
+	ViewModelProvider.Factory mViewModelFactory;
 
 	private ExtraCalendarView mExtraCalendarView;
 	private Observable.OnPropertyChangedCallback mSnakeBarCallback;
@@ -44,12 +49,11 @@ public class TasksFragment extends BaseFragment{
 	@Inject
 	public TasksFragment() {}
 
-//	public static TasksFragment newInstance(TasksViewModel tasksViewModel) {
-//		TasksFragment tasksFragment = new TasksFragment();
-//		tasksFragment.setViewModel(tasksViewModel);
-//		return tasksFragment;
-//	}
-
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(TasksViewModel.class);
+	}
 
 	@Nullable
 	@Override
