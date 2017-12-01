@@ -4,7 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.ycuwq.todo.AppViewModelFactory;
-import com.ycuwq.todo.task.TasksViewModel;
+import com.ycuwq.todo.tasks.TasksViewModel;
 
 import dagger.Binds;
 import dagger.Module;

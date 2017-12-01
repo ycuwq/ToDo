@@ -1,4 +1,4 @@
-package com.ycuwq.todo.task;
+package com.ycuwq.todo.tasks;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

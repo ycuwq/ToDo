@@ -1,4 +1,4 @@
-package com.ycuwq.todo.task;
+package com.ycuwq.todo.tasks;
 
 import android.support.annotation.NonNull;
 

@@ -1,4 +1,4 @@
-package com.ycuwq.todo.task;
+package com.ycuwq.todo.tasks;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -17,12 +17,13 @@ import android.widget.TextView;
 import com.yangchen.extracalendarview.ExtraCalendarView;
 import com.yangchen.extracalendarview.base.Date;
 import com.yangchen.extracalendarview.listener.OnDayClickListener;
-import com.ycuwq.todo.R;
-import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.common.recycler.ExRecyclerAdapter;
 import com.ycuwq.common.recycler.ExRecyclerViewHolder;
 import com.ycuwq.common.util.SnakeBarUtil;
-import com.ycuwq.todo.databinding.FragTaskBinding;
+import com.ycuwq.todo.R;
+import com.ycuwq.todo.addedittask.AddEditTaskActivity;
+import com.ycuwq.todo.base.BaseFragment;
+import com.ycuwq.todo.databinding.FragTasksBinding;
 import com.ycuwq.todo.di.Injectable;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class TasksFragment extends BaseFragment implements Injectable {
 
 	private final String TAG = getClass().getSimpleName();
 
-	private FragTaskBinding mBinding;
+	private FragTasksBinding mBinding;
 
 	private	TasksViewModel mViewModel;
 
@@ -59,7 +60,7 @@ public class TasksFragment extends BaseFragment implements Injectable {
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 	                         @Nullable Bundle savedInstanceState) {
-		mBinding = FragTaskBinding.inflate(inflater, container, false);
+		mBinding = FragTasksBinding.inflate(inflater, container, false);
 		mExtraCalendarView = mBinding.extraCalendarView;
 		mExtraCalendarView.setOnDayClickListener(new OnDayClickListener() {
 			@Override
@@ -68,12 +69,14 @@ public class TasksFragment extends BaseFragment implements Injectable {
 			}
 		});
 //		mExtraCalendarView.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
+
 		setupSnakeBar();
 		initView();
 		return mBinding.getRoot();
 	}
 
 	private void initView() {
+		mBinding.fabAddTask.setOnClickListener(v -> jumpAddTaskActivity());
 		RecyclerView recyclerView = mBinding.recyclerView;
 		ExRecyclerAdapter<String> adapter = new ExRecyclerAdapter<String>(getContext(), R.layout.item_choose) {
 			@Override
@@ -81,7 +84,7 @@ public class TasksFragment extends BaseFragment implements Injectable {
 				TextView textView = holder.getView(R.id.text);
 				textView.setText(s);
 				textView.setOnClickListener(v -> {
-					mExtraCalendarView.setCurrentDate(2017, 10, 1, true);
+					mExtraCalendarView.setCurrentDate(2017, 10, 1, false);
 				});
 			}
 		};
@@ -98,9 +101,12 @@ public class TasksFragment extends BaseFragment implements Injectable {
 	@Override
 	public void onResume() {
 		super.onResume();
-//		mExtraCalendarView.setCurrentMonth(2017, 7);
 	}
 
+
+	public void jumpAddTaskActivity() {
+		startActivity(AddEditTaskActivity.getIntent(getContext(), null));
+	}
 
 	/**
 	 * 设置SnakeBar的监听，当mViewModel的snakeBarText发生改变时SnakeBar显示
