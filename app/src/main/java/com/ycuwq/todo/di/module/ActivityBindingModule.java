@@ -14,9 +14,9 @@ import dagger.android.ContributesAndroidInjector;
  */
 @Module
 public abstract class ActivityBindingModule {
+	@ContributesAndroidInjector(modules = {AddEditTaskModule.class})
+	abstract AddEditTaskActivity addEditTaskActivityInjector();
+
 	@ContributesAndroidInjector(modules = {TasksModule.class})
 	abstract TasksActivity taskActivityInjector();
-
-	@ContributesAndroidInjector(modules = AddEditTaskModule.class)
-	abstract AddEditTaskActivity addEditTaskActivityInjector();
 }

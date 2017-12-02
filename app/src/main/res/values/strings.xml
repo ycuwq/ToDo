@@ -73,6 +73,8 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="action_settings">Settings</string>
-
+    <string name="schedule">日程</string>
+    <string name="birthday">生日</string>
+    <string name="commemorative_day">纪念日</string>
 
 </resources>

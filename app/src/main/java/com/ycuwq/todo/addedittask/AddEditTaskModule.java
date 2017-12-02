@@ -8,7 +8,6 @@ import dagger.android.ContributesAndroidInjector;
  */
 @Module
 public abstract class AddEditTaskModule {
-
 	@ContributesAndroidInjector
 	abstract AddEditTaskFragment addEditTaskFragment();
 }
