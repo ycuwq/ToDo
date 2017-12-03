@@ -13,6 +13,7 @@ import com.ycuwq.todo.di.Injectable;
 import javax.inject.Inject;
 
 /**
+ * 在{@link AddEditTaskActivity} 中使用
  * Created by yangchen on 2017/12/1.
  */
 public class AddEditTaskFragment extends BaseFragment implements Injectable {

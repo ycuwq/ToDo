@@ -22,7 +22,6 @@ import dagger.android.support.HasSupportFragmentInjector;
 
 /**
  * 新建或者编辑任务
- *
  * Created by yangchen on 2017/12/1.
  */
 public class AddEditTaskActivity extends BaseActivity implements HasSupportFragmentInjector {
