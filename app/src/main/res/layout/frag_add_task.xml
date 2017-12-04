@@ -11,67 +11,32 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <RadioGroup
         android:padding="8dp"
+        android:id="@+id/radioGroup_choose_type"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/btn_schedule_n"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal|bottom"
-                android:text="@string/schedule"/>
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/btn_birthday_n"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal|bottom"
-                android:text="@string/birthday"/>
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/btn_anniversary_n"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal|bottom"
-                android:text="@string/commemorative_day"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/radioButton_schedule"
+            android:drawableTop="@drawable/selector_btn_schedule"
+            android:text="@string/schedule"
+            style="@style/radioBtn_image_select"/>
+        <RadioButton
+            android:id="@+id/radioButton_birthday"
+            android:drawableTop="@drawable/selector_btn_anniversary"
+            android:text="@string/birthday"
+            style="@style/radioBtn_image_select"/>
+        <RadioButton
+            android:id="@+id/radioButton_anniversary"
+            android:drawableTop="@drawable/selector_btn_anniversary"
+            android:text="@string/commemorative_day"
+            style="@style/radioBtn_image_select"/>
+    </RadioGroup>
+    <ImageView
+        android:background="@color/diver"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"/>
     <FrameLayout
         android:id="@+id/content"
         android:layout_margin="8dp"
