@@ -76,5 +76,6 @@
     <string name="schedule">日程</string>
     <string name="birthday">生日</string>
     <string name="commemorative_day">纪念日</string>
+    <string name="name">姓名</string>
 
 </resources>

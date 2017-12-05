@@ -24,15 +24,15 @@ import dagger.android.support.HasSupportFragmentInjector;
  * 新建或者编辑任务
  * Created by yangchen on 2017/12/1.
  */
-public class AddEditTaskActivity extends BaseActivity implements HasSupportFragmentInjector {
+public class EditTaskActivity extends BaseActivity implements HasSupportFragmentInjector {
 
 	@Inject
 	DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 	@Inject
-	Lazy<AddEditTaskFragment> fragmentProvider;
+	Lazy<EditTaskFragment> fragmentProvider;
 
 	public static Intent getIntent(@NonNull Context context, @Nullable Task task) {
-		Intent intent = new Intent(context, AddEditTaskActivity.class);
+		Intent intent = new Intent(context, EditTaskActivity.class);
 		if (task != null) {
 			// TODO: 2017/12/1 Task不为空，编辑的情况
 		}
@@ -42,22 +42,21 @@ public class AddEditTaskActivity extends BaseActivity implements HasSupportFragm
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.act_add_task);
+		setContentView(R.layout.act_edit_task);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-		findFragment();
+		showFragment();
 	}
 
-	private AddEditTaskFragment findFragment() {
-		AddEditTaskFragment fragment = (AddEditTaskFragment) getSupportFragmentManager().
+	private void showFragment() {
+		EditTaskFragment fragment = (EditTaskFragment) getSupportFragmentManager().
 				findFragmentById(R.id.frame_content);
 		if (fragment == null) {
 			fragment = fragmentProvider.get();
 			ActivityUtils.addFragmentToActivity(
 					getSupportFragmentManager(), fragment, R.id.frame_content);
 		}
-		return fragment;
 	}
 
 	@Override

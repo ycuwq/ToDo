@@ -33,7 +33,7 @@ public class TasksActivity extends BaseActivity implements HasSupportFragmentInj
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.act_task);
+		setContentView(R.layout.act_tasks);
 		initToolbar();
 
 		findTaskFragment();

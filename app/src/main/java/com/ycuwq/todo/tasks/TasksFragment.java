@@ -21,7 +21,7 @@ import com.ycuwq.common.recycler.ExRecyclerAdapter;
 import com.ycuwq.common.recycler.ExRecyclerViewHolder;
 import com.ycuwq.common.util.SnakeBarUtil;
 import com.ycuwq.todo.R;
-import com.ycuwq.todo.addedittask.AddEditTaskActivity;
+import com.ycuwq.todo.addedittask.EditTaskActivity;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.databinding.FragTasksBinding;
 import com.ycuwq.todo.di.Injectable;
@@ -105,7 +105,7 @@ public class TasksFragment extends BaseFragment implements Injectable {
 
 
 	public void jumpAddTaskActivity() {
-		startActivity(AddEditTaskActivity.getIntent(getContext(), null));
+		startActivity(EditTaskActivity.getIntent(getContext(), null));
 	}
 
 	/**

@@ -57,7 +57,6 @@ public class ActivityUtils {
 
 	/**
 	 * 更新fragment
-
 	 */
 	public static void replaceFragmentToActivity(@NonNull FragmentManager fragmentManager,
                                                  @NonNull Fragment fragment, int frameId) {

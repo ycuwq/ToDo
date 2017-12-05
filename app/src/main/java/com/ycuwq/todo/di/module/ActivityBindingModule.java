@@ -1,7 +1,7 @@
 package com.ycuwq.todo.di.module;
 
-import com.ycuwq.todo.addedittask.AddEditTaskActivity;
-import com.ycuwq.todo.addedittask.AddEditTaskModule;
+import com.ycuwq.todo.addedittask.EditTaskActivity;
+import com.ycuwq.todo.addedittask.EditTaskModule;
 import com.ycuwq.todo.tasks.TasksActivity;
 import com.ycuwq.todo.tasks.TasksModule;
 
@@ -14,8 +14,8 @@ import dagger.android.ContributesAndroidInjector;
  */
 @Module
 public abstract class ActivityBindingModule {
-	@ContributesAndroidInjector(modules = {AddEditTaskModule.class})
-	abstract AddEditTaskActivity addEditTaskActivityInjector();
+	@ContributesAndroidInjector(modules = {EditTaskModule.class})
+	abstract EditTaskActivity addEditTaskActivityInjector();
 
 	@ContributesAndroidInjector(modules = {TasksModule.class})
 	abstract TasksActivity taskActivityInjector();
