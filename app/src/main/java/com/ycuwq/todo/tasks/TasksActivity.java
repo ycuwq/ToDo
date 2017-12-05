@@ -18,7 +18,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
 /**
- *
+ * 显示任务总览的Activity
  * Created by 杨晨 on 2017/5/8.
  */
 public class TasksActivity extends BaseActivity implements HasSupportFragmentInjector {

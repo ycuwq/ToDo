@@ -8,7 +8,7 @@ import com.ycuwq.todo.data.source.TasksRepository;
 import javax.inject.Inject;
 
 /**
- * Task的ViewModel 利用Dagger2注入TaskRepository
+ * Task的ViewModel
  * Created by 杨晨 on 2017/5/9.
  */
 public class TasksViewModel extends BaseViewModel {

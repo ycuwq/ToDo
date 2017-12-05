@@ -1,4 +1,4 @@
-package com.ycuwq.todo.addedittask;
+package com.ycuwq.todo.edittask;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,28 +7,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ycuwq.todo.base.BaseFragment;
-import com.ycuwq.todo.databinding.FragEditScheduleBinding;
+import com.ycuwq.todo.databinding.FragEditAnniversaryBinding;
 import com.ycuwq.todo.di.Injectable;
 
 import javax.inject.Inject;
 
 /**
- * {@link EditTaskFragment} 中的日程的的部分。
+ * {@link EditTaskFragment} 中的纪念日的部分
  * Created by yangchen on 2017/12/5.
  */
-public class EditScheduleFragment extends BaseFragment implements Injectable {
-
-	private FragEditScheduleBinding mBinding;
-
-
+public class EditAnniversaryFragment extends BaseFragment implements Injectable {
+	private FragEditAnniversaryBinding mBinding;
 	@Inject
-	public EditScheduleFragment() {
+	public EditAnniversaryFragment() {
 	}
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		mBinding = FragEditScheduleBinding.inflate(inflater, container, false);
+		mBinding = FragEditAnniversaryBinding.inflate(inflater, container, false);
 		return mBinding.getRoot();
 	}
 }

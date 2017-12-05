@@ -1,7 +1,7 @@
 package com.ycuwq.todo.di.module;
 
-import com.ycuwq.todo.addedittask.EditTaskActivity;
-import com.ycuwq.todo.addedittask.EditTaskModule;
+import com.ycuwq.todo.edittask.EditTaskActivity;
+import com.ycuwq.todo.edittask.EditTaskModule;
 import com.ycuwq.todo.tasks.TasksActivity;
 import com.ycuwq.todo.tasks.TasksModule;
 

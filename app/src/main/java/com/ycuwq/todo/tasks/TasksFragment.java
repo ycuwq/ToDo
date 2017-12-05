@@ -21,7 +21,7 @@ import com.ycuwq.common.recycler.ExRecyclerAdapter;
 import com.ycuwq.common.recycler.ExRecyclerViewHolder;
 import com.ycuwq.common.util.SnakeBarUtil;
 import com.ycuwq.todo.R;
-import com.ycuwq.todo.addedittask.EditTaskActivity;
+import com.ycuwq.todo.edittask.EditTaskActivity;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.databinding.FragTasksBinding;
 import com.ycuwq.todo.di.Injectable;
@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 /**
+ * 显示任务总览的Activity
  * Created by 杨晨 on 2017/5/10.
  */
 public class TasksFragment extends BaseFragment implements Injectable {
