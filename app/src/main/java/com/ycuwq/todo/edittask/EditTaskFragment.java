@@ -1,5 +1,7 @@
 package com.ycuwq.todo.edittask;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,6 +41,11 @@ public class EditTaskFragment extends BaseFragment implements Injectable {
 	Lazy<EditAnniversaryFragment> mAnniversaryFragmentProvider;
 
 	@Inject
+	ViewModelProvider.Factory mViewModelFactory;
+
+	EditTaskViewModel mEditTaskViewModel;
+
+	@Inject
 	public EditTaskFragment() {
 	}
 
@@ -53,6 +60,7 @@ public class EditTaskFragment extends BaseFragment implements Injectable {
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		mEditTaskViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EditTaskViewModel.class);
 		showScheduleFragment();
 		initView();
 	}
@@ -104,6 +112,7 @@ public class EditTaskFragment extends BaseFragment implements Injectable {
 			ActivityUtils.replaceFragmentToActivity(
 					getChildFragmentManager(), fragment, R.id.content);
 		}
+		mBirthdayFragmentProvider.get().setEditTaskViewModel(mEditTaskViewModel);
 	}
 
 	private void showAnniversaryFragment() {

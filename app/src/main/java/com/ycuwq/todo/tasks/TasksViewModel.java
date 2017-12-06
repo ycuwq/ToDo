@@ -21,7 +21,5 @@ public class TasksViewModel extends BaseViewModel {
 
 	}
 
-	String getSnakeBarText() {
-		return snakeBarText.get();
-	}
+
 }

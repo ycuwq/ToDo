@@ -21,10 +21,10 @@ import com.ycuwq.common.recycler.ExRecyclerAdapter;
 import com.ycuwq.common.recycler.ExRecyclerViewHolder;
 import com.ycuwq.common.util.SnakeBarUtil;
 import com.ycuwq.todo.R;
-import com.ycuwq.todo.edittask.EditTaskActivity;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.databinding.FragTasksBinding;
 import com.ycuwq.todo.di.Injectable;
+import com.ycuwq.todo.edittask.EditTaskActivity;
 
 import java.util.ArrayList;
 
@@ -51,17 +51,21 @@ public class TasksFragment extends BaseFragment implements Injectable {
 	@Inject
 	public TasksFragment() {}
 
-	@Override
-	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(TasksViewModel.class);
-	}
+
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 	                         @Nullable Bundle savedInstanceState) {
 		mBinding = FragTasksBinding.inflate(inflater, container, false);
+
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(TasksViewModel.class);
 		mExtraCalendarView = mBinding.extraCalendarView;
 		mExtraCalendarView.setOnDayClickListener(new OnDayClickListener() {
 			@Override
@@ -69,11 +73,9 @@ public class TasksFragment extends BaseFragment implements Injectable {
 				Log.d(TAG, "onClick: " + date.toString());
 			}
 		});
-//		mExtraCalendarView.setCalendarType(ExtraCalendarView.CALENDAR_TYPE_WEEK);
 
 		setupSnakeBar();
 		initView();
-		return mBinding.getRoot();
 	}
 
 	private void initView() {
@@ -84,9 +86,6 @@ public class TasksFragment extends BaseFragment implements Injectable {
 			public void bindData(ExRecyclerViewHolder holder, String s, int position) {
 				TextView textView = holder.getView(R.id.text);
 				textView.setText(s);
-				textView.setOnClickListener(v -> {
-					mExtraCalendarView.setCurrentDate(2017, 10, 1, false);
-				});
 			}
 		};
 		ArrayList<String> list = new ArrayList<>();

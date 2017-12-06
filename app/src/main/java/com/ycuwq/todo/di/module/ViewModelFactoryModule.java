@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.ycuwq.todo.AppViewModelFactory;
+import com.ycuwq.todo.edittask.EditTaskViewModel;
 import com.ycuwq.todo.tasks.TasksViewModel;
 
 import dagger.Binds;
@@ -20,6 +21,11 @@ public abstract class ViewModelFactoryModule {
 	@IntoMap
 	@ViewModelKey(TasksViewModel.class)
 	abstract ViewModel bindTasksViewModel(TasksViewModel tasksViewModel);
+
+	@Binds
+	@IntoMap
+	@ViewModelKey(EditTaskViewModel.class)
+	abstract ViewModel bindEditTaskViewModel(EditTaskViewModel viewModel);
 
 	@Binds
 	abstract ViewModelProvider.Factory provideTaskViewModelModule(AppViewModelFactory appViewModelFactory);

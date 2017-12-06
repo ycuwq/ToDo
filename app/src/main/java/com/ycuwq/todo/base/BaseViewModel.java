@@ -10,5 +10,7 @@ public abstract class BaseViewModel extends ViewModel {
 
 	public ObservableField<String> snakeBarText = new ObservableField<>();
 
-
+	public String getSnakeBarText() {
+		return snakeBarText.get();
+	}
 }

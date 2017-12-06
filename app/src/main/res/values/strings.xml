@@ -77,6 +77,8 @@
     <string name="birthday">生日</string>
     <string name="commemorative_day">纪念日</string>
     <string name="name">姓名</string>
-    <string name="date_of_birth">出生日期</string>
+    <string name="date">日期</string>
+    <string name="reminder_time">提醒时间</string>
+    <string name="input_anniversary_content">请输入纪念内容</string>
 
 </resources>

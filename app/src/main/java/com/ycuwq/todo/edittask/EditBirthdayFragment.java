@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.databinding.FragEditBirthdayBinding;
@@ -19,10 +20,12 @@ import javax.inject.Inject;
 public class EditBirthdayFragment extends BaseFragment implements Injectable {
 
 	private FragEditBirthdayBinding mBinding;
+	private EditTaskViewModel mEditTaskViewModel;
 
 	@Inject
 	public EditBirthdayFragment() {
 	}
+
 
 	@Nullable
 	@Override
@@ -30,4 +33,13 @@ public class EditBirthdayFragment extends BaseFragment implements Injectable {
 		mBinding = FragEditBirthdayBinding.inflate(inflater, container, false);
 		return mBinding.getRoot();
 	}
+
+	public void setEditTaskViewModel(EditTaskViewModel editTaskViewModel) {
+		mEditTaskViewModel = editTaskViewModel;
+	}
+
+	public void chooseBirthday() {
+		Toast.makeText(getContext(), "chooseBirthday", Toast.LENGTH_SHORT).show();
+	}
+
 }

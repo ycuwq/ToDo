@@ -17,7 +17,10 @@ import javax.inject.Inject;
  * Created by yangchen on 2017/12/5.
  */
 public class EditAnniversaryFragment extends BaseFragment implements Injectable {
+
 	private FragEditAnniversaryBinding mBinding;
+	private EditTaskViewModel mEditTaskViewModel;
+
 	@Inject
 	public EditAnniversaryFragment() {
 	}

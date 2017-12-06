@@ -35,13 +35,9 @@
             style="@style/radioBtn_image_select"/>
     </RadioGroup>
     <View
-        android:background="@color/diver"
+        android:background="@color/divider"
         android:layout_width="match_parent"
         android:layout_height="4dp"/>
-    <!--<ImageView-->
-        <!--android:background="@color/diver"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="8dp"/>-->
     <FrameLayout
         android:id="@+id/content"
         android:layout_width="match_parent"

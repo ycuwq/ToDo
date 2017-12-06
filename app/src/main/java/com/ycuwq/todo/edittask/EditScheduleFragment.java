@@ -19,7 +19,7 @@ import javax.inject.Inject;
 public class EditScheduleFragment extends BaseFragment implements Injectable {
 
 	private FragEditScheduleBinding mBinding;
-
+	private EditTaskViewModel mEditTaskViewModel;
 
 	@Inject
 	public EditScheduleFragment() {
