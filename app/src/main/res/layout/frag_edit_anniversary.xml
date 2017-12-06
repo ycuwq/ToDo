@@ -9,7 +9,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
-                android:id="@+id/et_birthday_name"
+                android:id="@+id/et_anniversary_name"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:layout_margin="@dimen/text_margin"
@@ -41,6 +41,7 @@
                     style="@style/list_item_tv_content"/>
             </LinearLayout>
             <include layout="@layout/view_divider_line"/>
+
         </LinearLayout>
     </ScrollView>
 </layout>

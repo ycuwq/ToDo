@@ -4,22 +4,52 @@
         xmlns:tools="http://schemas.android.com/tools">
 
 
-<android.support.constraint.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_schedule_name"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_margin="@dimen/text_margin"
+                android:background="@null"
+                android:hint="@string/input_schedule_name"
+                android:inputType="text"
+                android:textSize="16sp"/>
+            <include layout="@layout/view_divider_line"/>
+            <LinearLayout
+                style="@style/list_item_layout">
+                <TextView
+                    android:text="@string/time"
+                    style="@style/list_item_label"/>
+                <TextView
+                    android:id="@+id/tv_date"
+                    style="@style/list_item_tv_content"/>
+            </LinearLayout>
+            <include layout="@layout/view_divider_line"/>
+            <LinearLayout
 
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="180dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.535"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-</android.support.constraint.ConstraintLayout>
+                style="@style/list_item_layout">
+                <TextView
+                    android:text="@string/reminder_time"
+                    style="@style/list_item_label"/>
+                <TextView
+                    style="@style/list_item_tv_content"/>
+            </LinearLayout>
+            <include layout="@layout/view_divider_line"/>
+            <LinearLayout
+                style="@style/list_item_layout">
+                <TextView
+                    android:text="@string/repeat_mode"
+                    style="@style/list_item_label"/>
+                <TextView
+                    style="@style/list_item_tv_content"/>
+            </LinearLayout>
+            <include layout="@layout/view_divider_line"/>
+        </LinearLayout>
+    </ScrollView>
 </layout>
