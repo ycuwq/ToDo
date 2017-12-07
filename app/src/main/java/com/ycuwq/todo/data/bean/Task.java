@@ -1,10 +1,13 @@
 package com.ycuwq.todo.data.bean;
 
 /**
+ * 任务实体类
  * Created by 杨晨 on 2017/5/8.
  */
 public class Task {
 	private long id;
+
+	private int type;
 
 	private String title;
 
