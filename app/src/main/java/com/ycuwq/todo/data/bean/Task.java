@@ -1,64 +1,127 @@
 package com.ycuwq.todo.data.bean;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
+import java.util.Date;
+
 /**
  * 任务实体类
  * Created by 杨晨 on 2017/5/8.
  */
+@Entity
 public class Task {
-	private long id;
 
+
+	public static final int TYPE_SCHEDULE = 1;
+
+	public static final int TYPE_BIRTHDAY = 2;
+
+	public static final int TYPE_ANNIVERSARY = 3;
+
+	/**
+	 * 不重复
+	 */
+	public static final int REPEAT_NULL = 1;
+
+	public static final int REPEAT_DAY = 2;
+
+	public static final int REPEAT_WEEK = 3;
+
+	public static final int REPEAT_MONTH = 4;
+
+	public static final int REPEAT_YEAR = 5;
+
+	@PrimaryKey
+	private int id;
+
+	/**
+	 * 任务类型：SCHEDULE，BIRTHDAY，ANNIVERSARY
+	 */
 	private int type;
 
-	private String title;
+	private String name;
 
-	private String description;
+	/**
+	 * 是否已经完成
+	 */
+	private boolean isComplete;
 
-	private boolean complete;
+	/**
+	 * 是否是全天事件
+	 */
+	private boolean isAllDay;
 
-	private long time;
+	private Date startTime;
 
+	private Date reminderTime;
 
-	public long getId() {
+	/**
+	 * 重复模式，每天，每周，等模式
+	 */
+	private int repeat;
+
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public int getType() {
+		return type;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setType(int type) {
+		this.type = type;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getName() {
+		return name;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public boolean isComplete() {
-		return complete;
+		return isComplete;
 	}
 
 	public void setComplete(boolean complete) {
-		this.complete = complete;
+		isComplete = complete;
 	}
 
-	public long getTime() {
-		return time;
+	public boolean isAllDay() {
+		return isAllDay;
 	}
 
-	public void setTime(long time) {
-		this.time = time;
+	public void setAllDay(boolean allDay) {
+		isAllDay = allDay;
 	}
 
-	public boolean getComplete() {
-		return this.complete;
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getReminderTime() {
+		return reminderTime;
+	}
+
+	public void setReminderTime(Date reminderTime) {
+		this.reminderTime = reminderTime;
+	}
+
+	public int getRepeat() {
+		return repeat;
+	}
+
+	public void setRepeat(int repeat) {
+		this.repeat = repeat;
 	}
 }

@@ -1,12 +1,8 @@
 package com.ycuwq.todo.edittask;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
-
 import com.ycuwq.todo.di.module.ViewModelFactoryModule;
 
 import dagger.Module;
-import dagger.Provides;
 import dagger.android.ContributesAndroidInjector;
 
 /**
@@ -28,10 +24,5 @@ public abstract class EditTaskModule {
 
 	@ContributesAndroidInjector
 	abstract EditAnniversaryFragment editAnniversaryFragment();
-
-	@Provides
-	static EditTaskViewModel provideEditTaskViewModel(EditTaskFragment fragment, ViewModelProvider.Factory mViewModelFactory) {
-		return ViewModelProviders.of(fragment, mViewModelFactory).get(EditTaskViewModel.class);
-	}
 
 }

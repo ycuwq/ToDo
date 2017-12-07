@@ -3,7 +3,7 @@ package com.ycuwq.todo.tasks;
 import android.support.annotation.NonNull;
 
 import com.ycuwq.todo.base.BaseViewModel;
-import com.ycuwq.todo.data.source.TasksRepository;
+import com.ycuwq.todo.data.source.local.AppDatabase;
 
 import javax.inject.Inject;
 
@@ -13,11 +13,11 @@ import javax.inject.Inject;
  */
 public class TasksViewModel extends BaseViewModel {
 	private final String TAG = getClass().getSimpleName();
-	private final TasksRepository mTasksRepository;
+	private final AppDatabase mAppDatabase;
 
 	@Inject
-	public TasksViewModel(@NonNull TasksRepository tasksRepository) {
-		mTasksRepository = tasksRepository;
+	public TasksViewModel(@NonNull AppDatabase appDatabase) {
+		mAppDatabase = appDatabase;
 
 	}
 

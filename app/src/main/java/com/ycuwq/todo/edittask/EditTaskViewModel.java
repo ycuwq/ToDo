@@ -1,7 +1,7 @@
 package com.ycuwq.todo.edittask;
 
 import com.ycuwq.todo.base.BaseViewModel;
-import com.ycuwq.todo.data.source.TasksRepository;
+import com.ycuwq.todo.data.source.local.AppDatabase;
 
 import javax.inject.Inject;
 
@@ -10,11 +10,11 @@ import javax.inject.Inject;
  */
 public class EditTaskViewModel extends BaseViewModel {
 
-	private final TasksRepository mTasksRepository;
+	private final AppDatabase mAppDatabase;
 
 	@Inject
-	public EditTaskViewModel(TasksRepository tasksRepository) {
-		mTasksRepository = tasksRepository;
+	public EditTaskViewModel(AppDatabase appDatabase) {
+		mAppDatabase = appDatabase;
 	}
 
 

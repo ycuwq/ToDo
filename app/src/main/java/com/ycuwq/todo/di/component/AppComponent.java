@@ -5,7 +5,7 @@ import android.app.Application;
 import com.ycuwq.todo.App;
 import com.ycuwq.todo.di.module.ActivityBindingModule;
 import com.ycuwq.todo.di.module.AppModule;
-import com.ycuwq.todo.di.module.TasksRepositoryModule;
+import com.ycuwq.todo.di.module.RepositoryModule;
 import com.ycuwq.todo.di.module.ViewModelFactoryModule;
 
 import javax.inject.Singleton;
@@ -21,7 +21,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
  */
 @Singleton
 @Component(modules = {AppModule.class,
-		TasksRepositoryModule.class,
+		RepositoryModule.class,
 		ActivityBindingModule.class,
 		ViewModelFactoryModule.class,
 		AndroidSupportInjectionModule.class})

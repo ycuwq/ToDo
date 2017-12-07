@@ -112,7 +112,7 @@ public class EditTaskFragment extends BaseFragment implements Injectable {
 			ActivityUtils.replaceFragmentToActivity(
 					getChildFragmentManager(), fragment, R.id.content);
 		}
-//		mBirthdayFragmentProvider.get().setEditTaskViewModel(mEditTaskViewModel);
+		mBirthdayFragmentProvider.get().setEditTaskViewModel(mEditTaskViewModel);
 	}
 
 	private void showAnniversaryFragment() {
