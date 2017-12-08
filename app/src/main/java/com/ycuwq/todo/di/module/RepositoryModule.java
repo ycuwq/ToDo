@@ -1,6 +1,9 @@
 package com.ycuwq.todo.di.module;
 
-import com.ycuwq.todo.data.source.local.AppDatabase;
+import android.arch.persistence.room.Room;
+import android.content.Context;
+
+import com.ycuwq.todo.data.source.local.AppDb;
 
 import javax.inject.Singleton;
 
@@ -14,10 +17,12 @@ import dagger.Provides;
 @Module
 public class RepositoryModule {
 
+	static final String DATABASE_NAME = "todo-db";
+
 	@Singleton
 	@Provides
-	AppDatabase provideTasksRepository() {
-		return new AppDatabase();
+	AppDb provideTasksRepository(Context context) {
+		return Room.databaseBuilder(context.getApplicationContext(), AppDb.class, DATABASE_NAME).build();
 	}
 
 }

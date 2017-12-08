@@ -129,6 +129,9 @@ public class EditTaskFragment extends BaseFragment implements Injectable {
 		}
 	}
 
+	/**
+	 * RadioButton 可以设置Drawable但是不能在XML中设置大小。
+	 */
 	private void setRadioButtonDrawableSize() {
 		RadioButton scheduleRb = mBinding.radioButtonSchedule;
 		Drawable drawableSchedule = getResources().getDrawable(R.drawable.selector_btn_schedule);

@@ -86,6 +86,12 @@ public class TasksFragment extends BaseFragment implements Injectable {
 			public void bindData(ExRecyclerViewHolder holder, String s, int position) {
 				TextView textView = holder.getView(R.id.text);
 				textView.setText(s);
+				holder.getRootView().setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						mViewModel.onTaskClicked();
+					}
+				});
 			}
 		};
 		ArrayList<String> list = new ArrayList<>();

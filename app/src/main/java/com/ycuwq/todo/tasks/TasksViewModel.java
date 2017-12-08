@@ -3,7 +3,8 @@ package com.ycuwq.todo.tasks;
 import android.support.annotation.NonNull;
 
 import com.ycuwq.todo.base.BaseViewModel;
-import com.ycuwq.todo.data.source.local.AppDatabase;
+import com.ycuwq.todo.data.bean.Task;
+import com.ycuwq.todo.data.source.local.AppDb;
 
 import javax.inject.Inject;
 
@@ -13,11 +14,24 @@ import javax.inject.Inject;
  */
 public class TasksViewModel extends BaseViewModel {
 	private final String TAG = getClass().getSimpleName();
-	private final AppDatabase mAppDatabase;
+	private final AppDb mAppDb;
 
 	@Inject
-	public TasksViewModel(@NonNull AppDatabase appDatabase) {
-		mAppDatabase = appDatabase;
+	public TasksViewModel(@NonNull AppDb appDb) {
+		mAppDb = appDb;
+	}
+
+	public void onTaskClicked() {
+		Task task = new Task();
+		task.setName("hahaha");
+		task.setAllDay(true);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				mAppDb.taskDao().insertTask(task);
+
+			}
+		}).start();
 
 	}
 
