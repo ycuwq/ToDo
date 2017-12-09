@@ -1,10 +1,15 @@
 package com.ycuwq.todo.data.bean;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
+import android.databinding.Bindable;
+import android.databinding.Observable;
+import android.databinding.PropertyChangeRegistry;
 
+import com.ycuwq.todo.BR;
 import com.ycuwq.todo.data.converters.DateConverter;
 
 import java.util.Date;
@@ -13,9 +18,10 @@ import java.util.Date;
  * 任务实体类
  * Created by 杨晨 on 2017/5/8.
  */
+@SuppressWarnings("unused")
 @Entity(indices = {@Index(value = "startDate")})
 @TypeConverters(DateConverter.class)
-public class Task {
+public class Task implements Observable {
 
 	public static final int TYPE_SCHEDULE = 1;
 
@@ -49,7 +55,7 @@ public class Task {
 	/**
 	 * 是否已经完成
 	 */
-	private boolean isComplete;
+	private boolean isCompleted;
 
 	/**
 	 * 是否是全天事件
@@ -69,12 +75,13 @@ public class Task {
 	 * 重复模式，每天，每周，等模式
 	 */
 	private int repeat;
+	private transient PropertyChangeRegistry propertyChangeRegistry = new PropertyChangeRegistry();
 
-
-	public Task(int type, String name, boolean isComplete, boolean isAllDay, String startDate, Date startTime, Date reminderTime, int repeat) {
+	@Ignore
+	public Task(int type, String name, boolean isCompleted, boolean isAllDay, String startDate, Date startTime, Date reminderTime, int repeat) {
 		this.type = type;
 		this.name = name;
-		this.isComplete = isComplete;
+		this.isCompleted = isCompleted;
 		this.isAllDay = isAllDay;
 		this.startDate = startDate;
 		this.startTime = startTime;
@@ -101,23 +108,27 @@ public class Task {
 		this.type = type;
 	}
 
+	@Bindable
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+		notifyChange(BR.name);
 	}
 
-	public boolean isComplete() {
-		return isComplete;
+	@Bindable
+	public boolean getIsCompleted() {
+		return isCompleted;
 	}
 
-	public void setComplete(boolean complete) {
-		isComplete = complete;
+	public void setIsCompleted(boolean completed) {
+		isCompleted = completed;
+		notifyChange(BR.isCompleted);
 	}
 
-	public boolean isAllDay() {
+	public boolean getIsAllDay() {
 		return isAllDay;
 	}
 
@@ -125,35 +136,66 @@ public class Task {
 		isAllDay = allDay;
 	}
 
+	@Bindable
 	public Date getStartTime() {
 		return startTime;
 	}
 
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
+		notifyChange(BR.startTime);
 	}
 
+	@Bindable
 	public Date getReminderTime() {
 		return reminderTime;
 	}
 
 	public void setReminderTime(Date reminderTime) {
 		this.reminderTime = reminderTime;
+		notifyChange(BR.reminderTime);
 	}
 
+	@Bindable
 	public int getRepeat() {
 		return repeat;
 	}
 
 	public void setRepeat(int repeat) {
 		this.repeat = repeat;
+		notifyChange(BR.repeat);
 	}
 
+	@Bindable
 	public String getStartDate() {
 		return startDate;
 	}
 
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
+		notifyChange(BR.startDate);
+	}
+
+	private void notifyChange(int propertyId) {
+		if (propertyChangeRegistry == null) {
+			propertyChangeRegistry = new PropertyChangeRegistry();
+		}
+		propertyChangeRegistry.notifyChange(this, propertyId);
+	}
+
+	@Override
+	public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+		if (propertyChangeRegistry == null) {
+			propertyChangeRegistry = new PropertyChangeRegistry();
+		}
+		propertyChangeRegistry.add(callback);
+
+	}
+
+	@Override
+	public void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+		if (propertyChangeRegistry != null) {
+			propertyChangeRegistry.remove(callback);
+		}
 	}
 }

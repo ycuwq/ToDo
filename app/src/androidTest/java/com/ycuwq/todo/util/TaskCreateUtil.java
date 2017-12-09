@@ -9,10 +9,17 @@ import java.util.Date;
  * 生成Task实体类，方便测试。
  * Created by yangchen on 2017/12/8.
  */
-public class TaskUtil {
+public class TaskCreateUtil {
 	public static Task createTask(String name) {
 		Date date = new Date(System.currentTimeMillis());
 		Task task = new Task(Task.TYPE_ANNIVERSARY, name, false, false, DateUtil.getNowDateShort(), date,
+				date, Task.REPEAT_NULL);
+		return task;
+	}
+
+	public static Task createTask(String name, String startDate) {
+		Date date = new Date(System.currentTimeMillis());
+		Task task = new Task(Task.TYPE_ANNIVERSARY, name, false, false, startDate, date,
 				date, Task.REPEAT_NULL);
 		return task;
 	}

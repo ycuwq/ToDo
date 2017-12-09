@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ycuwq.todo.base.BaseFragment;
+import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.databinding.FragEditAnniversaryBinding;
 import com.ycuwq.todo.di.Injectable;
 
@@ -20,7 +21,7 @@ public class EditAnniversaryFragment extends BaseFragment implements Injectable 
 
 	private FragEditAnniversaryBinding mBinding;
 	private EditTaskViewModel mEditTaskViewModel;
-
+	private Task mTask;
 	@Inject
 	public EditAnniversaryFragment() {
 	}
@@ -30,5 +31,10 @@ public class EditAnniversaryFragment extends BaseFragment implements Injectable 
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		mBinding = FragEditAnniversaryBinding.inflate(inflater, container, false);
 		return mBinding.getRoot();
+	}
+
+
+	public void setEditTaskViewModel(EditTaskViewModel editTaskViewModel) {
+		mEditTaskViewModel = editTaskViewModel;
 	}
 }

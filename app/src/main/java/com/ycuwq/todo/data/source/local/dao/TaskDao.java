@@ -28,4 +28,7 @@ public interface TaskDao {
 
 	@Query("SELECT * FROM task")
 	List<Task> loadAllTask();
+
+	@Query("SELECT * FROM task WHERE startDate = :startDate")
+	List<Task> loadAllTask(String startDate);
 }

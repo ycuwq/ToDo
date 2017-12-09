@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,7 @@ import dagger.Lazy;
  * 在{@link EditTaskActivity} 中使用
  * Created by yangchen on 2017/12/1.
  */
-public class EditTaskFragment extends BaseFragment implements Injectable {
+public class EditTaskFragment extends BaseFragment implements Injectable, View.OnClickListener {
 
 	private final static int RADIO_BUTTON_DRAWABLE_SIZE = 120;
 
@@ -82,6 +83,8 @@ public class EditTaskFragment extends BaseFragment implements Injectable {
 					break;
 			}
 		});
+		FloatingActionButton fab = getActivity().findViewById(R.id.fab_add_task);
+		fab.setOnClickListener(this);
 	}
 
 	private void showScheduleFragment() {
@@ -97,6 +100,7 @@ public class EditTaskFragment extends BaseFragment implements Injectable {
 			ActivityUtils.replaceFragmentToActivity(
 					getChildFragmentManager(), fragment, R.id.content);
 		}
+		mEditScheduleFragmentProvider.get().setEditTaskViewModel(mEditTaskViewModel);
 	}
 
 	private void showBirthdayFragment() {
@@ -127,6 +131,7 @@ public class EditTaskFragment extends BaseFragment implements Injectable {
 			ActivityUtils.replaceFragmentToActivity(
 					getChildFragmentManager(), fragment, R.id.content);
 		}
+		mAnniversaryFragmentProvider.get().setEditTaskViewModel(mEditTaskViewModel);
 	}
 
 	/**
@@ -150,4 +155,14 @@ public class EditTaskFragment extends BaseFragment implements Injectable {
 	}
 
 
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+			case R.id.fab_add_task:
+
+				break;
+			default:
+				break;
+		}
+	}
 }

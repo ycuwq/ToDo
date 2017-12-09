@@ -83,5 +83,10 @@
     <string name="input_schedule_name">请输入日程名称</string>
     <string name="time">时间</string>
     <string name="repeat_mode">重复模式</string>
+    <string name="repeat_null">不重复</string>
+    <string name="repeat_day">每天</string>
+    <string name="repeat_week">每周</string>
+    <string name="repeat_month">每月</string>
+    <string name="repeat_year">每年</string>
 
 </resources>

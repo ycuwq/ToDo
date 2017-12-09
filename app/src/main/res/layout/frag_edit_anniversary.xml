@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="task"
+            type="com.ycuwq.todo.data.bean.Task"/>
+    </data>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -13,6 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:layout_margin="@dimen/text_margin"
+                android:text="@={task.name}"
                 android:background="@null"
                 android:hint="@string/input_anniversary_content"
                 android:inputType="text"
@@ -25,18 +33,19 @@
                     android:text="@string/date"
                     style="@style/list_item_label"/>
                 <TextView
+                    app:textForDate="@{task.startTime}"
                     android:id="@+id/tv_date"
                     style="@style/list_item_tv_content"/>
             </LinearLayout>
             <include layout="@layout/view_divider_line"/>
             <LinearLayout
-
                 style="@style/list_item_layout">
                 <TextView
                     android:id="@+id/tv_label_reminder_time"
                     android:text="@string/reminder_time"
                     style="@style/list_item_label"/>
                 <TextView
+                    app:textForDate="@{task.reminderTime}"
                     android:id="@+id/tv_reminder_time"
                     style="@style/list_item_tv_content"/>
             </LinearLayout>

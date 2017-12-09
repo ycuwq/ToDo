@@ -81,7 +81,6 @@ public class CalendarViewBehavior extends CoordinatorLayout.Behavior<ExtraCalend
 			consumed[1] = dy;
 			if (!mIsRunning && child.getCalendarType() == ExtraCalendarView.CALENDAR_TYPE_MONTH) {
 				//当变成周模式在切换成月模式时，会导致RecyclerView坐标异常，当上滑时重新layout一下可以恢复
-//				Log.d(TAG, "onNestedPreScroll: requestLayout");
 				mIsRunning = true;
 			}
 			//点击View上方距离顶部的距离
