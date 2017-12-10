@@ -75,6 +75,7 @@ public class Task implements Observable {
 	 * 重复模式，每天，每周，等模式
 	 */
 	private int repeat;
+
 	private transient PropertyChangeRegistry propertyChangeRegistry = new PropertyChangeRegistry();
 
 	@Ignore
