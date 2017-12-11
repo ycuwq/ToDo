@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.ycuwq.common.util.AutoClearedValue;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.databinding.FragEditBirthdayBinding;
@@ -20,7 +21,7 @@ import javax.inject.Inject;
  */
 public class EditBirthdayFragment extends BaseFragment implements Injectable {
 
-	private FragEditBirthdayBinding mBinding;
+	private AutoClearedValue<FragEditBirthdayBinding> mBinding;
 	private EditTaskViewModel mEditTaskViewModel;
 	private Task mTask;
 	@Inject
@@ -31,10 +32,19 @@ public class EditBirthdayFragment extends BaseFragment implements Injectable {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		mBinding = FragEditBirthdayBinding.inflate(inflater, container, false);
-		return mBinding.getRoot();
+		FragEditBirthdayBinding binding = FragEditBirthdayBinding.inflate(inflater, container, false);
+		mBinding = new AutoClearedValue<>(this, binding);
+		return binding.getRoot();
 	}
 
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (mTask == null) {
+			mTask = new Task();
+		}
+		mBinding.get().setTask(mTask);
+	}
 
 	public void setEditTaskViewModel(EditTaskViewModel editTaskViewModel) {
 		mEditTaskViewModel = editTaskViewModel;

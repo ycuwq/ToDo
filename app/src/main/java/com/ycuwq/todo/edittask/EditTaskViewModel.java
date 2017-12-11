@@ -12,11 +12,9 @@ import javax.inject.Inject;
 public class EditTaskViewModel extends BaseViewModel {
 
 	private final AppDb mAppDb;
-	Task task;
 	@Inject
 	public EditTaskViewModel(AppDb appDb) {
 		mAppDb = appDb;
-		task = new Task();
 	}
 
 

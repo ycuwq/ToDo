@@ -11,4 +11,6 @@ ext {
     daggerVersion = '2.13'
     rxjava2Version = '2.1.6'
     rxAndroidVersion = '2.0.1'
+
+    timberVersion = "4.6.0"
 }

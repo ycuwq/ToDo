@@ -56,6 +56,9 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
+    implementation "com.jakewharton.timber:timber:$timberVersion"
+
+    //Architecture Component
     implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
     annotationProcessor "android.arch.lifecycle:compiler:$archLifecycleVersion"
     implementation "android.arch.lifecycle:common-java8:$archLifecycleVersion"

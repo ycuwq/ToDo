@@ -38,10 +38,13 @@ public class EditScheduleFragment extends BaseFragment implements Injectable {
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mTask = new Task();
+		if (mTask == null) {
+			mTask = new Task();
+		}
 		mBinding.get().setFragment(this);
 		mBinding.get().setTask(mTask);
 		initView();
+
 	}
 
 

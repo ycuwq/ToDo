@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ycuwq.common.util.AutoClearedValue;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.databinding.FragEditAnniversaryBinding;
@@ -19,7 +20,7 @@ import javax.inject.Inject;
  */
 public class EditAnniversaryFragment extends BaseFragment implements Injectable {
 
-	private FragEditAnniversaryBinding mBinding;
+	private AutoClearedValue<FragEditAnniversaryBinding> mBinding;
 	private EditTaskViewModel mEditTaskViewModel;
 	private Task mTask;
 	@Inject
@@ -29,10 +30,19 @@ public class EditAnniversaryFragment extends BaseFragment implements Injectable 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		mBinding = FragEditAnniversaryBinding.inflate(inflater, container, false);
-		return mBinding.getRoot();
+		FragEditAnniversaryBinding binding = FragEditAnniversaryBinding.inflate(inflater, container, false);
+		mBinding = new AutoClearedValue<>(this, binding);
+		return binding.getRoot();
 	}
 
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (mTask == null) {
+			mTask = new Task();
+		}
+		mBinding.get().setTask(mTask);
+	}
 
 	public void setEditTaskViewModel(EditTaskViewModel editTaskViewModel) {
 		mEditTaskViewModel = editTaskViewModel;
