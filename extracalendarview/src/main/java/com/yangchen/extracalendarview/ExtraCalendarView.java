@@ -245,6 +245,7 @@ public class ExtraCalendarView extends LinearLayout {
 				mDayItemAttrs.setClickBg(drawable);
 			}
 		}
+		a.recycle();
 
 	}
 
