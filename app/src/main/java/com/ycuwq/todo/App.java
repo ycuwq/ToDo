@@ -6,6 +6,7 @@ import com.ycuwq.todo.di.component.DaggerAppComponent;
 
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
+import timber.log.Timber;
 
 
 /**
@@ -18,6 +19,14 @@ public class App extends DaggerApplication {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+
+		if (BuildConfig.DEBUG) {
+			Timber.plant(new Timber.DebugTree());
+		} else {
+			// TODO: 2017/12/11 崩溃保存
+			Timber.plant(new Timber.DebugTree());
+		}
+
 		AppInjector.init(this);
 	}
 
