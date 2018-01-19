@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ycuwq.common.util.AutoClearedValue;
+import com.ycuwq.datepicker.date.DatePickerDialogFragment;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.databinding.FragEditAnniversaryBinding;
@@ -23,6 +24,7 @@ public class EditAnniversaryFragment extends BaseFragment implements Injectable 
 	private AutoClearedValue<FragEditAnniversaryBinding> mBinding;
 	private EditTaskViewModel mEditTaskViewModel;
 	private Task mTask;
+
 	@Inject
 	public EditAnniversaryFragment() {
 	}
@@ -46,5 +48,16 @@ public class EditAnniversaryFragment extends BaseFragment implements Injectable 
 
 	public void setEditTaskViewModel(EditTaskViewModel editTaskViewModel) {
 		mEditTaskViewModel = editTaskViewModel;
+	}
+
+	public void chooseStartDate(View v) {
+		DatePickerDialogFragment datePickerDialogFragment = new DatePickerDialogFragment();
+		datePickerDialogFragment.setOnDateChooseListener(new DatePickerDialogFragment.OnDateChooseListener() {
+			@Override
+			public void onDateChoose(int year, int month, int day) {
+				mEditTaskViewModel.setStartDate(year, month, day);
+			}
+		});
+		datePickerDialogFragment.show(getChildFragmentManager(), "chooseStartDate");
 	}
 }

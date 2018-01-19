@@ -1,11 +1,11 @@
 ext {
     // Sdk and tools
     minSdkVersion = 21
-    targetSdkVersion = 26
-    compileSdkVersion = 26
-    buildToolsVersion = '26.0.2'
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+//    buildToolsVersion = '26.0.2'
 
-    supportLibraryVersion = '26.1.0'
+    supportLibraryVersion = '27.0.2'
     archLifecycleVersion = '1.0.0'
     roomVersion = "1.0.0"
     daggerVersion = '2.13'

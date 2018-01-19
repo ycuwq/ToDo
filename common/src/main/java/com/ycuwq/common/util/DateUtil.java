@@ -2,6 +2,7 @@ package com.ycuwq.common.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -13,19 +14,25 @@ public class DateUtil {
     public static String getNowDate() {
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-//        String dateString = formatter.format(currentTime);
-//        ParsePosition pos = new ParsePosition(8);
-//        Date currentTime_2 = formatter.parse(dateString, pos);
         return formatter.format(currentTime);
     }
 
     public static String getNowDateShort() {
         Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-        //		ParsePosition pos = new ParsePosition(8);
-//		Date currentTime_2 = formatter.parse(dateString, pos);
-        return formatter.format(currentTime);
+        return dateShortToString(currentTime);
     }
+
+    public static String getDateString(int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        return dateShortToString(calendar.getTime());
+    }
+
+    public static String dateShortToString(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        return formatter.format(date);
+    }
+
 
     public static String getYesterday(String date) {
         return getFormerlyTime(date, 60 * 60 * 24);

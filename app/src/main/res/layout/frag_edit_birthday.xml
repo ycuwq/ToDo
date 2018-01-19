@@ -31,14 +31,14 @@
                 android:textSize="16sp"/>
             <include layout="@layout/view_divider_line"/>
             <LinearLayout
-                android:onClick="@{() -> fragment.chooseBirthday()}"
+                android:onClick="@{(v) -> fragment.chooseStartDate(v)}"
                 style="@style/list_item_layout">
                 <TextView
                     android:id="@+id/tv_label_date"
                     android:text="@string/date"
                     style="@style/list_item_label"/>
                 <TextView
-                    app:textForDate="@{task.startTime}"
+                    android:text="@{task.startDate}"
                     android:id="@+id/tv_date"
                     style="@style/list_item_tv_content"/>
             </LinearLayout>

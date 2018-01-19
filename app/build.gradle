@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+//    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "com.ycuwq.todo"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -44,6 +44,7 @@ dependencies {
     implementation "com.android.support:design:$supportLibraryVersion"
     implementation "com.android.support:support-v4:$supportLibraryVersion"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.ycuwq.widgets:datepicker:1.0.4'
 
     //RxJava2
     implementation "io.reactivex.rxjava2:rxjava:$rxjava2Version"

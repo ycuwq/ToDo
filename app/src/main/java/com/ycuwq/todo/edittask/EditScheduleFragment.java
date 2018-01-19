@@ -32,6 +32,7 @@ public class EditScheduleFragment extends BaseFragment implements Injectable {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		FragEditScheduleBinding binding = FragEditScheduleBinding.inflate(inflater, container, false);
 		mBinding = new AutoClearedValue<>(this, binding);
+
 		return binding.getRoot();
 	}
 
