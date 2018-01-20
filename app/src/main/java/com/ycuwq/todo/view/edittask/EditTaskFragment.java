@@ -1,4 +1,4 @@
-package com.ycuwq.todo.edittask;
+package com.ycuwq.todo.view.edittask;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;

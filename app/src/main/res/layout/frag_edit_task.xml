@@ -3,7 +3,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.ycuwq.todo.edittask.EditTaskFragment"/>
+            type="com.ycuwq.todo.view.edittask.EditTaskFragment"/>
     </data>
 
 <LinearLayout

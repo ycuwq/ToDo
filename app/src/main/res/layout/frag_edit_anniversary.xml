@@ -6,7 +6,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.ycuwq.todo.edittask.EditAnniversaryFragment"/>
+            type="com.ycuwq.todo.view.edittask.EditAnniversaryFragment"/>
 
         <variable
             name="task"

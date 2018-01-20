@@ -20,6 +20,7 @@ public class App extends DaggerApplication {
 	public void onCreate() {
 		super.onCreate();
 
+
 		if (BuildConfig.DEBUG) {
 			Timber.plant(new Timber.DebugTree());
 		} else {

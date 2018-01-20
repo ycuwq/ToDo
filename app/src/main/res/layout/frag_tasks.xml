@@ -6,15 +6,15 @@
     <data>
         <variable
             name="viewModel"
-            type="com.ycuwq.todo.tasks.TasksViewModel"/>
+            type="com.ycuwq.todo.view.tasks.TasksViewModel"/>
         <variable
             name="fragment"
-            type="com.ycuwq.todo.tasks.TasksFragment"/>
+            type="com.ycuwq.todo.view.tasks.TasksFragment"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".tasks.TasksActivity"
+        tools:context=".view.tasks.TasksActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

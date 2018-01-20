@@ -1,4 +1,4 @@
-package com.ycuwq.todo.tasks;
+package com.ycuwq.todo.view.tasks;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -1,4 +1,4 @@
-package com.ycuwq.todo.tasks;
+package com.ycuwq.todo.view.tasks;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -24,7 +24,7 @@ import com.ycuwq.todo.R;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.databinding.FragTasksBinding;
 import com.ycuwq.todo.di.Injectable;
-import com.ycuwq.todo.edittask.EditTaskActivity;
+import com.ycuwq.todo.view.edittask.EditTaskActivity;
 
 import java.util.ArrayList;
 

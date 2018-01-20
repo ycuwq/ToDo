@@ -1,4 +1,4 @@
-package com.ycuwq.todo.edittask;
+package com.ycuwq.todo.view.edittask;
 
 import com.ycuwq.common.util.DateUtil;
 import com.ycuwq.todo.base.BaseViewModel;
@@ -24,6 +24,10 @@ public class EditTaskViewModel extends BaseViewModel {
 
 	public void setStartDate(int year, int month, int day) {
 	    task.setStartDate(DateUtil.getDateString(year, month, day));
+    }
+
+    public void save() {
+
     }
 
 

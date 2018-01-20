@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".tasks.TasksActivity"
+        <activity android:name=".view.tasks.TasksActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -30,7 +30,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".edittask.EditTaskActivity"
+        <activity android:name=".view.edittask.EditTaskActivity"
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
 

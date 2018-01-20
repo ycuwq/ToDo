@@ -1,4 +1,4 @@
-package com.ycuwq.todo.edittask;
+package com.ycuwq.todo.view.edittask;
 
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +43,7 @@ public class EditTaskActivity extends BaseActivity implements HasSupportFragment
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_edit_task);
+
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 

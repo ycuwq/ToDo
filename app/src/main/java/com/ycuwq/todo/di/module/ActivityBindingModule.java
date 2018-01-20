@@ -1,9 +1,9 @@
 package com.ycuwq.todo.di.module;
 
-import com.ycuwq.todo.edittask.EditTaskActivity;
-import com.ycuwq.todo.edittask.EditTaskModule;
-import com.ycuwq.todo.tasks.TasksActivity;
-import com.ycuwq.todo.tasks.TasksModule;
+import com.ycuwq.todo.view.edittask.EditTaskActivity;
+import com.ycuwq.todo.view.edittask.EditTaskModule;
+import com.ycuwq.todo.view.tasks.TasksActivity;
+import com.ycuwq.todo.view.tasks.TasksModule;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

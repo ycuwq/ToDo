@@ -1,4 +1,4 @@
-package com.ycuwq.todo.edittask;
+package com.ycuwq.todo.view.edittask;
 
 import com.ycuwq.todo.di.module.ViewModelFactoryModule;
 
@@ -18,6 +18,7 @@ public abstract class EditTaskModule {
 
 	@ContributesAndroidInjector
 	abstract EditScheduleFragment editScheduleFragment();
+
 
 	@ContributesAndroidInjector
 	abstract EditBirthdayFragment editBirthdayFragment();

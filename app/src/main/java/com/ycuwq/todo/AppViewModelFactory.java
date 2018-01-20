@@ -39,6 +39,7 @@ public class AppViewModelFactory implements ViewModelProvider.Factory{
 				}
 			}
 		}
+
 		if (creator == null) {
 			throw new IllegalArgumentException("unknown model class " + modelClass);
 		}

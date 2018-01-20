@@ -1,4 +1,4 @@
-package com.ycuwq.todo.edittask;
+package com.ycuwq.todo.view.edittask;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,29 +10,28 @@ import android.view.ViewGroup;
 import com.ycuwq.common.util.AutoClearedValue;
 import com.ycuwq.datepicker.date.DatePickerDialogFragment;
 import com.ycuwq.todo.base.BaseFragment;
-import com.ycuwq.todo.databinding.FragEditBirthdayBinding;
+import com.ycuwq.todo.databinding.FragEditAnniversaryBinding;
 import com.ycuwq.todo.di.Injectable;
 
 import javax.inject.Inject;
 
 /**
- * {@link EditTaskFragment} 中的生日的部分
+ * {@link EditTaskFragment} 中的纪念日的部分
  * Created by yangchen on 2017/12/5.
  */
-public class EditBirthdayFragment extends BaseFragment implements Injectable {
+public class EditAnniversaryFragment extends BaseFragment implements Injectable {
 
-	private AutoClearedValue<FragEditBirthdayBinding> mBinding;
+	private AutoClearedValue<FragEditAnniversaryBinding> mBinding;
 	private EditTaskViewModel mEditTaskViewModel;
 
 	@Inject
-	public EditBirthdayFragment() {
+	public EditAnniversaryFragment() {
 	}
-
 
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		FragEditBirthdayBinding binding = FragEditBirthdayBinding.inflate(inflater, container, false);
+		FragEditAnniversaryBinding binding = FragEditAnniversaryBinding.inflate(inflater, container, false);
 		mBinding = new AutoClearedValue<>(this, binding);
 		return binding.getRoot();
 	}
@@ -40,9 +39,7 @@ public class EditBirthdayFragment extends BaseFragment implements Injectable {
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-//		if (mEditTaskViewModel.task == null) {
-//            mEditTaskViewModel.task = new Task();
-//		}
+
 		mBinding.get().setTask(mEditTaskViewModel.task);
 		mBinding.get().setFragment(this);
 	}
@@ -61,5 +58,4 @@ public class EditBirthdayFragment extends BaseFragment implements Injectable {
 		});
 		datePickerDialogFragment.show(getChildFragmentManager(), "chooseStartDate");
 	}
-
 }
