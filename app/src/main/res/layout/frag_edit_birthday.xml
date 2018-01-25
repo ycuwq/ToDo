@@ -44,7 +44,7 @@
             </LinearLayout>
             <include layout="@layout/view_divider_line"/>
             <LinearLayout
-
+                android:onClick="@{(v) -> fragment.chooseRemindTime(v)}"
                 style="@style/list_item_layout">
                 <TextView
                     android:id="@+id/tv_label_reminder_time"

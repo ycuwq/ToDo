@@ -1,4 +1,4 @@
-package com.ycuwq.todo.setting;
+package com.ycuwq.todo.view.setting;
 
 
 import android.annotation.TargetApi;

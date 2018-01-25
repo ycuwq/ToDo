@@ -12,6 +12,7 @@ import com.ycuwq.datepicker.date.DatePickerDialogFragment;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.databinding.FragEditBirthdayBinding;
 import com.ycuwq.todo.di.Injectable;
+import com.ycuwq.todo.view.common.ChooseRemindTimeDialogFragment;
 
 import javax.inject.Inject;
 
@@ -62,5 +63,10 @@ public class EditBirthdayFragment extends BaseFragment implements Injectable {
         datePickerDialogFragment.show(getChildFragmentManager(), "chooseStartDate");
 
 	}
+
+	public void chooseRemindTime(View v) {
+        ChooseRemindTimeDialogFragment chooseRemindTimeDialogFragment = new ChooseRemindTimeDialogFragment();
+        chooseRemindTimeDialogFragment.show(getChildFragmentManager(), "chooseRemindTime");
+    }
 
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="4dp"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:gravity="center"
+        android:text="@string/remind_time"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:gravity="center"
+        android:padding="4dp"
+        android:textSize="15sp"
+        android:id="@+id/tv_dialog_choose_remind_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.ycuwq.datepicker.time.HourAndMinutePicker
+        android:id="@+id/picker_dialog_choose_remind_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btn_dialog_choose_remind_cancel"
+            android:background="#f7f7f7"
+            android:text="@string/ycuwq_datepicker_cancel"
+            android:textColor="@color/selectedTextColor"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:background="@color/divider"
+            android:layout_width="1px"
+            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/btn_dialog_choose_remind_decide"
+            android:background="#f7f7f7"
+            android:text="@string/ycuew_datepicker_decide"
+            android:textColor="@color/selectedTextColor"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>
