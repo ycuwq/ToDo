@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.ycuwq.common.util.AutoClearedValue;
 import com.ycuwq.datepicker.date.DatePickerDialogFragment;
+import com.ycuwq.todo.BR;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.databinding.FragEditBirthdayBinding;
 import com.ycuwq.todo.di.Injectable;
@@ -41,8 +42,8 @@ public class EditBirthdayFragment extends BaseFragment implements Injectable {
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+        mBinding.get().setVariable(BR.viewModel, mEditTaskViewModel);
 
-		mBinding.get().setTask(mEditTaskViewModel.task);
 		mBinding.get().setFragment(this);
 
 	}
@@ -51,22 +52,6 @@ public class EditBirthdayFragment extends BaseFragment implements Injectable {
 		mEditTaskViewModel = editTaskViewModel;
 	}
 
-	public void chooseStartDate(View v) {
-		DatePickerDialogFragment datePickerDialogFragment = new DatePickerDialogFragment();
 
-		datePickerDialogFragment.setOnDateChooseListener(new DatePickerDialogFragment.OnDateChooseListener() {
-			@Override
-			public void onDateChoose(int year, int month, int day) {
-				mEditTaskViewModel.setStartDate(year, month, day);
-			}
-		});
-        datePickerDialogFragment.show(getChildFragmentManager(), "chooseStartDate");
-
-	}
-
-	public void chooseRemindTime(View v) {
-        ChooseRemindTimeDialogFragment chooseRemindTimeDialogFragment = new ChooseRemindTimeDialogFragment();
-        chooseRemindTimeDialogFragment.show(getChildFragmentManager(), "chooseRemindTime");
-    }
 
 }

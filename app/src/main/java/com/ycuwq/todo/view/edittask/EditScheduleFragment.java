@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ycuwq.common.util.AutoClearedValue;
+import com.ycuwq.todo.BR;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.databinding.FragEditScheduleBinding;
@@ -43,7 +44,7 @@ public class EditScheduleFragment extends BaseFragment implements Injectable {
 		if (mTask == null) {
 			mTask = new Task();
 		}
-		mBinding.get().setTask(mEditTaskViewModel.task);
+		mBinding.get().setVariable(BR.viewModel, mEditTaskViewModel);
 		mBinding.get().setFragment(this);
 		initView();
 

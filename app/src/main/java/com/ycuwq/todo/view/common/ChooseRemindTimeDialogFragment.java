@@ -38,7 +38,6 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
         hourAndMinutePicker.setOnTimeListener(new HourAndMinutePicker.OnTimeListener() {
             @Override
             public void onTimeSelected(int hour, int minute) {
-
                 timeTv.setText(String.format("%s:%s", numberFormat.format(hour), numberFormat.format(minute)));
             }
         });
@@ -58,6 +57,7 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
             }
         });
 
+        hourAndMinutePicker.setTime(9, 0, false);
 
         return view;
     }
@@ -77,7 +77,9 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.gravity = Gravity.BOTTOM; // 紧贴底部
             lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
+            lp.dimAmount = 0.35f;
             window.setAttributes(lp);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         }
         return dialog;
     }

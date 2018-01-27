@@ -7,8 +7,8 @@
             name="fragment"
             type="com.ycuwq.todo.view.edittask.EditScheduleFragment"/>
         <variable
-            name="task"
-            type="com.ycuwq.todo.data.bean.Task"/>
+            name="viewModel"
+            type="com.ycuwq.todo.view.edittask.EditTaskViewModel"/>
     </data>
 
     <ScrollView
@@ -22,7 +22,7 @@
                 android:id="@+id/et_schedule_name"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
-                android:text="@={task.name}"
+                android:text="@={viewModel.task.name}"
                 android:layout_margin="@dimen/text_margin"
                 android:background="@null"
                 android:hint="@string/input_schedule_name"
@@ -35,8 +35,19 @@
                     android:text="@string/time"
                     style="@style/list_item_label"/>
                 <TextView
-                    app:textForDate="@{task.startTime}"
+                    app:textForDate="@{viewModel.task.startTime}"
                     android:id="@+id/tv_date"
+                    style="@style/list_item_tv_content"/>
+            </LinearLayout>
+            <include layout="@layout/view_divider_line"/>
+            <LinearLayout
+                android:onClick="@{(v) -> viewModel.chooseRemindTime(v)}"
+                style="@style/list_item_layout">
+                <TextView
+                    android:text="@string/reminder_time"
+                    style="@style/list_item_label"/>
+                <TextView
+                    app:textForDate="@{viewModel.task.reminderTime}"
                     style="@style/list_item_tv_content"/>
             </LinearLayout>
             <include layout="@layout/view_divider_line"/>
@@ -44,20 +55,10 @@
 
                 style="@style/list_item_layout">
                 <TextView
-                    android:text="@string/reminder_time"
-                    style="@style/list_item_label"/>
-                <TextView
-                    app:textForDate="@{task.reminderTime}"
-                    style="@style/list_item_tv_content"/>
-            </LinearLayout>
-            <include layout="@layout/view_divider_line"/>
-            <LinearLayout
-                style="@style/list_item_layout">
-                <TextView
                     android:text="@string/repeat_mode"
                     style="@style/list_item_label"/>
                 <TextView
-                    app:repeat="@{task.repeat}"
+                    app:repeat="@{viewModel.task.repeat}"
                     style="@style/list_item_tv_content"/>
             </LinearLayout>
             <include layout="@layout/view_divider_line"/>

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.ycuwq.common.util.AutoClearedValue;
 import com.ycuwq.datepicker.date.DatePickerDialogFragment;
+import com.ycuwq.todo.BR;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.databinding.FragEditAnniversaryBinding;
 import com.ycuwq.todo.di.Injectable;
@@ -39,8 +40,7 @@ public class EditAnniversaryFragment extends BaseFragment implements Injectable 
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-		mBinding.get().setTask(mEditTaskViewModel.task);
+		mBinding.get().setVariable(BR.viewModel, mEditTaskViewModel);
 		mBinding.get().setFragment(this);
 	}
 
