@@ -17,7 +17,7 @@ import javax.inject.Singleton;
  * Created by yangchen on 2017/11/30.
  */
 @Singleton
-public class AppViewModelFactory implements ViewModelProvider.Factory{
+public class AppViewModelFactory implements ViewModelProvider.Factory {
 
 	private final Map<Class<? extends ViewModel>, Provider<ViewModel>> creators;
 

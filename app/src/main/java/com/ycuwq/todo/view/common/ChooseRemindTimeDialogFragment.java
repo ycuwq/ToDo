@@ -2,6 +2,7 @@ package com.ycuwq.todo.view.common;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
@@ -35,7 +36,7 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
         numberFormat.setMinimumIntegerDigits(2);
         TextView timeTv = view.findViewById(R.id.tv_dialog_choose_remind_time);
         HourAndMinutePicker hourAndMinutePicker = view.findViewById(R.id.picker_dialog_choose_remind_time);
-        hourAndMinutePicker.setOnTimeListener(new HourAndMinutePicker.OnTimeListener() {
+        hourAndMinutePicker.setOnTimeSelectedListener(new HourAndMinutePicker.OnTimeSelectedListener() {
             @Override
             public void onTimeSelected(int hour, int minute) {
                 timeTv.setText(String.format("%s:%s", numberFormat.format(hour), numberFormat.format(minute)));
@@ -62,9 +63,10 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
         return view;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(getActivity(), R.style.BottomDialog);
+        Dialog dialog = new Dialog(getActivity(), R.style.DatePickerBottomDialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 设置Content前设定
 
         dialog.setContentView(R.layout.dialog_choose_remind_time);
@@ -73,7 +75,7 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
         Window window = dialog.getWindow();
         if (window != null) {
 
-            window.getAttributes().windowAnimations = R.style.dialogAnim;
+            window.getAttributes().windowAnimations = R.style.DatePickerDialogAnim;
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.gravity = Gravity.BOTTOM; // 紧贴底部
             lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平

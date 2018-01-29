@@ -63,6 +63,7 @@ public class EditTaskFragment extends BaseFragment implements Injectable, View.O
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		mEditTaskViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EditTaskViewModel.class);
+		mEditTaskViewModel.setBaseFragment(this);
 		showScheduleFragment();
 		initView();
 	}

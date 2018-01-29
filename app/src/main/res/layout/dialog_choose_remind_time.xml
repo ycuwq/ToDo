@@ -28,10 +28,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
+            android:padding="16dp"
             android:id="@+id/btn_dialog_choose_remind_cancel"
             android:background="#f7f7f7"
-            android:text="@string/ycuwq_datepicker_cancel"
-            android:textColor="@color/selectedTextColor"
+            android:text="@string/cancel"
+            android:textColor="@color/com_ycuwq_datepicker_selectedTextColor"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
@@ -40,10 +41,11 @@
             android:layout_width="1px"
             android:layout_height="match_parent" />
         <Button
+            android:padding="16dp"
             android:id="@+id/btn_dialog_choose_remind_decide"
             android:background="#f7f7f7"
-            android:text="@string/ycuew_datepicker_decide"
-            android:textColor="@color/selectedTextColor"
+            android:text="@string/decide"
+            android:textColor="@color/com_ycuwq_datepicker_selectedTextColor"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
