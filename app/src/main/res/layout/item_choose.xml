@@ -8,7 +8,7 @@
     <TextView
         android:padding="8dp"
         android:layout_gravity="center"
-        android:id="@+id/text"
+        android:id="@+id/tv_item_choose"
         android:textSize="18sp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"

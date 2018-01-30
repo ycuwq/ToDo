@@ -32,9 +32,11 @@ public class Task implements Observable {
 	/**
 	 * 不重复
 	 */
-	public static final int REPEAT_NULL = 1;
+	public static final int REPEAT_NULL = 0;
 
-	public static final int REPEAT_DAY = 2;
+	public static final int REPEAT_DAY = 1;
+
+	public static final int REPEAT_WORK_DAY = 2;
 
 	public static final int REPEAT_WEEK = 3;
 

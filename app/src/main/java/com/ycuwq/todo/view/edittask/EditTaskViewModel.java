@@ -9,6 +9,7 @@ import com.ycuwq.todo.base.BaseViewModel;
 import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.data.source.local.AppDb;
 import com.ycuwq.todo.view.common.ChooseRemindTimeDialogFragment;
+import com.ycuwq.todo.view.edittask.child.RepeatModeDialogFragment;
 
 import java.util.Calendar;
 
@@ -21,14 +22,14 @@ public class EditTaskViewModel extends BaseViewModel {
 
 	private final AppDb mAppDb;
 
-	public Task task;
+	private Task mTask;
 
 	private Fragment mBaseFragment;
 
 	@Inject
 	public EditTaskViewModel(AppDb appDb) {
 		mAppDb = appDb;
-		task = new Task();
+		mTask = new Task();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
         setStartDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
@@ -36,13 +37,13 @@ public class EditTaskViewModel extends BaseViewModel {
         calendar.set(Calendar.HOUR_OF_DAY, 9);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        task.setReminderTime(calendar.getTime());
+        mTask.setReminderTime(calendar.getTime());
 	}
 
 
 
 	public void setStartDate(int year, int month, int day) {
-	    task.setStartDate(DateUtil.getDateString(year, month - 1, day));
+	    mTask.setStartDate(DateUtil.getDateString(year, month - 1, day));
     }
 
     public void save() {
@@ -50,11 +51,11 @@ public class EditTaskViewModel extends BaseViewModel {
     }
 
     public Task getTask() {
-        return task;
+        return mTask;
     }
 
     public void setTask(Task task) {
-        this.task = task;
+        this.mTask = task;
     }
 
     public Fragment getBaseFragment() {
@@ -81,5 +82,16 @@ public class EditTaskViewModel extends BaseViewModel {
     public void chooseRemindTime(View v) {
         ChooseRemindTimeDialogFragment chooseRemindTimeDialogFragment = new ChooseRemindTimeDialogFragment();
         chooseRemindTimeDialogFragment.show(mBaseFragment.getChildFragmentManager(), "chooseRemindTime");
+    }
+
+    public void chooseRepeatMode(View v) {
+        RepeatModeDialogFragment repeatModeDialogFragment = new RepeatModeDialogFragment();
+        repeatModeDialogFragment.setOnRepeatModeSelectedListener(new RepeatModeDialogFragment.OnRepeatModeSelectedListener() {
+            @Override
+            public void onRepeatModeSelected(int mode) {
+                mTask.setRepeat(mode);
+            }
+        });
+        repeatModeDialogFragment.show(mBaseFragment.getChildFragmentManager(), "chooseRepeatMode");
     }
 }

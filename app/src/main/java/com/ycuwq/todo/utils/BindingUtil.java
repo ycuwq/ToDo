@@ -37,28 +37,12 @@ public class BindingUtil {
 
 	@BindingAdapter("repeat")
 	public static void setRepeatMode(TextView tv, int repeat) {
-		Resources resources = tv.getContext().getResources();
-		String text;
-		switch (repeat) {
-			case Task.REPEAT_NULL:
-				text = resources.getString(R.string.repeat_null);
-				break;
-			case Task.REPEAT_DAY:
-				text = resources.getString(R.string.repeat_day);
-				break;
-			case Task.REPEAT_WEEK:
-				text = resources.getString(R.string.repeat_week);
-				break;
-			case Task.REPEAT_MONTH:
-				text = resources.getString(R.string.repeat_month);
-				break;
-			case Task.REPEAT_YEAR:
-				text = resources.getString(R.string.repeat_year);
-				break;
-			default:
-				text = "";
-				break;
-		}
+		String[] repeatModeNames = tv.getContext().getResources().getStringArray(R.array.list_repeat_mode);
+        String text = "";
+		if (repeat < repeatModeNames.length) {
+		    text = repeatModeNames[repeat];
+        }
+
 		tv.setText(text);
 	}
 }

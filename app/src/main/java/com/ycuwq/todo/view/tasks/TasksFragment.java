@@ -84,7 +84,7 @@ public class TasksFragment extends BaseFragment implements Injectable {
 		ExRecyclerAdapter<String> adapter = new ExRecyclerAdapter<String>(getContext(), R.layout.item_choose) {
 			@Override
 			public void bindData(ExRecyclerViewHolder holder, String s, int position) {
-				TextView textView = holder.getView(R.id.text);
+				TextView textView = holder.getView(R.id.tv_item_choose);
 				textView.setText(s);
 				holder.getRootView().setOnClickListener(new View.OnClickListener() {
 					@Override

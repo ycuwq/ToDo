@@ -66,7 +66,7 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(getActivity(), R.style.DatePickerBottomDialog);
+        Dialog dialog = new Dialog(getContext(), R.style.DatePickerBottomDialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 设置Content前设定
 
         dialog.setContentView(R.layout.dialog_choose_remind_time);

@@ -2,6 +2,7 @@ package com.ycuwq.common.recycler;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,7 @@ public abstract class ExRecyclerAdapter<T> extends RecyclerView.Adapter<ExRecycl
 	private Context mContext;
 	private int layoutRes;
 
-	public ExRecyclerAdapter(Context mContext, @LayoutRes int layoutRes) {
+	public ExRecyclerAdapter(@NonNull Context mContext, @LayoutRes int layoutRes) {
 		this.mContext = mContext;
 		this.layoutRes = layoutRes;
 	}

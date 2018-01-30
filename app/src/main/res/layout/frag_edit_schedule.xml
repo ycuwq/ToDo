@@ -52,7 +52,7 @@
             </LinearLayout>
             <include layout="@layout/view_divider_line"/>
             <LinearLayout
-
+                android:onClick="@{(v) -> viewModel.chooseRepeatMode(v)}"
                 style="@style/list_item_layout">
                 <TextView
                     android:text="@string/repeat_mode"
