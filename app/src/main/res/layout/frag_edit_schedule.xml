@@ -30,12 +30,13 @@
                 android:textSize="16sp"/>
             <include layout="@layout/view_divider_line"/>
             <LinearLayout
+                android:onClick="@{(v) -> viewModel.chooseStartDate(v)}"
                 style="@style/list_item_layout">
                 <TextView
                     android:text="@string/time"
                     style="@style/list_item_label"/>
                 <TextView
-                    app:textForDate="@{viewModel.task.startTime}"
+                    android:text="@{viewModel.task.startDate}"
                     android:id="@+id/tv_date"
                     style="@style/list_item_tv_content"/>
             </LinearLayout>

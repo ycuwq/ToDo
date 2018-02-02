@@ -1,6 +1,7 @@
 package com.ycuwq.todo;
 
 
+import com.squareup.leakcanary.LeakCanary;
 import com.ycuwq.todo.di.AppInjector;
 import com.ycuwq.todo.di.component.DaggerAppComponent;
 
@@ -20,6 +21,12 @@ public class App extends DaggerApplication {
 	public void onCreate() {
 		super.onCreate();
 
+		if (LeakCanary.isInAnalyzerProcess(this)) {
+			// This process is dedicated to LeakCanary for heap analysis.
+			// You should not init your app in this process.
+			return;
+		}
+		LeakCanary.install(this);
 
 		if (BuildConfig.DEBUG) {
 			Timber.plant(new Timber.DebugTree());

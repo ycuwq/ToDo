@@ -64,6 +64,13 @@ public class Task implements Observable {
 	 */
 	private boolean isAllDay;
 
+
+	private int year;
+
+	private int month;
+
+	private int day;
+
 	/**
 	 * 开始日期
 	 */
@@ -94,6 +101,7 @@ public class Task implements Observable {
 
 	public Task() {
 	}
+
 
 	public int getId() {
 		return id;
@@ -169,7 +177,31 @@ public class Task implements Observable {
 		notifyChange(BR.repeat);
 	}
 
-	@Bindable
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    @Bindable
 	public String getStartDate() {
 		return startDate;
 	}

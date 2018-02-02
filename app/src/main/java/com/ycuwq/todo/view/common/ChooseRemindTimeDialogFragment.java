@@ -27,9 +27,11 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
 
     protected Button mCancelButton, mDecideButton;
 
+    private String mDate;
+    private OnTimeSelectedListener mOnTimeSelectedListener;
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_choose_remind_time, container);
 
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
@@ -39,7 +41,7 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
         hourAndMinutePicker.setOnTimeSelectedListener(new HourAndMinutePicker.OnTimeSelectedListener() {
             @Override
             public void onTimeSelected(int hour, int minute) {
-                timeTv.setText(String.format("%s:%s", numberFormat.format(hour), numberFormat.format(minute)));
+                timeTv.setText(String.format(mDate + " %s:%s", numberFormat.format(hour), numberFormat.format(minute)));
             }
         });
         mCancelButton = view.findViewById(R.id.btn_dialog_choose_remind_cancel);
@@ -53,7 +55,10 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
         mDecideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (mOnTimeSelectedListener != null) {
+                    mOnTimeSelectedListener.onTimeSelected(hourAndMinutePicker.getHour(),
+                            hourAndMinutePicker.getMinute());
+                }
                 dismiss();
             }
         });
@@ -84,5 +89,17 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         }
         return dialog;
+    }
+
+    public void setDate(String date) {
+        mDate = date;
+    }
+
+    public void setOnTimeSelectedListener(OnTimeSelectedListener onTimeSelectedListener) {
+        mOnTimeSelectedListener = onTimeSelectedListener;
+    }
+
+    public interface OnTimeSelectedListener {
+        void onTimeSelected(int hour, int minute);
     }
 }

@@ -28,22 +28,30 @@ public class EditTaskViewModel extends BaseViewModel {
 
 	@Inject
 	public EditTaskViewModel(AppDb appDb) {
-		mAppDb = appDb;
-		mTask = new Task();
+        mAppDb = appDb;
+        mTask = new Task();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
-        setStartDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
-                calendar.get(Calendar.DATE));
+
         calendar.set(Calendar.HOUR_OF_DAY, 9);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         mTask.setReminderTime(calendar.getTime());
-	}
+        setStartDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DATE));
+    }
 
 
 
 	public void setStartDate(int year, int month, int day) {
+        mTask.setYear(year);
+        mTask.setMonth(month);
+        mTask.setDay(day);
 	    mTask.setStartDate(DateUtil.getDateString(year, month - 1, day));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mTask.getReminderTime());
+        calendar.set(year, month - 1, day);
+        mTask.setReminderTime(calendar.getTime());
     }
 
     public void save() {
@@ -69,29 +77,25 @@ public class EditTaskViewModel extends BaseViewModel {
     public void chooseStartDate(View v) {
         DatePickerDialogFragment datePickerDialogFragment = new DatePickerDialogFragment();
 
-        datePickerDialogFragment.setOnDateChooseListener(new DatePickerDialogFragment.OnDateChooseListener() {
-            @Override
-            public void onDateChoose(int year, int month, int day) {
-                setStartDate(year, month, day);
-            }
-        });
+        datePickerDialogFragment.setOnDateChooseListener(this::setStartDate);
         datePickerDialogFragment.show(mBaseFragment.getChildFragmentManager(), "chooseStartDate");
 
     }
 
     public void chooseRemindTime(View v) {
         ChooseRemindTimeDialogFragment chooseRemindTimeDialogFragment = new ChooseRemindTimeDialogFragment();
+        chooseRemindTimeDialogFragment.setDate(mTask.getStartDate());
+        chooseRemindTimeDialogFragment.setOnTimeSelectedListener((hour, minute) -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(mTask.getYear(), mTask.getMonth() - 1, mTask.getDay(), hour, minute, 0);
+            mTask.setReminderTime(calendar.getTime());
+        });
         chooseRemindTimeDialogFragment.show(mBaseFragment.getChildFragmentManager(), "chooseRemindTime");
     }
 
     public void chooseRepeatMode(View v) {
         RepeatModeDialogFragment repeatModeDialogFragment = new RepeatModeDialogFragment();
-        repeatModeDialogFragment.setOnRepeatModeSelectedListener(new RepeatModeDialogFragment.OnRepeatModeSelectedListener() {
-            @Override
-            public void onRepeatModeSelected(int mode) {
-                mTask.setRepeat(mode);
-            }
-        });
+        repeatModeDialogFragment.setOnRepeatModeSelectedListener(mode -> mTask.setRepeat(mode));
         repeatModeDialogFragment.show(mBaseFragment.getChildFragmentManager(), "chooseRepeatMode");
     }
 }
