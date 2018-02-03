@@ -25,7 +25,7 @@
                 android:text="@={viewModel.task.name}"
                 android:layout_margin="@dimen/text_margin"
                 android:background="@null"
-                android:hint="@string/input_schedule_name"
+                android:hint="@string/hint_input_schedule_name"
                 android:inputType="text"
                 android:textSize="16sp"/>
             <include layout="@layout/view_divider_line"/>
@@ -63,6 +63,29 @@
                     style="@style/list_item_tv_content"/>
             </LinearLayout>
             <include layout="@layout/view_divider_line"/>
+            <EditText
+                android:id="@+id/et_schedule_address"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:text="@={viewModel.task.address}"
+                android:layout_margin="@dimen/text_margin"
+                android:background="@null"
+                android:hint="@string/hint_input_address"
+                android:inputType="text"
+                android:textSize="16sp"/>
+            <include layout="@layout/view_divider_line"/>
+            <EditText
+                android:id="@+id/et_schedule_remark"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:text="@={viewModel.task.remark}"
+                android:layout_margin="@dimen/text_margin"
+                android:background="@null"
+                android:hint="@string/hint_input_remark"
+                android:inputType="text"
+                android:textSize="16sp"/>
+            <include layout="@layout/view_divider_line"/>
         </LinearLayout>
+
     </ScrollView>
 </layout>

@@ -4,11 +4,11 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.ycuwq.common.util.DateUtil;
-import com.ycuwq.datepicker.date.DatePickerDialogFragment;
 import com.ycuwq.todo.base.BaseViewModel;
 import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.data.source.local.AppDb;
-import com.ycuwq.todo.view.common.ChooseRemindTimeDialogFragment;
+import com.ycuwq.todo.view.edittask.child.ChooseDateDialogFragment;
+import com.ycuwq.todo.view.edittask.child.ChooseRemindTimeDialogFragment;
 import com.ycuwq.todo.view.edittask.child.RepeatModeDialogFragment;
 
 import java.util.Calendar;
@@ -16,6 +16,7 @@ import java.util.Calendar;
 import javax.inject.Inject;
 
 /**
+ * 编辑日程的ViewModel
  * Created by yangchen on 2017/12/6.
  */
 public class EditTaskViewModel extends BaseViewModel {
@@ -75,10 +76,10 @@ public class EditTaskViewModel extends BaseViewModel {
     }
 
     public void chooseStartDate(View v) {
-        DatePickerDialogFragment datePickerDialogFragment = new DatePickerDialogFragment();
-
-        datePickerDialogFragment.setOnDateChooseListener(this::setStartDate);
-        datePickerDialogFragment.show(mBaseFragment.getChildFragmentManager(), "chooseStartDate");
+        ChooseDateDialogFragment chooseDateDialogFragment = new ChooseDateDialogFragment();
+        chooseDateDialogFragment.setOnDateSelectedListener(this::setStartDate);
+        chooseDateDialogFragment.setInitDate(mTask.getYear(), mTask.getMonth(), mTask.getDay());
+        chooseDateDialogFragment.show(mBaseFragment.getChildFragmentManager(), "chooseStartDate");
 
     }
 

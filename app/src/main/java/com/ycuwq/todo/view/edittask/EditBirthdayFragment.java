@@ -8,12 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ycuwq.common.util.AutoClearedValue;
-import com.ycuwq.datepicker.date.DatePickerDialogFragment;
 import com.ycuwq.todo.BR;
 import com.ycuwq.todo.base.BaseFragment;
 import com.ycuwq.todo.databinding.FragEditBirthdayBinding;
 import com.ycuwq.todo.di.Injectable;
-import com.ycuwq.todo.view.common.ChooseRemindTimeDialogFragment;
 
 import javax.inject.Inject;
 

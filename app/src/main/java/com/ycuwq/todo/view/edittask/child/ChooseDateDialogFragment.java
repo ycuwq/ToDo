@@ -1,4 +1,4 @@
-package com.ycuwq.todo.view.common;
+package com.ycuwq.todo.view.edittask.child;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -14,38 +14,43 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.ycuwq.datepicker.time.HourAndMinutePicker;
+import com.ycuwq.datepicker.date.DatePicker;
 import com.ycuwq.todo.R;
 
 import java.text.NumberFormat;
 
 /**
- * 选择提醒时间
- * Created by ycuwq on 2018/1/25.
+ * 日期选择
+ * Created by ycuwq on 2018/2/3.
  */
-public class ChooseRemindTimeDialogFragment extends DialogFragment {
-
+public class ChooseDateDialogFragment extends DialogFragment {
     protected Button mCancelButton, mDecideButton;
 
-    private String mDate;
-    private OnTimeSelectedListener mOnTimeSelectedListener;
+    private OnDateSelectedListener mOnDateSelectedListener;
+    private int mInitYear = -1, mInitMonth = -1, mInitDay = -1;
+    private String mTitle;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_choose_remind_time, container);
+        View view = inflater.inflate(R.layout.dialog_choose_date, container);
 
+        TextView titleTv = view.findViewById(R.id.tv_dialog_choose_date_title);
+        if (mTitle != null) {
+            titleTv.setText(mTitle);
+        }
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
         numberFormat.setMinimumIntegerDigits(2);
-        TextView timeTv = view.findViewById(R.id.tv_dialog_choose_remind_time);
-        HourAndMinutePicker hourAndMinutePicker = view.findViewById(R.id.picker_dialog_choose_remind_time);
-        hourAndMinutePicker.setOnTimeSelectedListener(new HourAndMinutePicker.OnTimeSelectedListener() {
+        TextView timeTv = view.findViewById(R.id.tv_dialog_choose_date);
+        DatePicker datePicker = view.findViewById(R.id.picker_dialog_choose_date);
+        datePicker.setOnDateSelectedListener(new DatePicker.OnDateSelectedListener() {
             @Override
-            public void onTimeSelected(int hour, int minute) {
-                timeTv.setText(String.format(mDate + " %s:%s", numberFormat.format(hour), numberFormat.format(minute)));
+            public void onDateSelected(int year, int month, int day) {
+                timeTv.setText(String.format("%s-%s-%s", year,
+                        numberFormat.format(month), numberFormat.format(day)));
             }
         });
-        mCancelButton = view.findViewById(R.id.btn_dialog_choose_remind_cancel);
-        mDecideButton = view.findViewById(R.id.btn_dialog_choose_remind_decide);
+        mCancelButton = view.findViewById(R.id.btn_dialog_choose_date_cancel);
+        mDecideButton = view.findViewById(R.id.btn_dialog_choose_date_decide);
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,15 +60,16 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
         mDecideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mOnTimeSelectedListener != null) {
-                    mOnTimeSelectedListener.onTimeSelected(hourAndMinutePicker.getHour(),
-                            hourAndMinutePicker.getMinute());
+                if (mOnDateSelectedListener != null) {
+                    mOnDateSelectedListener.onDateSelected(datePicker.getYear(),
+                            datePicker.getMonth(), datePicker.getDay());
                 }
                 dismiss();
             }
         });
-
-        hourAndMinutePicker.setTime(9, 0, false);
+        if (mInitYear != -1) {
+            datePicker.setDate(mInitYear, mInitMonth, mInitDay, false);
+        }
 
         return view;
     }
@@ -74,7 +80,7 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
         Dialog dialog = new Dialog(getContext(), R.style.DatePickerBottomDialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 设置Content前设定
 
-        dialog.setContentView(R.layout.dialog_choose_remind_time);
+        dialog.setContentView(R.layout.dialog_choose_date);
         dialog.setCanceledOnTouchOutside(true); // 外部点击取消
 
         Window window = dialog.getWindow();
@@ -91,15 +97,21 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
         return dialog;
     }
 
-    public void setDate(String date) {
-        mDate = date;
+    public void setInitDate(int year, int month, int day) {
+        mInitYear = year;
+        mInitMonth = month;
+        mInitDay = day;
     }
 
-    public void setOnTimeSelectedListener(OnTimeSelectedListener onTimeSelectedListener) {
-        mOnTimeSelectedListener = onTimeSelectedListener;
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
-    public interface OnTimeSelectedListener {
-        void onTimeSelected(int hour, int minute);
+    public void setOnDateSelectedListener(OnDateSelectedListener onDateSelectedListener) {
+        mOnDateSelectedListener = onDateSelectedListener;
+    }
+
+    public interface OnDateSelectedListener {
+        void onDateSelected(int year, int month, int day);
     }
 }

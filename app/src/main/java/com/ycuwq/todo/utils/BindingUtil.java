@@ -1,13 +1,12 @@
 package com.ycuwq.todo.utils;
 
-import android.content.res.Resources;
 import android.databinding.BindingAdapter;
 import android.support.v4.app.Fragment;
 import android.widget.TextView;
 
 import com.ycuwq.todo.R;
 import com.ycuwq.todo.data.bean.Task;
-import com.ycuwq.todo.view.common.ChooseRemindTimeDialogFragment;
+import com.ycuwq.todo.view.edittask.child.ChooseRemindTimeDialogFragment;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

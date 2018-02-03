@@ -1,7 +1,6 @@
 package com.ycuwq.todo.data.bean;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
@@ -85,19 +84,17 @@ public class Task implements Observable {
 	 */
 	private int repeat;
 
-	private transient PropertyChangeRegistry propertyChangeRegistry = new PropertyChangeRegistry();
+    /**
+     * 地点
+     */
+	private String address;
 
-	@Ignore
-	public Task(int type, String name, boolean isCompleted, boolean isAllDay, String startDate, Date startTime, Date reminderTime, int repeat) {
-		this.type = type;
-		this.name = name;
-		this.isCompleted = isCompleted;
-		this.isAllDay = isAllDay;
-		this.startDate = startDate;
-		this.startTime = startTime;
-		this.reminderTime = reminderTime;
-		this.repeat = repeat;
-	}
+    /**
+     * 备注
+     */
+	private String remark;
+
+	private transient PropertyChangeRegistry propertyChangeRegistry = new PropertyChangeRegistry();
 
 	public Task() {
 	}
@@ -211,7 +208,27 @@ public class Task implements Observable {
 		notifyChange(BR.startDate);
 	}
 
-	private void notifyChange(int propertyId) {
+    @Bindable
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+        notifyChange(BR.address);
+    }
+
+    @Bindable
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+        notifyChange(BR.remark);
+    }
+
+    private void notifyChange(int propertyId) {
 		if (propertyChangeRegistry == null) {
 			propertyChangeRegistry = new PropertyChangeRegistry();
 		}
