@@ -1,9 +1,11 @@
 package com.ycuwq.todo.view.edittask;
 
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.ycuwq.common.util.DateUtil;
+import com.ycuwq.todo.R;
 import com.ycuwq.todo.base.BaseViewModel;
 import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.data.source.local.AppDb;
@@ -31,6 +33,7 @@ public class EditTaskViewModel extends BaseViewModel {
 	public EditTaskViewModel(AppDb appDb) {
         mAppDb = appDb;
         mTask = new Task();
+        mTask.setType(Task.TYPE_SCHEDULE);
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
 
@@ -42,7 +45,9 @@ public class EditTaskViewModel extends BaseViewModel {
                 calendar.get(Calendar.DATE));
     }
 
-
+    public void setTaskType(@Task.TaskType int type) {
+	    mTask.setType(type);
+    }
 
 	public void setStartDate(int year, int month, int day) {
         mTask.setYear(year);
@@ -55,8 +60,35 @@ public class EditTaskViewModel extends BaseViewModel {
         mTask.setReminderTime(calendar.getTime());
     }
 
-    public void save() {
+    public boolean save() {
+	    if (TextUtils.isEmpty(mTask.getName())) {
+	        switch (mTask.getType()) {
+                case Task.TYPE_ANNIVERSARY:
+                    snackbarText.set(mBaseFragment.getString(R.string.hint_input_anniversary_content));
+                    break;
+                case Task.TYPE_BIRTHDAY:
+                    snackbarText.set(mBaseFragment.getString(R.string.hint_input_name));
+                    break;
+                case Task.TYPE_SCHEDULE:
+                    snackbarText.set(mBaseFragment.getString(R.string.hint_input_schedule_name));
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+        if (mTask.getType() != Task.TYPE_SCHEDULE) {
+            mTask.setRepeat(Task.REPEAT_YEAR);
+        }
+        // TODO: 2018/2/4 修改线程调用方式
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mAppDb.taskDao().insertTask(mTask);
 
+            }
+        }).start();
+        return true;
     }
 
     public Task getTask() {

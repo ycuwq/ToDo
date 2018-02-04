@@ -19,9 +19,8 @@ import com.yangchen.extracalendarview.base.Date;
 import com.yangchen.extracalendarview.listener.OnDayClickListener;
 import com.ycuwq.common.recycler.ExRecyclerAdapter;
 import com.ycuwq.common.recycler.ExRecyclerViewHolder;
-import com.ycuwq.common.util.SnakeBarUtil;
 import com.ycuwq.todo.R;
-import com.ycuwq.todo.base.BaseFragment;
+import com.ycuwq.todo.base.ViewModelFragment;
 import com.ycuwq.todo.databinding.FragTasksBinding;
 import com.ycuwq.todo.di.Injectable;
 import com.ycuwq.todo.view.edittask.EditTaskActivity;
@@ -34,7 +33,7 @@ import javax.inject.Inject;
  * 显示任务总览的Activity
  * Created by 杨晨 on 2017/5/10.
  */
-public class TasksFragment extends BaseFragment implements Injectable {
+public class TasksFragment extends ViewModelFragment implements Injectable {
 
 	private final String TAG = getClass().getSimpleName();
 
@@ -46,7 +45,7 @@ public class TasksFragment extends BaseFragment implements Injectable {
 	ViewModelProvider.Factory mViewModelFactory;
 
 	private ExtraCalendarView mExtraCalendarView;
-	private Observable.OnPropertyChangedCallback mSnakeBarCallback;
+	private Observable.OnPropertyChangedCallback mSnackbarCallback;
 
 	@Inject
 	public TasksFragment() {}
@@ -58,27 +57,26 @@ public class TasksFragment extends BaseFragment implements Injectable {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 	                         @Nullable Bundle savedInstanceState) {
 		mBinding = FragTasksBinding.inflate(inflater, container, false);
-
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(TasksViewModel.class);
+        registerSnackbarText(mViewModel);
+        initView();
 		return mBinding.getRoot();
 	}
 
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(TasksViewModel.class);
-		mExtraCalendarView = mBinding.extraCalendarView;
-		mExtraCalendarView.setOnDayClickListener(new OnDayClickListener() {
-			@Override
-			public void onClick(View v, Date date) {
-				Log.d(TAG, "onClick: " + date.toString());
-			}
-		});
 
-		setupSnakeBar();
-		initView();
 	}
 
 	private void initView() {
+        mExtraCalendarView = mBinding.extraCalendarView;
+        mExtraCalendarView.setOnDayClickListener(new OnDayClickListener() {
+            @Override
+            public void onClick(View v, Date date) {
+                Log.d(TAG, "onClick: " + date.toString());
+            }
+        });
 		mBinding.fabAddTask.setOnClickListener(v -> jumpAddTaskActivity());
 		RecyclerView recyclerView = mBinding.recyclerView;
 		ExRecyclerAdapter<String> adapter = new ExRecyclerAdapter<String>(getContext(), R.layout.item_choose) {
@@ -114,27 +112,5 @@ public class TasksFragment extends BaseFragment implements Injectable {
 		startActivity(EditTaskActivity.getIntent(getContext(), null));
 	}
 
-	/**
-	 * 设置SnakeBar的监听，当mViewModel的snakeBarText发生改变时SnakeBar显示
-	 */
-	private void setupSnakeBar() {
-		mSnakeBarCallback = new Observable.OnPropertyChangedCallback() {
-			@Override
-			public void onPropertyChanged(Observable observable, int i) {
-				SnakeBarUtil.showSnackBar(getView(), mViewModel.getSnakeBarText());
-			}
-		};
-		if (mViewModel == null) {
-			return;
-		}
-		mViewModel.snakeBarText.addOnPropertyChangedCallback(mSnakeBarCallback);
-	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		if (mViewModel != null) {
-			mViewModel.snakeBarText.removeOnPropertyChangedCallback(mSnakeBarCallback);
-		}
-	}
 }

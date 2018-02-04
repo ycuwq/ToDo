@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.ycuwq.common.util.AutoClearedValue;
 import com.ycuwq.todo.BR;
-import com.ycuwq.todo.base.BaseFragment;
+import com.ycuwq.todo.base.ViewModelFragment;
 import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.databinding.FragEditScheduleBinding;
 import com.ycuwq.todo.di.Injectable;
@@ -20,7 +20,7 @@ import javax.inject.Inject;
  * {@link EditTaskFragment} 中的日程的的部分。
  * Created by yangchen on 2017/12/5.
  */
-public class EditScheduleFragment extends BaseFragment implements Injectable {
+public class EditScheduleFragment extends ViewModelFragment implements Injectable {
 
 	private AutoClearedValue<FragEditScheduleBinding> mBinding;
 	private EditTaskViewModel mEditTaskViewModel;

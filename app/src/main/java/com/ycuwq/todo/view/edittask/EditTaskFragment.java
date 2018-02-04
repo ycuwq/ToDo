@@ -15,7 +15,8 @@ import android.widget.RadioButton;
 
 import com.ycuwq.common.util.ActivityUtils;
 import com.ycuwq.todo.R;
-import com.ycuwq.todo.base.BaseFragment;
+import com.ycuwq.todo.base.ViewModelFragment;
+import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.databinding.FragEditTaskBinding;
 import com.ycuwq.todo.di.Injectable;
 
@@ -27,7 +28,7 @@ import dagger.Lazy;
  * 在{@link EditTaskActivity} 中使用
  * Created by yangchen on 2017/12/1.
  */
-public class EditTaskFragment extends BaseFragment implements Injectable, View.OnClickListener {
+public class EditTaskFragment extends ViewModelFragment implements Injectable, View.OnClickListener {
 
 	private final static int RADIO_BUTTON_DRAWABLE_SIZE = 120;
 
@@ -56,37 +57,45 @@ public class EditTaskFragment extends BaseFragment implements Injectable, View.O
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		mBinding = FragEditTaskBinding.inflate(inflater, container, false);
 		mBinding.setFragment(this);
-		return mBinding.getRoot();
+        mEditTaskViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EditTaskViewModel.class);
+        mEditTaskViewModel.setBaseFragment(this);
+        registerSnackbarText(mEditTaskViewModel);
+        initView();
+        return mBinding.getRoot();
 	}
 
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mEditTaskViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EditTaskViewModel.class);
-		mEditTaskViewModel.setBaseFragment(this);
 		showScheduleFragment();
-		initView();
 	}
+
+
 
 	private void initView() {
 		setRadioButtonDrawableSize();
 		mBinding.radioGroupChooseType.setOnCheckedChangeListener((group, checkedId) -> {
 			switch (checkedId) {
 				case R.id.radioButton_schedule:
+				    mEditTaskViewModel.setTaskType(Task.TYPE_SCHEDULE);
 					showScheduleFragment();
 					break;
 				case R.id.radioButton_birthday:
+                    mEditTaskViewModel.setTaskType(Task.TYPE_BIRTHDAY);
 					showBirthdayFragment();
 					break;
 				case R.id.radioButton_anniversary:
+                    mEditTaskViewModel.setTaskType(Task.TYPE_ANNIVERSARY);
 					showAnniversaryFragment();
 					break;
 				default:
 					break;
 			}
 		});
-		FloatingActionButton fab = getActivity().findViewById(R.id.fab_add_task);
-		fab.setOnClickListener(this);
+		if (getActivity() != null) {
+            FloatingActionButton fab = getActivity().findViewById(R.id.fab_add_task);
+            fab.setOnClickListener(this);
+        }
 	}
 
 	private void showScheduleFragment() {
@@ -106,7 +115,6 @@ public class EditTaskFragment extends BaseFragment implements Injectable, View.O
 	}
 
 	private void showBirthdayFragment() {
-
 		Fragment fragment = getChildFragmentManager().
 				findFragmentById(R.id.content);
 		if (fragment == null) {
@@ -161,7 +169,10 @@ public class EditTaskFragment extends BaseFragment implements Injectable, View.O
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.fab_add_task:
-
+			    boolean isFinish = mEditTaskViewModel.save();
+			    if (isFinish && getActivity() != null) {
+			        getActivity().finish();
+                }
 				break;
 			default:
 				break;

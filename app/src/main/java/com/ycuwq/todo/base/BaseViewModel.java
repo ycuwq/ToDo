@@ -1,16 +1,17 @@
 package com.ycuwq.todo.base;
 
 import android.arch.lifecycle.ViewModel;
-import android.databinding.ObservableField;
+
+import com.ycuwq.todo.utils.SnackbarText;
 
 /**
  * Created by 杨晨 on 2017/10/18.
  */
 public abstract class BaseViewModel extends ViewModel {
 
-	public ObservableField<String> snakeBarText = new ObservableField<>();
+	public SnackbarText snackbarText = new SnackbarText();
 
-	public String getSnakeBarText() {
-		return snakeBarText.get();
+	public String getSnackbarText() {
+		return snackbarText.get();
 	}
 }

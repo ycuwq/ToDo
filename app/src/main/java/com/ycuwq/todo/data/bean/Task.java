@@ -7,10 +7,13 @@ import android.arch.persistence.room.TypeConverters;
 import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
+import android.support.annotation.IntDef;
 
 import com.ycuwq.todo.BR;
 import com.ycuwq.todo.data.converters.DateConverter;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Date;
 
 /**
@@ -66,9 +69,9 @@ public class Task implements Observable {
 
 	private int year;
 
-	private int month;
+    private int month;
 
-	private int day;
+    private int day;
 
 	/**
 	 * 开始日期
@@ -250,4 +253,8 @@ public class Task implements Observable {
 			propertyChangeRegistry.remove(callback);
 		}
 	}
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({TYPE_ANNIVERSARY, TYPE_BIRTHDAY, TYPE_SCHEDULE})
+	public @interface TaskType {
+    }
 }

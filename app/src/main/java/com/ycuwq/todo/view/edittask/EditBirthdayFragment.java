@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.ycuwq.common.util.AutoClearedValue;
 import com.ycuwq.todo.BR;
-import com.ycuwq.todo.base.BaseFragment;
+import com.ycuwq.todo.base.ViewModelFragment;
 import com.ycuwq.todo.databinding.FragEditBirthdayBinding;
 import com.ycuwq.todo.di.Injectable;
 
@@ -19,7 +19,7 @@ import javax.inject.Inject;
  * {@link EditTaskFragment} 中的生日的部分
  * Created by yangchen on 2017/12/5.
  */
-public class EditBirthdayFragment extends BaseFragment implements Injectable {
+public class EditBirthdayFragment extends ViewModelFragment implements Injectable {
 
 	private AutoClearedValue<FragEditBirthdayBinding> mBinding;
 	private EditTaskViewModel mEditTaskViewModel;
@@ -43,7 +43,6 @@ public class EditBirthdayFragment extends BaseFragment implements Injectable {
         mBinding.get().setVariable(BR.viewModel, mEditTaskViewModel);
 
 		mBinding.get().setFragment(this);
-
 	}
 
 	public void setEditTaskViewModel(EditTaskViewModel editTaskViewModel) {

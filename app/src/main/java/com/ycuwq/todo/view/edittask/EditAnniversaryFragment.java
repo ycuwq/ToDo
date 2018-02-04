@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.ycuwq.common.util.AutoClearedValue;
 import com.ycuwq.datepicker.date.DatePickerDialogFragment;
 import com.ycuwq.todo.BR;
-import com.ycuwq.todo.base.BaseFragment;
+import com.ycuwq.todo.base.ViewModelFragment;
 import com.ycuwq.todo.databinding.FragEditAnniversaryBinding;
 import com.ycuwq.todo.di.Injectable;
 
@@ -20,7 +20,7 @@ import javax.inject.Inject;
  * {@link EditTaskFragment} 中的纪念日的部分
  * Created by yangchen on 2017/12/5.
  */
-public class EditAnniversaryFragment extends BaseFragment implements Injectable {
+public class EditAnniversaryFragment extends ViewModelFragment implements Injectable {
 
 	private AutoClearedValue<FragEditAnniversaryBinding> mBinding;
 	private EditTaskViewModel mEditTaskViewModel;
