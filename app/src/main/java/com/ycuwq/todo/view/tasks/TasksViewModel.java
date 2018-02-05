@@ -1,9 +1,12 @@
 package com.ycuwq.todo.view.tasks;
 
-import android.support.annotation.NonNull;
+import android.arch.lifecycle.LiveData;
 
 import com.ycuwq.todo.base.BaseViewModel;
-import com.ycuwq.todo.data.source.local.AppDb;
+import com.ycuwq.todo.data.bean.Task;
+import com.ycuwq.todo.data.source.local.TaskRepository;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -13,17 +16,21 @@ import javax.inject.Inject;
  */
 public class TasksViewModel extends BaseViewModel {
 	private final String TAG = getClass().getSimpleName();
-	private final AppDb mAppDb;
+	private final TaskRepository mTaskRepository;
 
 	@Inject
-	public TasksViewModel(@NonNull AppDb appDb) {
-		mAppDb = appDb;
+	public TasksViewModel(TaskRepository taskRepository) {
+	    mTaskRepository = taskRepository;
 	}
 
 	public void onTaskClicked() {
 
 
 	}
+
+	public LiveData<List<Task>> loadAllTask() {
+	    return mTaskRepository.loadAllTask();
+    }
 
 
 }

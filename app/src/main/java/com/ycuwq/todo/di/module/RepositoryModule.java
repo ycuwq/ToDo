@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 
 import com.ycuwq.todo.data.source.local.AppDb;
+import com.ycuwq.todo.data.source.local.dao.TaskDao;
 
 import javax.inject.Singleton;
 
@@ -21,8 +22,14 @@ public class RepositoryModule {
 
 	@Singleton
 	@Provides
-	AppDb provideTasksRepository(Context context) {
+	AppDb provideAppDb(Context context) {
 		return Room.databaseBuilder(context.getApplicationContext(), AppDb.class, DATABASE_NAME).build();
 	}
+
+    @Singleton
+    @Provides
+	TaskDao provideTaskDao(AppDb appDb) {
+	    return appDb.taskDao();
+    }
 
 }

@@ -59,14 +59,13 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 		mBinding = FragTasksBinding.inflate(inflater, container, false);
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(TasksViewModel.class);
         registerSnackbarText(mViewModel);
-        initView();
 		return mBinding.getRoot();
 	}
 
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
+		initView();
 	}
 
 	private void initView() {
@@ -87,7 +86,6 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 				holder.getRootView().setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						mViewModel.onTaskClicked();
 					}
 				});
 			}

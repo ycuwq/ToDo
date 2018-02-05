@@ -8,7 +8,7 @@ import com.ycuwq.common.util.DateUtil;
 import com.ycuwq.todo.R;
 import com.ycuwq.todo.base.BaseViewModel;
 import com.ycuwq.todo.data.bean.Task;
-import com.ycuwq.todo.data.source.local.AppDb;
+import com.ycuwq.todo.data.source.local.TaskRepository;
 import com.ycuwq.todo.view.edittask.child.ChooseDateDialogFragment;
 import com.ycuwq.todo.view.edittask.child.ChooseRemindTimeDialogFragment;
 import com.ycuwq.todo.view.edittask.child.RepeatModeDialogFragment;
@@ -23,15 +23,14 @@ import javax.inject.Inject;
  */
 public class EditTaskViewModel extends BaseViewModel {
 
-	private final AppDb mAppDb;
-
+    private final TaskRepository mTaskRepository;
 	private Task mTask;
 
 	private Fragment mBaseFragment;
 
 	@Inject
-	public EditTaskViewModel(AppDb appDb) {
-        mAppDb = appDb;
+	public EditTaskViewModel(TaskRepository taskRepository) {
+	    mTaskRepository = taskRepository;
         mTask = new Task();
         mTask.setType(Task.TYPE_SCHEDULE);
         Calendar calendar = Calendar.getInstance();
@@ -80,14 +79,7 @@ public class EditTaskViewModel extends BaseViewModel {
         if (mTask.getType() != Task.TYPE_SCHEDULE) {
             mTask.setRepeat(Task.REPEAT_YEAR);
         }
-        // TODO: 2018/2/4 修改线程调用方式
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mAppDb.taskDao().insertTask(mTask);
-
-            }
-        }).start();
+        mTaskRepository.saveTask(mTask);
         return true;
     }
 
