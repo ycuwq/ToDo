@@ -1,7 +1,6 @@
 package com.ycuwq.todo.data.source.local;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 
 import com.ycuwq.todo.AppExecutors;
 import com.ycuwq.todo.data.bean.Task;
@@ -41,15 +40,10 @@ public class TaskRepository {
     }
 
     public LiveData<List<Task>> loadAllTask() {
-        MutableLiveData<List<Task>> taskList = new MutableLiveData<>();
-        mAppExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<Task> t = mTaskDao.loadAllTask();
-                taskList.postValue(mTaskDao.loadAllTask());
-            }
-        });
-        return taskList;
+        return mTaskDao.loadAllTask();
+    }
+    public LiveData<List<Task>> loadTasks(String date) {
+        return mTaskDao.loadAllTask(date);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.ycuwq.todo.data.source.local.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -27,8 +28,8 @@ public interface TaskDao {
 	void deleteTask(Task task);
 
 	@Query("SELECT * FROM task")
-	List<Task> loadAllTask();
+	LiveData<List<Task>> loadAllTask();
 
 	@Query("SELECT * FROM task WHERE startDate = :startDate")
-	List<Task> loadAllTask(String startDate);
+	LiveData<List<Task>> loadAllTask(String startDate);
 }

@@ -1,5 +1,6 @@
 package com.ycuwq.todo.view.tasks;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.Observable;
@@ -8,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +21,17 @@ import com.ycuwq.common.recycler.ExRecyclerAdapter;
 import com.ycuwq.common.recycler.ExRecyclerViewHolder;
 import com.ycuwq.todo.R;
 import com.ycuwq.todo.base.ViewModelFragment;
+import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.databinding.FragTasksBinding;
 import com.ycuwq.todo.di.Injectable;
 import com.ycuwq.todo.view.edittask.EditTaskActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 /**
  * 显示任务总览的Activity
@@ -66,6 +70,12 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		initView();
+		mViewModel.getTasks().observe(this, new Observer<List<Task>>() {
+            @Override
+            public void onChanged(@Nullable List<Task> tasks) {
+                Timber.d("TASKS size" + tasks.size());
+            }
+        });
 	}
 
 	private void initView() {
@@ -73,7 +83,7 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
         mExtraCalendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onClick(View v, Date date) {
-                Log.d(TAG, "onClick: " + date.toString());
+                mViewModel.getDate().setValue(date.toString());
             }
         });
 		mBinding.fabAddTask.setOnClickListener(v -> jumpAddTaskActivity());
@@ -86,6 +96,7 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 				holder.getRootView().setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
+
 					}
 				});
 			}
