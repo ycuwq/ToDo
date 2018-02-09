@@ -26,12 +26,9 @@ import com.ycuwq.todo.databinding.FragTasksBinding;
 import com.ycuwq.todo.di.Injectable;
 import com.ycuwq.todo.view.edittask.EditTaskActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 /**
  * 显示任务总览的Activity
@@ -54,8 +51,6 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 	@Inject
 	public TasksFragment() {}
 
-
-
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -70,12 +65,7 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		initView();
-		mViewModel.getTasks().observe(this, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(@Nullable List<Task> tasks) {
-                Timber.d("TASKS size" + tasks.size());
-            }
-        });
+
 	}
 
 	private void initView() {
@@ -88,11 +78,15 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
         });
 		mBinding.fabAddTask.setOnClickListener(v -> jumpAddTaskActivity());
 		RecyclerView recyclerView = mBinding.recyclerView;
-		ExRecyclerAdapter<String> adapter = new ExRecyclerAdapter<String>(getContext(), R.layout.item_choose) {
+		ExRecyclerAdapter<Task> adapter = new ExRecyclerAdapter<Task>(getContext(), R.layout.item_task) {
 			@Override
-			public void bindData(ExRecyclerViewHolder holder, String s, int position) {
-				TextView textView = holder.getView(R.id.tv_item_choose);
-				textView.setText(s);
+			public void bindData(ExRecyclerViewHolder holder, Task task, int position) {
+				TextView textView = holder.getView(R.id.tv_item_task_name);
+				if (task.getType() == Task.TYPE_BIRTHDAY) {
+                    textView.setText(String.format("%s%s", task.getName(), getString(R.string.birthday_suffix)));
+                } else {
+				    textView.setText(task.getName());
+                }
 				holder.getRootView().setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -101,14 +95,15 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 				});
 			}
 		};
-		ArrayList<String> list = new ArrayList<>();
-		for (int i = 0; i < 100; i++) {
-			list.add("列表项" + i);
-		}
-		adapter.setList(list);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 		recyclerView.setAdapter(adapter);
+        mViewModel.getTasks().observe(this, new Observer<List<Task>>() {
+            @Override
+            public void onChanged(@Nullable List<Task> tasks) {
+                adapter.setList(tasks);
+            }
+        });
 	}
 
 	@Override

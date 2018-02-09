@@ -64,17 +64,16 @@ public class EditTaskViewModel extends BaseViewModel {
 	        switch (mTask.getType()) {
                 case Task.TYPE_ANNIVERSARY:
                     snackbarText.set(mBaseFragment.getString(R.string.hint_input_anniversary_content));
-                    break;
+                    return false;
                 case Task.TYPE_BIRTHDAY:
                     snackbarText.set(mBaseFragment.getString(R.string.hint_input_name));
-                    break;
+                    return false;
                 case Task.TYPE_SCHEDULE:
-                    snackbarText.set(mBaseFragment.getString(R.string.hint_input_schedule_name));
+                    mTask.setName(mBaseFragment.getString(R.string.no_schedule_name));
                     break;
                 default:
                     break;
             }
-            return false;
         }
         if (mTask.getType() != Task.TYPE_SCHEDULE) {
             mTask.setRepeat(Task.REPEAT_YEAR);
