@@ -195,7 +195,7 @@ public abstract class BaseCalendarItemView extends ViewGroup {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
 
-		int itemWidth = widthSpecSize / COLUMN;// - 14
+		int itemWidth = widthSpecSize / COLUMN;//
 
 		int width = widthSpecSize;
 		int height = itemWidth * maxRow;
