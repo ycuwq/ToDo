@@ -78,6 +78,9 @@ public class EditTaskViewModel extends BaseViewModel {
         if (mTask.getType() != Task.TYPE_SCHEDULE) {
             mTask.setRepeat(Task.REPEAT_YEAR);
         }
+        Calendar calendar = Calendar.getInstance();
+	    calendar.set(mTask.getYear(), mTask.getMonth(), mTask.getDay());
+        mTask.setStartTime(calendar.getTime());
         mTaskRepository.saveTask(mTask);
         return true;
     }

@@ -1,6 +1,5 @@
 package com.ycuwq.todo.view.tasks;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.Observable;
@@ -14,9 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.yangchen.extracalendarview.ExtraCalendarView;
-import com.yangchen.extracalendarview.base.Date;
-import com.yangchen.extracalendarview.listener.OnDayClickListener;
+import com.ycuwq.calendarview.CalendarView;
+import com.ycuwq.calendarview.Date;
 import com.ycuwq.common.recycler.ExRecyclerAdapter;
 import com.ycuwq.common.recycler.ExRecyclerViewHolder;
 import com.ycuwq.todo.R;
@@ -25,8 +23,6 @@ import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.databinding.FragTasksBinding;
 import com.ycuwq.todo.di.Injectable;
 import com.ycuwq.todo.view.edittask.EditTaskActivity;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -45,7 +41,7 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 	@Inject
 	ViewModelProvider.Factory mViewModelFactory;
 
-	private ExtraCalendarView mExtraCalendarView;
+	private CalendarView mCalendarView;
 	private Observable.OnPropertyChangedCallback mSnackbarCallback;
 
 	@Inject
@@ -69,10 +65,10 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 	}
 
 	private void initView() {
-        mExtraCalendarView = mBinding.extraCalendarView;
-        mExtraCalendarView.setOnDayClickListener(new OnDayClickListener() {
+        mCalendarView = mBinding.calendarView;
+        mCalendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
-            public void onClick(View v, Date date) {
+            public void onDateSelected(Date date) {
                 mViewModel.getDate().setValue(date.toString());
             }
         });
@@ -98,17 +94,13 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 		recyclerView.setAdapter(adapter);
-        mViewModel.getTasks().observe(this, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(@Nullable List<Task> tasks) {
-                adapter.setList(tasks);
-            }
-        });
+        mViewModel.getTasks().observe(this, tasks -> adapter.setList(tasks));
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		mViewModel.addSchemeToCalendarView(mCalendarView);
 	}
 
 

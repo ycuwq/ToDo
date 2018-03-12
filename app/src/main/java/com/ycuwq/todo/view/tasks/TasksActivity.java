@@ -35,7 +35,6 @@ public class TasksActivity extends BaseActivity implements HasSupportFragmentInj
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_tasks);
 		initToolbar();
-
 		findTaskFragment();
 	}
 

@@ -39,11 +39,16 @@ public class TaskRepository {
         });
     }
 
-    public LiveData<List<Task>> loadAllTask() {
-        return mTaskDao.loadAllTask();
+    public LiveData<List<Task>> loadAllTasks() {
+        return mTaskDao.loadAllTasks();
     }
+
+    public List<Task> loadAllTaskList() {
+        return mTaskDao.loadAllTaskList();
+    }
+
     public LiveData<List<Task>> loadTasks(String date) {
-        return mTaskDao.loadAllTask(date);
+        return mTaskDao.loadAllTasks(date);
     }
 
 }

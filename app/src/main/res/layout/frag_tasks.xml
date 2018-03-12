@@ -17,22 +17,21 @@
         tools:context=".view.tasks.TasksActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <com.yangchen.extracalendarview.ExtraCalendarView
-            android:id="@+id/extraCalendarView"
+        <com.ycuwq.calendarview.CalendarLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:clickBackground="@drawable/click_bg"
-            android:addStatesFromChildren="true"
-            app:calendarType="week"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:background="@color/colorText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="com.yangchen.extracalendarview.behavior.InCalendarBottomBehavior"/>
-
+            android:layout_height="match_parent">
+            <com.ycuwq.calendarview.CalendarView
+                android:id="@+id/calendarView"
+                app:bottomTextSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:background="@color/colorText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.ycuwq.calendarview.CalendarLayout>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_add_task"
             app:fabSize="normal"
