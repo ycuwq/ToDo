@@ -8,9 +8,12 @@ import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 
 import com.ycuwq.todo.BR;
 import com.ycuwq.todo.data.converters.DateConverter;
+
+import org.joda.time.LocalDate;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -78,6 +81,9 @@ public class Task implements Observable {
 	 */
 	private String startDate;
 
+	/**
+	 * 开始时间
+	 */
 	private Date startTime;
 
 	private Date reminderTime;
@@ -253,6 +259,21 @@ public class Task implements Observable {
 			propertyChangeRegistry.remove(callback);
 		}
 	}
+
+    /**
+     * 将repeatModeNames补充完整 例如每周变成每周（周四）这种类型.
+     * @param modeNames 每天每月每日的集合，在
+     */
+    public static void supplementRepeatModeName(@NonNull Task task, @NonNull String[] modeNames,
+                                          @NonNull String[] weekdayNames) {
+        String everyWeek = modeNames[3], everyMonth = modeNames[4], everyYear = modeNames[5];
+        LocalDate day = new LocalDate(task.getYear(), task.getMonth(), task.getDay());
+        modeNames[3] = String.format(everyWeek, weekdayNames[day.getDayOfWeek()-1]);
+        modeNames[4] = String.format(everyMonth, task.getDay());
+        modeNames[5] = String.format(everyYear, task.getMonth(), task.getDay());
+
+    }
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({TYPE_ANNIVERSARY, TYPE_BIRTHDAY, TYPE_SCHEDULE})
 	public @interface TaskType {

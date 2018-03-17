@@ -122,7 +122,10 @@ public class EditTaskViewModel extends BaseViewModel {
 
     public void chooseRepeatMode(View v) {
         RepeatModeDialogFragment repeatModeDialogFragment = new RepeatModeDialogFragment();
-        repeatModeDialogFragment.setOnRepeatModeSelectedListener(mode -> mTask.setRepeat(mode));
+        repeatModeDialogFragment.setTask(mTask);
+        repeatModeDialogFragment.setOnRepeatModeSelectedListener(mode -> {
+            mTask.setRepeat(mode);
+        });
         repeatModeDialogFragment.show(mBaseFragment.getChildFragmentManager(), "chooseRepeatMode");
     }
 }

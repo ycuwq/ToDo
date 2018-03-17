@@ -47,6 +47,10 @@ public class TaskRepository {
         return mTaskDao.loadAllTaskList();
     }
 
+    public List<Task> loadAllTaskList(int type) {
+        return mTaskDao.loadAllTaskList(type);
+    }
+
     public LiveData<List<Task>> loadTasks(String date) {
         return mTaskDao.loadAllTasks(date);
     }

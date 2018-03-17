@@ -23,8 +23,6 @@ import dagger.android.support.HasSupportFragmentInjector;
  */
 public class TasksActivity extends BaseActivity implements HasSupportFragmentInjector {
 
-	private final String TAG = getClass().getSimpleName();
-
 	@Inject
 	Lazy<TasksFragment> taskFragmentProvider;
 	@Inject

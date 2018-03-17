@@ -23,6 +23,9 @@
             android:layout_height="match_parent">
             <com.ycuwq.calendarview.CalendarView
                 android:id="@+id/calendarView"
+                app:selectedItemColor="@color/colorPrimary"
+                app:weekInfoTextSize="12sp"
+                app:topTextSize="12sp"
                 app:bottomTextSize="10sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

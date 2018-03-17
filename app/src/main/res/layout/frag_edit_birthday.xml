@@ -20,15 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
+                style="@style/et_input_text"
                 android:id="@+id/et_birthday_name"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:layout_margin="@dimen/text_margin"
-                android:background="@null"
                 android:hint="@string/hint_input_name"
-                android:text="@={viewModel.task.name}"
-                android:inputType="text"
-                android:textSize="16sp"/>
+                android:text="@={viewModel.task.name}"/>
             <include layout="@layout/view_divider_line"/>
             <LinearLayout
                 android:onClick="@{(v) -> viewModel.chooseStartDate(v)}"

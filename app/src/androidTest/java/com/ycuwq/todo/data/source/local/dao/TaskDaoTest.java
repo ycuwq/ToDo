@@ -25,7 +25,7 @@ public class TaskDaoTest extends DbTest{
 		Task task = TaskCreateUtil.createTask("Banana", date);
 		db.taskDao().insertTask(task);
 
-		List<Task> tasks = db.taskDao().loadAllTasks(date);
+		List<Task> tasks = db.taskDao().loadAllTaskList();
 		Task task1 = tasks.get(tasks.size() - 1);
 		assertThat(task1.getName(), is("Banana"));
 		assertThat(task1.getStartDate(), is(date));

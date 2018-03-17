@@ -6,20 +6,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ycuwq.common.recycler.ExRecyclerAdapter;
 import com.ycuwq.common.recycler.ExRecyclerViewHolder;
 import com.ycuwq.todo.R;
+import com.ycuwq.todo.data.bean.Task;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +31,7 @@ import java.util.List;
 public class RepeatModeDialogFragment extends DialogFragment {
 
     private OnRepeatModeSelectedListener mOnRepeatModeSelectedListener;
-
+    private Task mTask;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,9 +42,12 @@ public class RepeatModeDialogFragment extends DialogFragment {
         }
 
         String[] modeNames = getResources().getStringArray(R.array.list_repeat_mode);
+        if (mTask != null) {
+            Task.supplementRepeatModeName(mTask, modeNames, getResources().getStringArray(R.array.weekday_name));
+        }
         List<String> modeNameList = Arrays.asList(modeNames);
         RecyclerView repeatModeRv = view.findViewById(R.id.rv_dialog_repeat_mode);
-        // todo list的效果。
+
         ExRecyclerAdapter<String> adapter = new ExRecyclerAdapter<String>(context, R.layout.item_choose) {
             @Override
             public void bindData(ExRecyclerViewHolder holder, String s, int position) {
@@ -66,18 +69,22 @@ public class RepeatModeDialogFragment extends DialogFragment {
         adapter.setList(modeNameList);
         repeatModeRv.setAdapter(adapter);
         repeatModeRv.setLayoutManager(new LinearLayoutManager(context));
-        repeatModeRv.addItemDecoration(new DividerItemDecoration(context, LinearLayout.VERTICAL));
         return view;
+    }
+
+
+
+    public void setTask(Task task) {
+        mTask = task;
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = new Dialog(getContext(), R.style.DatePickerBottomDialog);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 设置Content前设定
 
-        Dialog dialog = new Dialog(getContext());
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 设置Content前设定
-
-        dialog.setContentView(R.layout.dialog_repeat_mode);
+        dialog.setContentView(R.layout.dialog_choose_remind_time);
         dialog.setCanceledOnTouchOutside(true); // 外部点击取消
 
         Window window = dialog.getWindow();
@@ -85,10 +92,8 @@ public class RepeatModeDialogFragment extends DialogFragment {
 
             window.getAttributes().windowAnimations = R.style.DatePickerDialogAnim;
             WindowManager.LayoutParams lp = window.getAttributes();
-//            lp.gravity = Gravity.BOTTOM; // 紧贴底部
+            lp.gravity = Gravity.BOTTOM; // 紧贴底部
             lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
-            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-
             lp.dimAmount = 0.35f;
             window.setAttributes(lp);
             window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);

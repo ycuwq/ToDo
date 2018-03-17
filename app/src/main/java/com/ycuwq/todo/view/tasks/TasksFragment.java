@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.Observable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.ycuwq.calendarview.CalendarView;
 import com.ycuwq.calendarview.Date;
+import com.ycuwq.calendarview.PagerInfo;
 import com.ycuwq.common.recycler.ExRecyclerAdapter;
 import com.ycuwq.common.recycler.ExRecyclerViewHolder;
 import com.ycuwq.todo.R;
@@ -23,6 +25,8 @@ import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.databinding.FragTasksBinding;
 import com.ycuwq.todo.di.Injectable;
 import com.ycuwq.todo.view.edittask.EditTaskActivity;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -66,10 +70,11 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 
 	private void initView() {
         mCalendarView = mBinding.calendarView;
-        mCalendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
+        mCalendarView.setOnDateSelectedListener(date -> mViewModel.getCurrentDate().setValue(date.toString()));
+        mCalendarView.setOnPageSelectedListener(new CalendarView.OnPageSelectedListener() {
             @Override
-            public void onDateSelected(Date date) {
-                mViewModel.getDate().setValue(date.toString());
+            public List<Date> onPageSelected(@NonNull PagerInfo pagerInfo) {
+                return mViewModel.getScheme(pagerInfo);
             }
         });
 		mBinding.fabAddTask.setOnClickListener(v -> jumpAddTaskActivity());
@@ -100,7 +105,7 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 	@Override
 	public void onResume() {
 		super.onResume();
-		mViewModel.addSchemeToCalendarView(mCalendarView);
+		mViewModel.updateScheme();
 	}
 
 

@@ -27,7 +27,7 @@ public interface TaskDao {
 	@Delete
 	void deleteTask(Task task);
 
-	@Query("SELECT * FROM task")
+	@Query("SELECT * FROM task ORDER BY startTime")
 	LiveData<List<Task>> loadAllTasks();
 
 	@Query("SELECT * FROM task")
@@ -35,4 +35,7 @@ public interface TaskDao {
 
 	@Query("SELECT * FROM task WHERE startDate = :startDate")
 	LiveData<List<Task>> loadAllTasks(String startDate);
+
+	@Query("SELECT * FROM task WHERE type = :type ORDER BY startTime")
+    List<Task> loadAllTaskList(int type);
 }

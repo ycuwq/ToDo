@@ -47,15 +47,24 @@
     <style name="list_item_label">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
     </style>
 
     <style name="list_item_tv_content">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/colorSecondaryText</item>
         <item name="android:gravity">end</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="et_input_text">
+        <item name="android:background">@null</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_margin">@dimen/text_margin</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textSize">12sp</item>
     </style>
 </resources>

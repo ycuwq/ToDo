@@ -20,14 +20,9 @@
             android:layout_height="wrap_content">
             <EditText
                 android:id="@+id/et_schedule_name"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
                 android:text="@={viewModel.task.name}"
-                android:layout_margin="@dimen/text_margin"
-                android:background="@null"
                 android:hint="@string/hint_input_schedule_name"
-                android:inputType="text"
-                android:textSize="16sp"/>
+                style="@style/et_input_text" />
             <include layout="@layout/view_divider_line"/>
             <LinearLayout
                 android:onClick="@{(v) -> viewModel.chooseStartDate(v)}"
@@ -60,30 +55,21 @@
                     style="@style/list_item_label"/>
                 <TextView
                     app:repeat="@{viewModel.task.repeat}"
+                    app:task="@{viewModel.task}"
                     style="@style/list_item_tv_content"/>
             </LinearLayout>
             <include layout="@layout/view_divider_line"/>
             <EditText
+                style="@style/et_input_text"
                 android:id="@+id/et_schedule_address"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
                 android:text="@={viewModel.task.address}"
-                android:layout_margin="@dimen/text_margin"
-                android:background="@null"
-                android:hint="@string/hint_input_address"
-                android:inputType="text"
-                android:textSize="16sp"/>
+                android:hint="@string/hint_input_address" />
             <include layout="@layout/view_divider_line"/>
             <EditText
+                style="@style/et_input_text"
                 android:id="@+id/et_schedule_remark"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
                 android:text="@={viewModel.task.remark}"
-                android:layout_margin="@dimen/text_margin"
-                android:background="@null"
-                android:hint="@string/hint_input_remark"
-                android:inputType="text"
-                android:textSize="16sp"/>
+                android:hint="@string/hint_input_remark" />
             <include layout="@layout/view_divider_line"/>
         </LinearLayout>
 

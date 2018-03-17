@@ -34,9 +34,11 @@ public class BindingUtil {
 		textView.setText(dateFormat.format(date));
 	}
 
-	@BindingAdapter("repeat")
-	public static void setRepeatMode(TextView tv, int repeat) {
+	@BindingAdapter({"repeat", "task"})
+	public static void setRepeatMode(TextView tv, int repeat, Task task) {
 		String[] repeatModeNames = tv.getContext().getResources().getStringArray(R.array.list_repeat_mode);
+        Task.supplementRepeatModeName(task, repeatModeNames,
+                tv.getResources().getStringArray(R.array.weekday_name));
         String text = "";
 		if (repeat < repeatModeNames.length) {
 		    text = repeatModeNames[repeat];
