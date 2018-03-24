@@ -44,6 +44,7 @@ public class EditTaskViewModel extends BaseViewModel {
                 calendar.get(Calendar.DATE));
     }
 
+
     public void setTaskType(@Task.TaskType int type) {
 	    mTask.setType(type);
     }
@@ -52,7 +53,7 @@ public class EditTaskViewModel extends BaseViewModel {
         mTask.setYear(year);
         mTask.setMonth(month);
         mTask.setDay(day);
-	    mTask.setStartDate(DateUtil.getDateString(year, month - 1, day));
+	    mTask.setStartDate(DateUtil.getDateString(year, month, day));
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mTask.getReminderTime());
         calendar.set(year, month - 1, day);

@@ -8,14 +8,14 @@
         android:gravity="center"
         android:text="@string/remind_time"
         android:textStyle="bold"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
         android:gravity="center"
         android:padding="4dp"
-        android:textSize="15sp"
+        android:textSize="11sp"
         android:id="@+id/tv_dialog_choose_remind_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -32,6 +32,7 @@
             android:id="@+id/btn_dialog_choose_remind_cancel"
             android:background="#f7f7f7"
             android:text="@string/cancel"
+            android:textSize="12sp"
             android:textColor="@color/com_ycuwq_datepicker_selectedTextColor"
             android:layout_weight="1"
             android:layout_width="0dp"
@@ -45,6 +46,7 @@
             android:id="@+id/btn_dialog_choose_remind_decide"
             android:background="#f7f7f7"
             android:text="@string/decide"
+            android:textSize="12sp"
             android:textColor="@color/com_ycuwq_datepicker_selectedTextColor"
             android:layout_weight="1"
             android:layout_width="0dp"

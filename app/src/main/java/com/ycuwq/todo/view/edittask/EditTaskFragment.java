@@ -30,7 +30,7 @@ import dagger.Lazy;
  */
 public class EditTaskFragment extends ViewModelFragment implements Injectable, View.OnClickListener {
 
-	private final static int RADIO_BUTTON_DRAWABLE_SIZE = 120;
+	private final static int RADIO_BUTTON_DRAWABLE_SIZE = 100;
 
 	private FragEditTaskBinding mBinding;
 
@@ -59,6 +59,10 @@ public class EditTaskFragment extends ViewModelFragment implements Injectable, V
 		mBinding.setFragment(this);
         mEditTaskViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EditTaskViewModel.class);
         mEditTaskViewModel.setBaseFragment(this);
+        Task task = getActivity().getIntent().getParcelableExtra(EditTaskActivity.KEY_EDIT_TASK);
+        if (task != null) {
+            mEditTaskViewModel.setTask(task);
+        }
         registerSnackbarText(mEditTaskViewModel);
         initView();
         return mBinding.getRoot();
@@ -67,10 +71,8 @@ public class EditTaskFragment extends ViewModelFragment implements Injectable, V
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		showScheduleFragment();
+		showChildFragment();
 	}
-
-
 
 	private void initView() {
 		setRadioButtonDrawableSize();
@@ -92,11 +94,30 @@ public class EditTaskFragment extends ViewModelFragment implements Injectable, V
 					break;
 			}
 		});
+
 		if (getActivity() != null) {
             FloatingActionButton fab = getActivity().findViewById(R.id.fab_add_task);
             fab.setOnClickListener(this);
         }
 	}
+
+	private void showChildFragment() {
+	    switch (mEditTaskViewModel.getTask().getType()) {
+            case Task.TYPE_SCHEDULE:
+                showScheduleFragment();
+                break;
+            case Task.TYPE_ANNIVERSARY:
+                showAnniversaryFragment();
+                break;
+            case Task.TYPE_BIRTHDAY:
+                showBirthdayFragment();
+                break;
+            default:
+                showScheduleFragment();
+                break;
+
+        }
+    }
 
 	private void showScheduleFragment() {
 		Fragment fragment = getChildFragmentManager().
@@ -163,7 +184,6 @@ public class EditTaskFragment extends ViewModelFragment implements Injectable, V
 		drawableAnniversary.setBounds(0, 0, RADIO_BUTTON_DRAWABLE_SIZE, RADIO_BUTTON_DRAWABLE_SIZE);
 		anniversaryRb.setCompoundDrawables(null, drawableAnniversary, null, null);
 	}
-
 
 	@Override
 	public void onClick(View v) {

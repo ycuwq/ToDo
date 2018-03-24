@@ -47,7 +47,7 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 
 	private CalendarView mCalendarView;
 	private Observable.OnPropertyChangedCallback mSnackbarCallback;
-
+	private Date mCurrentClickedDate;
 	@Inject
 	public TasksFragment() {}
 
@@ -70,7 +70,10 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 
 	private void initView() {
         mCalendarView = mBinding.calendarView;
-        mCalendarView.setOnDateSelectedListener(date -> mViewModel.getCurrentDate().setValue(date.toString()));
+        mCalendarView.setOnDateSelectedListener(date -> {
+        	mCurrentClickedDate = date;
+	        mViewModel.getCurrentDate().setValue(date.toString());
+        });
         mCalendarView.setOnPageSelectedListener(new CalendarView.OnPageSelectedListener() {
             @Override
             public List<Date> onPageSelected(@NonNull PagerInfo pagerInfo) {
@@ -99,7 +102,7 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 		recyclerView.setAdapter(adapter);
-        mViewModel.getTasks().observe(this, tasks -> adapter.setList(tasks));
+        mViewModel.getTasks().observe(this, adapter::setList);
 	}
 
 	@Override
@@ -110,7 +113,7 @@ public class TasksFragment extends ViewModelFragment implements Injectable {
 
 
 	public void jumpAddTaskActivity() {
-		startActivity(EditTaskActivity.getIntent(getContext(), null));
+		startActivity(EditTaskActivity.getIntent(getContext(), mCurrentClickedDate));
 	}
 
 

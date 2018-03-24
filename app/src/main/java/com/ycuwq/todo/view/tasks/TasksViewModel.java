@@ -29,7 +29,6 @@ import io.reactivex.schedulers.Schedulers;
  * Created by 杨晨 on 2017/5/9.
  */
 public class TasksViewModel extends BaseViewModel {
-	private final String TAG = getClass().getSimpleName();
 
 	private final TaskRepository mTaskRepository;
 
@@ -131,7 +130,6 @@ public class TasksViewModel extends BaseViewModel {
     }
 
     void updateScheme() {
-        // TODO: 2018/3/17 非不重复模式的没有处理
         Observable.create((ObservableOnSubscribe<List<Task>>) e -> {
             e.onNext(mTaskRepository.loadAllTaskList());
         }).subscribeOn(Schedulers.io())
@@ -149,6 +147,7 @@ public class TasksViewModel extends BaseViewModel {
                             }
                             dates.add(new Date(task.getYear(), task.getMonth(), task.getDay()));
                         }
+
                     }
                     return mSchemeMap;
                 })

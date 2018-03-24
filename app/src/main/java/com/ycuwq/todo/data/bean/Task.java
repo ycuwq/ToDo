@@ -7,6 +7,8 @@ import android.arch.persistence.room.TypeConverters;
 import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 
@@ -26,7 +28,7 @@ import java.util.Date;
 @SuppressWarnings("unused")
 @Entity(indices = {@Index(value = "startDate")})
 @TypeConverters(DateConverter.class)
-public class Task implements Observable {
+public class Task implements Observable, Parcelable {
 
 	public static final int TYPE_SCHEDULE = 1;
 
@@ -278,4 +280,58 @@ public class Task implements Observable {
     @IntDef({TYPE_ANNIVERSARY, TYPE_BIRTHDAY, TYPE_SCHEDULE})
 	public @interface TaskType {
     }
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(this.id);
+		dest.writeInt(this.type);
+		dest.writeString(this.name);
+		dest.writeByte(this.isCompleted ? (byte) 1 : (byte) 0);
+		dest.writeByte(this.isAllDay ? (byte) 1 : (byte) 0);
+		dest.writeInt(this.year);
+		dest.writeInt(this.month);
+		dest.writeInt(this.day);
+		dest.writeString(this.startDate);
+		dest.writeLong(this.startTime != null ? this.startTime.getTime() : -1);
+		dest.writeLong(this.reminderTime != null ? this.reminderTime.getTime() : -1);
+		dest.writeInt(this.repeat);
+		dest.writeString(this.address);
+		dest.writeString(this.remark);
+	}
+
+	protected Task(Parcel in) {
+		this.id = in.readInt();
+		this.type = in.readInt();
+		this.name = in.readString();
+		this.isCompleted = in.readByte() != 0;
+		this.isAllDay = in.readByte() != 0;
+		this.year = in.readInt();
+		this.month = in.readInt();
+		this.day = in.readInt();
+		this.startDate = in.readString();
+		long tmpStartTime = in.readLong();
+		this.startTime = tmpStartTime == -1 ? null : new Date(tmpStartTime);
+		long tmpReminderTime = in.readLong();
+		this.reminderTime = tmpReminderTime == -1 ? null : new Date(tmpReminderTime);
+		this.repeat = in.readInt();
+		this.address = in.readString();
+		this.remark = in.readString();
+	}
+
+	public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+		@Override
+		public Task createFromParcel(Parcel source) {
+			return new Task(source);
+		}
+
+		@Override
+		public Task[] newArray(int size) {
+			return new Task[size];
+		}
+	};
 }

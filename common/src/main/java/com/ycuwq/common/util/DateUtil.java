@@ -24,7 +24,7 @@ public class DateUtil {
 
     public static String getDateString(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
+        calendar.set(year, month - 1, day);
         return dateShortToString(calendar.getTime());
     }
 
