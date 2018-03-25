@@ -47,8 +47,10 @@ public class EditTaskActivity extends BaseActivity implements HasSupportFragment
 	    Task task = new Task();
         task.setType(Task.TYPE_SCHEDULE);
         DateTime dateTime = new DateTime(date.getYear(), date.getMonth(), date.getDay(), 9, 0);
-
-        task.setReminderTime(new java.util.Date(dateTime.getMillis()));
+        if (dateTime.isBeforeNow()) {
+            dateTime = new DateTime();
+        }
+        task.setStartTime(new java.util.Date(dateTime.getMillis()));
         task.setYear(dateTime.getYear());
         task.setMonth(dateTime.getMonthOfYear());
         task.setDay(dateTime.getDayOfMonth());

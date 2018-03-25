@@ -39,15 +39,13 @@
             </LinearLayout>
             <include layout="@layout/view_divider_line"/>
             <LinearLayout
-                android:onClick="@{(v) -> viewModel.chooseRemindTime(v)}"
+                android:onClick="@{(v) -> viewModel.chooseReminderTime(v)}"
                 style="@style/list_item_layout">
                 <TextView
-                    android:id="@+id/tv_label_reminder_time"
                     android:text="@string/reminder_time"
                     style="@style/list_item_label"/>
                 <TextView
                     app:textForDate="@{viewModel.task.reminderTime}"
-                    android:id="@+id/tv_reminder_time"
                     style="@style/list_item_tv_content"/>
             </LinearLayout>
             <include layout="@layout/view_divider_line"/>

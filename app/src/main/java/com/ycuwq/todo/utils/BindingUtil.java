@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.ycuwq.todo.R;
 import com.ycuwq.todo.data.bean.Task;
-import com.ycuwq.todo.view.edittask.child.ChooseRemindTimeDialogFragment;
+import com.ycuwq.todo.view.edittask.child.ChooseStartTimeDialogFragment;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,8 +20,8 @@ import java.util.Locale;
 public class BindingUtil {
 
     public static void setRemindTime(Fragment fragment, Task task) {
-        ChooseRemindTimeDialogFragment chooseRemindTimeDialogFragment = new ChooseRemindTimeDialogFragment();
-        chooseRemindTimeDialogFragment.show(fragment.getChildFragmentManager(), "chooseRemindTime");
+        ChooseStartTimeDialogFragment chooseStartTimeDialogFragment = new ChooseStartTimeDialogFragment();
+        chooseStartTimeDialogFragment.show(fragment.getChildFragmentManager(), "chooseStartTime");
     }
 
 	@BindingAdapter("textForDate")

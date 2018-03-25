@@ -23,7 +23,7 @@ import java.text.NumberFormat;
  * 选择提醒时间
  * Created by ycuwq on 2018/1/25.
  */
-public class ChooseRemindTimeDialogFragment extends DialogFragment {
+public class ChooseStartTimeDialogFragment extends DialogFragment {
 
     protected Button mCancelButton, mDecideButton;
 
@@ -32,7 +32,7 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_choose_remind_time, container);
+        View view = inflater.inflate(R.layout.dialog_choose_start_time, container);
 
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
         numberFormat.setMinimumIntegerDigits(2);
@@ -74,7 +74,7 @@ public class ChooseRemindTimeDialogFragment extends DialogFragment {
         Dialog dialog = new Dialog(getContext(), R.style.DatePickerBottomDialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 设置Content前设定
 
-        dialog.setContentView(R.layout.dialog_choose_remind_time);
+        dialog.setContentView(R.layout.dialog_choose_start_time);
         dialog.setCanceledOnTouchOutside(true); // 外部点击取消
 
         Window window = dialog.getWindow();

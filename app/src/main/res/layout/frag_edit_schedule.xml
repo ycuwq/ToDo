@@ -37,7 +37,18 @@
             </LinearLayout>
             <include layout="@layout/view_divider_line"/>
             <LinearLayout
-                android:onClick="@{(v) -> viewModel.chooseRemindTime(v)}"
+                android:onClick="@{(v) -> viewModel.chooseStartTime(v)}"
+                style="@style/list_item_layout">
+                <TextView
+                    android:text="@string/start_time"
+                    style="@style/list_item_label"/>
+                <TextView
+                    app:textForDate="@{viewModel.task.startTime}"
+                    style="@style/list_item_tv_content"/>
+            </LinearLayout>
+            <include layout="@layout/view_divider_line"/>
+            <LinearLayout
+                android:onClick="@{(v) -> viewModel.chooseReminderTime(v)}"
                 style="@style/list_item_layout">
                 <TextView
                     android:text="@string/reminder_time"

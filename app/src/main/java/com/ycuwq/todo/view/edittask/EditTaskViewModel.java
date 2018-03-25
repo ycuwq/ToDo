@@ -10,7 +10,7 @@ import com.ycuwq.todo.base.BaseViewModel;
 import com.ycuwq.todo.data.bean.Task;
 import com.ycuwq.todo.data.source.local.TaskRepository;
 import com.ycuwq.todo.view.edittask.child.ChooseDateDialogFragment;
-import com.ycuwq.todo.view.edittask.child.ChooseRemindTimeDialogFragment;
+import com.ycuwq.todo.view.edittask.child.ChooseStartTimeDialogFragment;
 import com.ycuwq.todo.view.edittask.child.RepeatModeDialogFragment;
 
 import java.util.Calendar;
@@ -39,7 +39,7 @@ public class EditTaskViewModel extends BaseViewModel {
         calendar.set(Calendar.HOUR_OF_DAY, 9);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        mTask.setReminderTime(calendar.getTime());
+        mTask.setStartTime(calendar.getTime());
         setStartDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DATE));
     }
@@ -55,9 +55,9 @@ public class EditTaskViewModel extends BaseViewModel {
         mTask.setDay(day);
 	    mTask.setStartDate(DateUtil.getDateString(year, month, day));
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(mTask.getReminderTime());
+        calendar.setTime(mTask.getStartTime());
         calendar.set(year, month - 1, day);
-        mTask.setReminderTime(calendar.getTime());
+        mTask.setStartTime(calendar.getTime());
     }
 
     public boolean save() {
@@ -110,15 +110,19 @@ public class EditTaskViewModel extends BaseViewModel {
 
     }
 
-    public void chooseRemindTime(View v) {
-        ChooseRemindTimeDialogFragment chooseRemindTimeDialogFragment = new ChooseRemindTimeDialogFragment();
-        chooseRemindTimeDialogFragment.setDate(mTask.getStartDate());
-        chooseRemindTimeDialogFragment.setOnTimeSelectedListener((hour, minute) -> {
+    public void chooseStartTime(View v) {
+        ChooseStartTimeDialogFragment chooseStartTimeDialogFragment = new ChooseStartTimeDialogFragment();
+        chooseStartTimeDialogFragment.setDate(mTask.getStartDate());
+        chooseStartTimeDialogFragment.setOnTimeSelectedListener((hour, minute) -> {
             Calendar calendar = Calendar.getInstance();
             calendar.set(mTask.getYear(), mTask.getMonth() - 1, mTask.getDay(), hour, minute, 0);
-            mTask.setReminderTime(calendar.getTime());
+            mTask.setStartTime(calendar.getTime());
         });
-        chooseRemindTimeDialogFragment.show(mBaseFragment.getChildFragmentManager(), "chooseRemindTime");
+        chooseStartTimeDialogFragment.show(mBaseFragment.getChildFragmentManager(), "chooseStartTime");
+    }
+
+    public void chooseReminderTime(View v) {
+
     }
 
     public void chooseRepeatMode(View v) {

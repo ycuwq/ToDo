@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
     <TextView
         android:gravity="center"
-        android:text="@string/remind_time"
+        android:text="@string/start_time"
         android:textStyle="bold"
         android:textSize="12sp"
         android:padding="16dp"
@@ -15,7 +15,7 @@
     <TextView
         android:gravity="center"
         android:padding="4dp"
-        android:textSize="11sp"
+        android:textSize="10sp"
         android:id="@+id/tv_dialog_choose_remind_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

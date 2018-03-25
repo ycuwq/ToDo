@@ -84,7 +84,7 @@ public class RepeatModeDialogFragment extends DialogFragment {
         Dialog dialog = new Dialog(getContext(), R.style.DatePickerBottomDialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 设置Content前设定
 
-        dialog.setContentView(R.layout.dialog_choose_remind_time);
+        dialog.setContentView(R.layout.dialog_choose_start_time);
         dialog.setCanceledOnTouchOutside(true); // 外部点击取消
 
         Window window = dialog.getWindow();
